@@ -18,14 +18,15 @@ The site is plain HTML with no server, database, framework or build tools. Each 
 5. [Reading a plan (live site)](#reading-a-plan-live-site)
 6. [Editing a plan (on your computer)](#editing-a-plan-on-your-computer)
 7. [Printing and PDFs](#printing-and-pdfs)
-8. [Changing the design: template.html and build.py](#changing-the-design-templatehtml-and-buildpy)
-9. [Adding a new plan](#adding-a-new-plan)
-10. [Term dates, holidays and special weeks](#term-dates-holidays-and-special-weeks)
-11. [How the data is stored](#how-the-data-is-stored)
-12. [Links to a week or term](#links-to-a-week-or-term)
-13. [Accessibility, phones and browsers](#accessibility-phones-and-browsers)
-14. [Troubleshooting](#troubleshooting)
-15. [Quick reference](#quick-reference)
+8. [Unit plans (Word)](#unit-plans-word)
+9. [Changing the design: template.html and build.py](#changing-the-design-templatehtml-and-buildpy)
+10. [Adding a new plan](#adding-a-new-plan)
+11. [Term dates, holidays and special weeks](#term-dates-holidays-and-special-weeks)
+12. [How the data is stored](#how-the-data-is-stored)
+13. [Links to a week or term](#links-to-a-week-or-term)
+14. [Accessibility, phones and browsers](#accessibility-phones-and-browsers)
+15. [Troubleshooting](#troubleshooting)
+16. [Quick reference](#quick-reference)
 
 ---
 
@@ -115,6 +116,7 @@ To preview a date, add `?today=YYYY-MM-DD` to the address, e.g. `index.html?toda
   - **Save:** local editing only. Hidden on the live site.
   - **Print full plan:** see [Printing](#printing-and-pdfs).
   - **Print CATs and topics:** see [Printing](#printing-and-pdfs).
+  - **Unit plans (Word):** download a unit of work as a Word curriculum map. See [Unit plans](#unit-plans-word).
   - **Clear all:** local editing only, and asks for confirmation. Hidden on the live site.
 - **Hint line:** short instructions. These differ between the live site and a local copy.
 
@@ -268,6 +270,30 @@ Plans are laid out for **A3 landscape**: each term starts on a new page, and col
 - In the print window, check the paper is **A3** and the layout is **Landscape**. Turn off "Headers and footers" for a cleaner page.
 - **Ctrl+P** prints the full plan.
 - When printing, every lesson prints open (you don't need to press Expand all first). The buttons, hint, sticky bar and search are left off the page.
+
+---
+
+## Unit plans (Word)
+
+**Unit plans (Word)** downloads one unit of work as a `.docx` curriculum map in the school's format (landscape A4, one table). It works on the live site and on a local copy, and it never changes the plan.
+
+**What counts as a unit:** it starts in the first teaching week after the previous assessment and ends with its CAT (any weekly topic starting `S1_`, `S2_` or `EXAM`). So an exam's revision weeks form a unit ending in the exam. Units can cross terms. Grey weeks without lessons (Set-Up, Step-Up and so on) are skipped. Weeks after the last assessment of the year belong to no unit. To move a unit's start, move the CAT before it.
+
+The window lists every unit with its weeks. Click **Download .docx** beside one.
+
+**The document:**
+
+| Row or column | Contents |
+|---|---|
+| Row 1 | `CURRICULUM MAP – Year 9 English` (from the plan code; `ADV` gives "Advanced") |
+| Row 2 | Semester and term(s), then "Unit of work:" with the CAT's title and the week range |
+| Week | Week of the unit (Week 1, 2…), the term and week (e.g. Term 1, Week 5) and the Monday's date |
+| TOPIC / Links to VIC Curriculum | The weekly topic, then each curriculum code on its own line |
+| Key Knowledge | Each lesson that has entries: its title, Learning Intention, Success Criteria (bulleted) and Do Now |
+| Link to lesson plans | One `[embed lesson plan]` placeholder per lesson. To fill one in Word: click the placeholder, then **Insert > Object > Create from File > Browse**, tick **Display as icon**, then **OK** |
+| Assessment | Only in the CAT's week: the CAT and its assessment details |
+
+The download includes unsaved edits currently on screen.
 
 ---
 
@@ -477,6 +503,7 @@ Every week and term has its own address. Add it to the end of the plan's URL:
 | Print everything | **Print full plan** |
 | Print an overview | **Print CATs and topics** |
 | Make a PDF | Either print button, then choose Save as PDF |
+| Make a unit plan | **Unit plans (Word)**, then **Download .docx** beside the unit |
 | Change term dates | `TERMS` in `template.html` and `T` in `index.html`, then rebuild |
 | Link to a week | `10ADVEN1.html#w2-5` |
 | Preview a date | Add `?today=2027-05-12` to the address |

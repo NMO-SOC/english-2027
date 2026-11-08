@@ -125,6 +125,14 @@
   .hit.cur{box-shadow:0 0 0 3px var(--navy)}
   ::highlight(search){background:#ffe066;color:#1f2933}
   @media (prefers-reduced-motion:reduce){.overview summary::before{transition:none}}
+  /* unit plan (Word) picker */
+  .units{max-width:min(680px,calc(100vw - 32px));border:none;border-radius:8px;padding:20px 24px;color:var(--ink)}
+  .units::backdrop{background:rgba(0,0,0,.45)}
+  .units h2{margin:0 0 4px;color:var(--navy)}
+  .units p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .units ul{list-style:none;margin:0 0 16px;padding:0}
+  .units li{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #e3e6ea}
+  .units li span{flex:1}.units small{display:block;color:var(--muted)}
   /* bigger targets on touch screens */
   @media (pointer:coarse){.lh,.cch{min-height:40px;display:flex;align-items:center}.jump a,.tools button,.btn{min-height:44px}}
   /* phones: weeks stack vertically instead of scrolling sideways */
@@ -173,6 +181,7 @@
     <button id="save" class="ed">Save</button>
     <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
     <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
+    <button id="unitbtn" title="Download a unit of work (first lesson to CAT) as a Word curriculum map">Unit plans (Word)</button>
     <button id="clear" class="ed">Clear all</button>
   </div>
 </header>
@@ -198,6 +207,7 @@ const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov",
 const fmt=d=>d.getDate()+" "+MONTHS[d.getMonth()];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const CAT=/^(S[12]_|EXAM)/;
+const lessonNames=(t,w)=>(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];
 function setStatus(t){statusEl.textContent=t;}
 // ?today=2027-02-17 previews the "This week" highlight
 const qd=new URLSearchParams(location.search).get("today");
@@ -231,7 +241,7 @@ TERMS.forEach(t=>{
   h+="</tr></thead><tbody><tr>";
   for(let w=1;w<=t.weeks;w++){
     const g=t.grey[w];
-    const lessons=(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];
+    const lessons=lessonNames(t,w);
     const nn=(t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w);
     const tcls=[g&&!(t.exam||[]).includes(w)?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
     h+=`<td id="w${t.n}-${w}" style="--o:${w}"${tcls?` class="${tcls}"`:""}>${nn?"":`<div class="wn" contenteditable="true" data-k="${t.n}--${w}"></div><div class="info" id="i${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="info-${t.n}--${w}" data-ph="Assessment details"></div><div class="ccw"><div class="cch" role="button" tabindex="0" aria-expanded="false" aria-controls="c${t.n}-${w}">Curriculum codes</div><div class="codes" id="c${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="codes-${t.n}--${w}" data-ph="Add curriculum codes"></div></div>`}`;
@@ -419,6 +429,98 @@ async function save(){
 document.getElementById("save").onclick=save;
 function printPlan(mode){document.body.classList.toggle("summary",mode==="summary");window.print();}
 addEventListener("afterprint",()=>document.body.classList.remove("summary"));
+
+// Unit plans: a unit runs from the first week after the previous assessment to its CAT (or EXAM).
+// Exported as a Word curriculum map in the school's format. Read-only: works on the live site too.
+function units(){
+  const out=[];let cur=[];
+  TERMS.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if((t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on
+    const k=`${t.n}--${w}`;
+    cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
+    if(CAT.test((store[k]||"").trim())){out.push(cur);cur=[];}
+  }});
+  return out; // weeks after the last assessment have no CAT, so they form no unit
+}
+const unitName=u=>{const v=store[u[u.length-1].k].trim(),i=v.indexOf(":");return i<0?v:v.slice(i+1).trim();};
+const unitSpan=u=>{const a=u[0],b=u[u.length-1];return `Term ${a.t} Week ${a.w} to Term ${b.t} Week ${b.w} · ${u.length} weeks`;};
+function unitDocx(u){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
+  const P=(s,o={})=>`<w:p><w:pPr>${o.li?'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>':""}${o.c?'<w:jc w:val="center"/>':""}${o.gap?'<w:spacing w:before="120"/>':""}</w:pPr>`+
+    (s?`<w:r>${o.b||o.i?`<w:rPr>${o.b?"<w:b/>":""}${o.i?'<w:i/><w:color w:val="595959"/>':""}</w:rPr>`:""}<w:t xml:space="preserve">${esc(s)}</w:t></w:r>`:"")+"</w:p>";
+  const W=[1129,2835,5245,2552,2409];
+  const C=(ps,i)=>`<w:tc><w:tcPr><w:tcW w:w="${i<0?14170:W[i]}" w:type="dxa"/>${i<0?'<w:gridSpan w:val="5"/>':""}</w:tcPr>${ps||P("")}</w:tc>`;
+  const terms=[...new Set(u.map(x=>x.t))], sem=u[u.length-1].t<=2?1:2;
+  let rows=`<w:tr>${C(P("CURRICULUM MAP – "+subject,{b:1,c:1}),-1)}</w:tr>`+
+    `<w:tr>${C(P(`Semester ${sem} – Term ${terms.join(" and ")}`)+P("")+P("Unit of work:")+P(unitName(u),{li:1})+P(unitSpan(u),{i:1}),-1)}</w:tr>`+
+    `<w:tr><w:trPr><w:tblHeader/></w:trPr>${C(P(""),0)}${C(P("TOPIC",{b:1,c:1})+P("Links to VIC Curriculum",{b:1,c:1}),1)}${C(P("Key Knowledge",{b:1,c:1}),2)}`+
+    `${C(P("Link to lesson plans",{b:1,c:1})+P("Insert > Object > Create from File > Display as icon",{i:1,c:1}),3)}${C(P("Assessment",{b:1,c:1}),4)}</w:tr>`;
+  u.forEach((x,n)=>{
+    const topic=(store[x.k]||"").trim(), cat=CAT.test(topic);
+    const codes=(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean);
+    let kk="",links="";
+    x.lessons.forEach((name,i)=>{
+      const k=`${x.t}-${x.w}-${i+1}`, f=s=>(store[`${k}-${s}`]||"").trim(), label=f("title")||name;
+      links+=P(label+":",{b:1,gap:i>0})+P("[embed lesson plan]",{i:1});
+      if(!f("li")&&!f("sc")&&!f("dn"))return;
+      kk+=P(label,{b:1,gap:kk!==""});
+      if(f("li"))kk+=P("Learning Intention:",{b:1})+P(f("li"));
+      if(f("sc"))kk+=P("Success Criteria:",{b:1})+f("sc").split(/\s*\|\s*/).filter(Boolean).map(s=>P(s,{li:1})).join("");
+      if(f("dn"))kk+=P("Do Now:",{b:1})+P(f("dn"));
+    });
+    rows+=`<w:tr><w:trPr><w:cantSplit/></w:trPr>${C(P("Week "+(n+1),{b:1})+P(`Term ${x.t}, Week ${x.w}`)+P(weekDate[x.k],{i:1}),0)}`+
+      `${C(P(topic,{b:1})+codes.map(c=>P(c)).join(""),1)}${C(kk,2)}${C(links,3)}`+
+      `${C(cat?P(topic,{b:1})+(store["info-"+x.k]||"").split("\n").filter(s=>s.trim()).map(s=>P(s)).join(""):"",4)}</w:tr>`;
+  });
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"', X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  const B=["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="auto"/>`).join("");
+  const R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>`+
+      `<Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/><Override PartName="/word/numbering.xml" ContentType="${CT}numbering+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId2" Type="${R}/numbering" Target="numbering.xml"/></Relationships>`,
+    "word/styles.xml":X+`<w:styles ${NS}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos Display" w:hAnsi="Aptos Display" w:eastAsia="Aptos Display" w:cs="Aptos Display"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault>`+
+      `<w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/numbering.xml":X+`<w:numbering ${NS}><w:abstractNum w:abstractNumId="0"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="360" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num></w:numbering>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body><w:tbl><w:tblPr><w:tblW w:w="14170" w:type="dxa"/><w:tblBorders>${B}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr>`+
+      `<w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows}</w:tbl><w:p/>`+
+      `<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+// Minimal zip (stored, no compression): all a .docx needs
+function zip(files){
+  const enc=new TextEncoder(),local=[],central=[];let off=0;
+  const T=[...Array(256)].map((_,n)=>{for(let k=0;k<8;k++)n=n&1?0xEDB88320^(n>>>1):n>>>1;return n>>>0;});
+  const le=(...f)=>{const b=new Uint8Array(f.reduce((s,x)=>s+x[1],0)),v=new DataView(b.buffer);let i=0;for(const [x,n] of f){n===2?v.setUint16(i,x,true):v.setUint32(i,x,true);i+=n;}return b;};
+  for(const [name,text] of Object.entries(files)){
+    const nm=enc.encode(name),d=enc.encode(text);let c=~0;for(const b of d)c=T[(c^b)&255]^(c>>>8);c=~c>>>0;
+    const common=[[20,2],[0,2],[0,2],[0,2],[33,2],[c,4],[d.length,4],[d.length,4],[nm.length,2],[0,2]];
+    local.push(le([0x04034b50,4],...common),nm,d);
+    central.push(le([0x02014b50,4],[20,2],...common,[0,2],[0,2],[0,2],[0,4],[off,4]),nm);
+    off+=30+nm.length+d.length;
+  }
+  const size=central.reduce((s,b)=>s+b.length,0), n=Object.keys(files).length;
+  return new Blob([...local,...central,le([0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2])],{type:CT_DOCX});
+}
+const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+document.getElementById("unitbtn").onclick=()=>{
+  const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","unitsh");
+  dl.innerHTML=`<h2 id="unitsh">Unit plans</h2><p>Each unit runs from its first lesson to its CAT. Download one as a Word curriculum map.</p>`+
+    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-i]");if(!b)return;
+    const u=us[b.dataset.i], a=document.createElement("a");
+    a.href=URL.createObjectURL(unitDocx(u));
+    a.download=`${document.title.split(" ")[0]} Unit Plan - ${unitName(u).replace(/[\\/:*?"<>|]/g,"")}.docx`;
+    a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"){e.preventDefault();save();}});
 window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue="";}});
 document.getElementById("clear").onclick=()=>{

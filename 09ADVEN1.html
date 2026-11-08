@@ -430,7 +430,7 @@ document.getElementById("save").onclick=save;
 function printPlan(mode){document.body.classList.toggle("summary",mode==="summary");window.print();}
 addEventListener("afterprint",()=>document.body.classList.remove("summary"));
 
-// Unit plans: a unit runs from the first week after the previous assessment to its CAT (or EXAM).
+// Unit plans: a unit runs from the first week after the previous assessment to its CAT. Exams have no unit plan.
 // Exported as a Word curriculum map in the school's format. Read-only: works on the live site too.
 function units(){
   const out=[];let cur=[];
@@ -438,7 +438,8 @@ function units(){
     if((t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on
     const k=`${t.n}--${w}`;
     cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
-    if(CAT.test((store[k]||"").trim())){out.push(cur);cur=[];}
+    const v=(store[k]||"").trim();
+    if(CAT.test(v)){if(!v.startsWith("EXAM"))out.push(cur);cur=[];} // exam revision weeks get no unit plan
   }});
   return out; // weeks after the last assessment have no CAT, so they form no unit
 }
@@ -454,21 +455,24 @@ function unitDocx(u){
   const terms=[...new Set(u.map(x=>x.t))], sem=u[u.length-1].t<=2?1:2;
   let rows=`<w:tr>${C(P("CURRICULUM MAP – "+subject,{b:1,c:1}),-1)}</w:tr>`+
     `<w:tr>${C(P(`Semester ${sem} – Term ${terms.join(" and ")}`)+P("")+P("Unit of work:")+P(unitName(u),{li:1})+P(unitSpan(u),{i:1}),-1)}</w:tr>`+
-    `<w:tr><w:trPr><w:tblHeader/></w:trPr>${C(P(""),0)}${C(P("TOPIC",{b:1,c:1})+P("Links to VIC Curriculum",{b:1,c:1}),1)}${C(P("Key Knowledge",{b:1,c:1}),2)}`+
+    `<w:tr><w:trPr><w:tblHeader/></w:trPr>${C(P(""),0)}${C(P("TOPIC",{b:1,c:1})+P("Links to VIC Curriculum",{b:1,c:1}),1)}${C(P("Weekly Learning Intention and Success Criteria",{b:1,c:1}),2)}`+
     `${C(P("Link to lesson plans",{b:1,c:1})+P("Insert > Object > Create from File > Display as icon",{i:1,c:1}),3)}${C(P("Assessment",{b:1,c:1}),4)}</w:tr>`;
   u.forEach((x,n)=>{
     const topic=(store[x.k]||"").trim(), cat=CAT.test(topic);
     const codes=(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean);
-    let kk="",links="";
+    // Weekly column: every lesson's LIs and SCs for the week, duplicates removed. Lesson column: each lesson in full.
+    let links="";const lis=new Set(),scs=new Set();
     x.lessons.forEach((name,i)=>{
-      const k=`${x.t}-${x.w}-${i+1}`, f=s=>(store[`${k}-${s}`]||"").trim(), label=f("title")||name;
-      links+=P(label+":",{b:1,gap:i>0})+P("[embed lesson plan]",{i:1});
-      if(!f("li")&&!f("sc")&&!f("dn"))return;
-      kk+=P(label,{b:1,gap:kk!==""});
-      if(f("li"))kk+=P("Learning Intention:",{b:1})+P(f("li"));
-      if(f("sc"))kk+=P("Success Criteria:",{b:1})+f("sc").split(/\s*\|\s*/).filter(Boolean).map(s=>P(s,{li:1})).join("");
-      if(f("dn"))kk+=P("Do Now:",{b:1})+P(f("dn"));
+      const k=`${x.t}-${x.w}-${i+1}`, f=s=>(store[`${k}-${s}`]||"").trim(), sc=f("sc").split(/\s*\|\s*/).filter(Boolean);
+      if(f("li"))lis.add(f("li"));sc.forEach(s=>scs.add(s));
+      links+=P(f("title")||name,{b:1,gap:i>0});
+      if(f("li"))links+=P("Learning Intention:",{b:1})+P(f("li"));
+      if(sc.length)links+=P("Success Criteria:",{b:1})+sc.map(s=>P(s,{li:1})).join("");
+      if(f("dn"))links+=P("Do Now:",{b:1})+P(f("dn"));
+      links+=P("[embed lesson plan]",{i:1});
     });
+    const kk=(lis.size?P("Learning Intentions:",{b:1})+[...lis].map(s=>P(s,{li:1})).join(""):"")+
+      (scs.size?P("Success Criteria:",{b:1,gap:lis.size>0})+[...scs].map(s=>P(s,{li:1})).join(""):"");
     rows+=`<w:tr><w:trPr><w:cantSplit/></w:trPr>${C(P("Week "+(n+1),{b:1})+P(`Term ${x.t}, Week ${x.w}`)+P(weekDate[x.k],{i:1}),0)}`+
       `${C(P(topic,{b:1})+codes.map(c=>P(c)).join(""),1)}${C(kk,2)}${C(links,3)}`+
       `${C(cat?P(topic,{b:1})+(store["info-"+x.k]||"").split("\n").filter(s=>s.trim()).map(s=>P(s)).join(""):"",4)}</w:tr>`;

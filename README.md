@@ -277,7 +277,7 @@ Plans are laid out for **A3 landscape**: each term starts on a new page, and col
 
 **Unit plans (Word)** downloads one unit of work as a `.docx` curriculum map in the school's format (landscape A4, one table). It works on the live site and on a local copy, and it never changes the plan.
 
-**What counts as a unit:** it starts in the first teaching week after the previous assessment and ends with its CAT (any weekly topic starting `S1_`, `S2_` or `EXAM`). So an exam's revision weeks form a unit ending in the exam. Units can cross terms. Grey weeks without lessons (Set-Up, Step-Up and so on) are skipped. Weeks after the last assessment of the year belong to no unit. To move a unit's start, move the CAT before it.
+**What counts as a unit:** it starts in the first teaching week after the previous assessment and ends with its CAT (a weekly topic starting `S1_` or `S2_`). Exams don't get unit plans: an exam and its revision weeks belong to no unit. Units can cross terms. Grey weeks without lessons (Set-Up, Step-Up and so on) are skipped. Weeks after the last assessment of the year belong to no unit. To move a unit's start, move the CAT before it.
 
 The window lists every unit with its weeks. Click **Download .docx** beside one.
 
@@ -289,8 +289,8 @@ The window lists every unit with its weeks. Click **Download .docx** beside one.
 | Row 2 | Semester and term(s), then "Unit of work:" with the CAT's title and the week range |
 | Week | Week of the unit (Week 1, 2…), the term and week (e.g. Term 1, Week 5) and the Monday's date |
 | TOPIC / Links to VIC Curriculum | The weekly topic, then each curriculum code on its own line |
-| Key Knowledge | Each lesson that has entries: its title, Learning Intention, Success Criteria (bulleted) and Do Now |
-| Link to lesson plans | One `[embed lesson plan]` placeholder per lesson. To fill one in Word: click the placeholder, then **Insert > Object > Create from File > Browse**, tick **Display as icon**, then **OK** |
+| Weekly Learning Intention and Success Criteria | A summary of the week: every lesson's Learning Intention, then every Success Criterion, as bullets (repeats removed) |
+| Link to lesson plans | Each lesson in full (title, Learning Intention, Success Criteria, Do Now), then an `[embed lesson plan]` placeholder. To fill one in Word: click the placeholder, then **Insert > Object > Create from File > Browse**, tick **Display as icon**, then **OK** |
 | Assessment | Only in the CAT's week: the CAT and its assessment details |
 
 The download includes unsaved edits currently on screen.

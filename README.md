@@ -289,7 +289,7 @@ The window lists every unit with its weeks. Click **Download .docx** beside one.
 | Row 2 | Semester and term(s), then "Unit of work:" with the CAT's title and the week range |
 | Week | Week of the unit (Week 1, 2…), the term and week (e.g. Term 1, Week 5) and the Monday's date |
 | TOPIC / Links to VIC Curriculum | The weekly topic, then each curriculum code on its own line |
-| Weekly Learning Intention and Success Criteria | A summary of the week: every lesson's Learning Intention, then every Success Criterion, as bullets (repeats removed) |
+| Weekly Learning Intention and Success Criteria | A summary of the week: up to 3 Learning Intentions and 3 Success Criteria, picked from the start, middle and end of the week |
 | Link to lesson plans | Each lesson in full (title, Learning Intention, Success Criteria, Do Now), then an `[embed lesson plan]` placeholder. To fill one in Word: click the placeholder, then **Insert > Object > Create from File > Browse**, tick **Display as icon**, then **OK** |
 | Assessment | Only in the CAT's week: the CAT and its assessment details |
 

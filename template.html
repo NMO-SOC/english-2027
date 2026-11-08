@@ -471,8 +471,10 @@ function unitDocx(u){
       if(f("dn"))links+=P("Do Now:",{b:1})+P(f("dn"));
       links+=P("[embed lesson plan]",{i:1});
     });
-    const kk=(lis.size?P("Learning Intentions:",{b:1})+[...lis].map(s=>P(s,{li:1})).join(""):"")+
-      (scs.size?P("Success Criteria:",{b:1,gap:lis.size>0})+[...scs].map(s=>P(s,{li:1})).join(""):"");
+    // ponytail: "summary" = 3 picks spread across the week (first, middle, last); add weekly summary fields if picks read poorly
+    const three=a=>a.length<=3?a:[0,1,2].map(i=>a[Math.round(i*(a.length-1)/2)]);
+    const kk=(lis.size?P("Learning Intentions:",{b:1})+three([...lis]).map(s=>P(s,{li:1})).join(""):"")+
+      (scs.size?P("Success Criteria:",{b:1,gap:lis.size>0})+three([...scs]).map(s=>P(s,{li:1})).join(""):"");
     rows+=`<w:tr><w:trPr><w:cantSplit/></w:trPr>${C(P("Week "+(n+1),{b:1})+P(`Term ${x.t}, Week ${x.w}`)+P(weekDate[x.k],{i:1}),0)}`+
       `${C(P(topic,{b:1})+codes.map(c=>P(c)).join(""),1)}${C(kk,2)}${C(links,3)}`+
       `${C(cat?P(topic,{b:1})+(store["info-"+x.k]||"").split("\n").filter(s=>s.trim()).map(s=>P(s)).join(""):"",4)}</w:tr>`;

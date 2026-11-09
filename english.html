@@ -164,7 +164,7 @@ function zip(files){
 const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 // Learning Area Plan (school format), built from the plans. One block per class: a topic row and a codes row per semester.
-// Codes rows are coloured by unit of work.
+// Each unit's topic and codes cells are coloured by unit of work.
 const LAP_PAL=["A8D08D","9DC3E6","F7CAAC","FFE699","C5E0B3","D9B3FF","F4B183","BDD7EE","E2EFDA","FCE4D6"];
 const LAP_YEARS=[
   {name:"Year 7 Mainstream",code:null},{name:"Year 7 Advanced",code:null},
@@ -195,16 +195,17 @@ function lapUnits(p,weeks){
   return name;
 }
 function lapDocx(plans){
-  const WEEKS=20, TOT=22379, YW=572, SW=1427, WW=Math.floor((TOT-YW-SW)/WEEKS);
+  const WEEKS=20, TOT=22379, YW=572, SW=1427, EXW=1700, WW=Math.floor((TOT-YW-SW-EXW)/WEEKS);
   const bdr='<w:tcBorders><w:top w:val="single" w:sz="4" w:color="808080"/><w:left w:val="single" w:sz="4" w:color="808080"/><w:bottom w:val="single" w:sz="4" w:color="808080"/><w:right w:val="single" w:sz="4" w:color="808080"/></w:tcBorders>';
   const run=(text,o={})=>`<w:r><w:rPr>${o.b?"<w:b/>":""}<w:sz w:val="${o.sz||14}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
   const par=(text,o={})=>`<w:p><w:pPr><w:spacing w:after="0" w:line="216" w:lineRule="auto"/>${o.c?'<w:jc w:val="center"/>':""}</w:pPr>${text?run(text,o):""}</w:p>`;
-  const tc=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${bdr}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}${o.dir?'<w:textDirection w:val="btLr"/>':""}<w:vAlign w:val="center"/></w:tcPr>${par(o.text||"",o)}</w:tc>`;
+  // o.text may hold several lines (one paragraph each)
+  const tc=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${bdr}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}${o.dir?'<w:textDirection w:val="btLr"/>':""}<w:vAlign w:val="center"/></w:tcPr>${String(o.text||"").split("\n").map(l=>par(l,o)).join("")}</w:tc>`;
   const tr=cells=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cells.join("")}</w:tr>`;
-  const grid=[YW,SW,...Array(WEEKS).fill(WW)];
-  let rows=[];
+  const grid=[YW,SW,...Array(WEEKS).fill(WW),EXW];
+  const rows=[];
   // header: the week numbers
-  rows.push(tr([tc(YW,{fill:"F2F2F2"}),tc(SW,{text:"Week",b:1,c:1,fill:"F2F2F2"}),...Array.from({length:WEEKS},(_,i)=>tc(WW,{text:String(i+1),b:1,c:1,fill:"F2F2F2"}))]));
+  rows.push(tr([tc(YW,{fill:"F2F2F2"}),tc(SW,{text:"Week",b:1,c:1,fill:"F2F2F2"}),...Array.from({length:WEEKS},(_,i)=>tc(WW,{text:String(i+1),b:1,c:1,fill:"F2F2F2"})),tc(EXW,{text:"Exam Revision",b:1,c:1,fill:"F2F2F2"})]));
   const legend=[];
   const ref=plans.find(p=>!p.soon);
   LAP_YEARS.forEach(y=>{
@@ -220,21 +221,21 @@ function lapDocx(plans){
       for(let i=0;i<WEEKS;i++){
         const x=weeks[i];
         if(!x){topicCells.push(tc(WW)); codeCells.push(tc(WW)); continue;}
-        const isCat=CAT.test(x.topic);
-        topicCells.push(tc(WW,{text:x.topic||x.grey||"",b:isCat}));
+        const isCat=CAT.test(x.topic), fill=un[x.k]?colour[un[x.k]]:null;
+        topicCells.push(tc(WW,{text:x.topic||x.grey||"",b:isCat,fill}));
         const codes=((p.store||{})["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean).join(", ");
-        const fill=un[x.k]?colour[un[x.k]]:null;
         codeCells.push(tc(WW,{text:codes,fill}));
       }
-      return {s,topicCells,codeCells};
+      const exams=weeks.filter(x=>x.topic.startsWith("EXAM")).map(x=>x.topic);
+      return {s,topicCells,codeCells,exam:exams.join("\n")};
     });
+    const [a,b]=sems;
     const yr={vm:"restart",dir:1,fill:"F2F2F2",text:y.name,b:1};
     // rows for this class: S1 topic, S1 codes, S2 topic, S2 codes
-    const [a,b]=sems;
-    rows.push(tr([tc(YW,{...yr}),tc(SW,{vm:"restart",text:"Semester 1",b:1,fill:"FFFFFF"}),...a.topicCells]));
-    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...a.codeCells]));
-    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"restart",text:"Semester 2",b:1,fill:"FFFFFF"}),...b.topicCells]));
-    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...b.codeCells]));
+    rows.push(tr([tc(YW,{...yr}),tc(SW,{vm:"restart",text:"Semester 1\nTopic / Subject\nCurriculum 2.0 codes",b:1,fill:"FFFFFF"}),...a.topicCells,tc(EXW,{text:a.exam?"Exam Revision\n"+a.exam:"Exam Revision",fill:"FFFFFF"})]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...a.codeCells,tc(EXW,{fill:"FFFFFF"})]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"restart",text:"Semester 2\nTopic / Subject\nCurriculum 2.0 codes",b:1,fill:"FFFFFF"}),...b.topicCells,tc(EXW,{text:b.exam?"Exam Revision\n"+b.exam:"Exam Revision",fill:"FFFFFF"})]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...b.codeCells,tc(EXW,{fill:"FFFFFF"})]));
   });
   const mainTbl=`<w:tbl><w:tblPr><w:tblW w:w="${TOT}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${grid.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.join("")}</w:tbl>`;
   // unit colour key
@@ -254,7 +255,6 @@ function lapDocx(plans){
     "word/document.xml":X+`<w:document ${NS}><w:body>${body}<w:sectPr><w:pgSz w:w="23811" w:h="16838" w:orient="landscape"/><w:pgMar w:top="900" w:right="709" w:bottom="900" w:left="709" w:header="500" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`
   });
 }
-
 document.getElementById("lapbtn").onclick=()=>{
   if(!window.PLANS){alert("The plans are still loading. Try again in a moment.");return;}
   const b=lapDocx(window.PLANS), a=document.createElement("a"), url=URL.createObjectURL(b);

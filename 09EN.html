@@ -182,6 +182,7 @@
     <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
     <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
     <button id="unitbtn" title="Download a unit of work (first lesson to CAT) as a Word curriculum map">Unit plans (Word)</button>
+    <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
     <button id="clear" class="ed">Clear all</button>
   </div>
 </header>
@@ -527,6 +528,98 @@ document.getElementById("unitbtn").onclick=()=>{
   dl.addEventListener("close",()=>dl.remove());
   document.body.appendChild(dl);dl.showModal();
 };
+
+// Curriculum map (Word): one document per semester in the school's template layout.
+// Lesson plan and CAT links are relative: save the download into that semester's Curriculum Map folder.
+// Folder name for each unit (Year Level Folder structure). Plans without an entry get no links.
+const CM_FOLDERS={
+ "09ADVEN1":{"NAPLAN Practice":"1. NAPLAN Practice","Scene Analysis (12 Angry Men)":"2. Scene Analysis (12 Angry Men)","Crafting Texts":"3. Crafting Texts","Oral Presentation":"1. Oral Presentation","Analysing Argument":"2. Analysing Argument","Analytical Text Response Essay (Julius Caesar)":"3. Julius Caesar"},
+ "10ADVEN1":{"Personal Text Response Essay (Rear Window)":"1. Rear Window","English Conventions":"2. English Conventions","Love Framework of Ideas":"3. Love Framework of Ideas","Oral Presentation":"1. Oral Presentation","Early Modern English":"2. Early Modern English","Analytical Text Response Essay (Macbeth)":"3. Macbeth"},
+ "09EN":{"Presenting Argument":"1. Presenting Argument","Whale Rider Analytical Essay":"2. Whale Rider","Creative Writing (Memoir)":"1. Creative Writing (Memoir)","Animal Farm Analytical Essay":"2. Animal Farm"}
+};
+function cmDocx(sem){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
+  const folders=CM_FOLDERS[code]||{};
+  const terms=TERMS.filter(t=>sem===1?t.n<=2:t.n>=3);
+  const unitOf={};
+  units().forEach(u=>u.forEach(x=>{unitOf[x.k]={u,cat:x===u[u.length-1]};}));
+  const rels=[];
+  const link=(text,target)=>{
+    const id="rIdL"+(rels.length+1);
+    rels.push(`<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(target)}" TargetMode="External"/>`);
+    return `<w:hyperlink r:id="${id}"><w:r><w:rPr><w:color w:val="0563C1"/><w:sz w:val="18"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:hyperlink>`;};
+  const run=(text,b)=>`<w:r><w:rPr>${b?"<w:b/>":""}<w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(runs)=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${runs}</w:p>`;
+  const P=(text,b)=>para(run(text,b));
+  const W=[1035,1941,2070,1797,1830,2414,1873], SH=[null,null,"DAE8F8",null,null,"DAE8F8",null];
+  const cell=(i,paras)=>`<w:tc><w:tcPr><w:tcW w:w="${W[i]}" w:type="dxa"/>${SH[i]?`<w:shd w:val="clear" w:color="auto" w:fill="${SH[i]}"/>`:""}</w:tcPr>${paras||para("")}</w:tc>`;
+  const row=(cells)=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cells.map((c,i)=>cell(i,c)).join("")}</w:tr>`;
+  const three=a=>{const u=[...new Set(a)];return u.length<=3?u:[0,1,2].map(i=>u[Math.round(i*(u.length-1)/2)]);};
+  const header=row(["",P("Semester "+sem,true),"","","","",""])+
+    row([P(""),P("Topic / Links to VIC Curriculum",true),P("Learning Intentions: / Success Criteria: / (include in lesson plan)",true),P("Key Knowledge",true),P("Link to Lesson plans",true),P("Do Now",true),P("Assessment",true)]);
+  const rowsXml=[]; let n=0;
+  terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    n++;
+    const k=`${t.n}--${w}`, d=new Date(t.start+"T00:00"); d.setDate(d.getDate()+7*(w-1));
+    const topic=(store[k]||"").trim(), g=t.grey[w];
+    const c0=P("Week "+n,true)+P(`Term ${t.n}, Week ${w}`)+P("Monday "+fmt(d));
+    if(g&&!topic){rowsXml.push(row([c0,P(g,true),"","","","",""]));continue;}
+    const codes=(store["codes-"+k]||"").trim();
+    const c1=P(topic||"Not yet entered",true)+P("Curriculum codes: "+(codes||"to be added"));
+    const lis=[],scs=[],titles=[],dos=[];
+    lessonNames(t,w).forEach((ln,j)=>{
+      const kk=`${t.n}-${w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+      if(f("li"))lis.push(f("li"));
+      f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+      if(f("title"))titles.push(f("title"));
+      if(f("dn"))dos.push([f("title")||ln,f("dn")]);
+    });
+    let c2="";
+    if(three(lis).length)c2+=P("Learning Intentions:",true)+three(lis).map(s=>P("• "+s)).join("");
+    if(three(scs).length)c2+=P("Success Criteria:",true)+three(scs).map(s=>P("• "+s)).join("");
+    c2=c2||P("Not yet entered");
+    const c3=titles.length?titles.map(s=>P(s)).join(""):P("Lesson titles to be added");
+    const ui=unitOf[k], name=ui?unitName(ui.u):"", folder=ui?folders[name]:null;
+    // A unit sits in the semester of its CAT (S1_ or S2_), even when its first weeks fall in the other semester
+    const usem=ui?(/^S2_/.test((store[ui.u[ui.u.length-1].k]||"").trim())?2:1):0;
+    let c4="";
+    if(ui){
+      if(folder){const file=`${code} - ${name} - Lesson Plans.docx`.replace(/\//g," ").replace(/:/g,"");
+        c4=para(link("Lesson plans: "+name,`../../Semester ${usem}/${folder}/Lesson Plans/${file}`));}
+      else c4=P("Lesson plans: "+name);
+    }
+    const c5=dos.length?dos.map(([l,dn])=>P(l+": "+dn)).join(""):P("Do Nows to be added");
+    let c6="";
+    if(ui&&ui.cat){c6=P(topic,true)+(folder?para(link("CAT assessment brief",`../../Semester ${usem}/${folder}/Assessments & Rubrics/${code} - ${name} - CAT Assessment.docx`)):"");}
+    rowsXml.push(row([c0,c1,c2,c3,c4,c5,c6]));
+  }});
+  const tbl=`<w:tbl><w:tblPr><w:tblW w:w="${W.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="9AA5B1"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${header}${rowsXml.join("")}</w:tbl>`;
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/>${rels.join("")}</Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${P("Semester "+sem,true)}${P("KLA: English")}${P("Subject: "+subject)}${tbl}<w:p/><w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("cmbtn").onclick=()=>{
+  const dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","cmh");
+  dl.innerHTML=`<h2 id="cmh">Curriculum map</h2><p>One curriculum map per semester, in the school's Word format. Save each download into that semester's Curriculum Map folder so the lesson plan and assessment links work.</p>`+
+    `<ul>${[1,2].map(s=>`<li><span><b>Semester ${s}</b><small>${s===1?"Terms 1 and 2":"Terms 3 and 4"}</small></span><button type="button" class="btn" data-s="${s}">Download .docx</button></li>`).join("")}</ul>`+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-s]");if(!b)return;
+    const s=+b.dataset.s, a=document.createElement("a"), url=URL.createObjectURL(cmDocx(s));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Semester ${s} Curriculum Map.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
 document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"){e.preventDefault();save();}});
 window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue="";}});
 document.getElementById("clear").onclick=()=>{

@@ -537,6 +537,14 @@ const CM_FOLDERS={
  "10ADVEN1":{"Personal Text Response Essay (Rear Window)":"1. Rear Window","English Conventions":"2. English Conventions","Love Framework of Ideas":"3. Love Framework of Ideas","Oral Presentation":"1. Oral Presentation","Early Modern English":"2. Early Modern English","Analytical Text Response Essay (Macbeth)":"3. Macbeth"},
  "09EN":{"Presenting Argument":"1. Presenting Argument","Whale Rider Analytical Essay":"2. Whale Rider","Creative Writing (Memoir)":"1. Creative Writing (Memoir)","Animal Farm Analytical Essay":"2. Animal Farm"}
 };
+// Key knowledge reads as the content itself: "We will explore how memory shapes a story." -> "How memory shapes a story"
+const kkFromLI=li=>{
+  let t=(li||"").trim().replace(/^we will\s+/i,"");
+  if(/^be\s+/i.test(t)) t=t.replace(/^be\s+/i,"");
+  else t=t.replace(/^[a-z]+\s+/i,"");
+  t=t.replace(/\.$/,"").trim();
+  return t?t.charAt(0).toUpperCase()+t.slice(1):"";
+};
 function cmDocx(sem){
   const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
   const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
@@ -573,7 +581,7 @@ function cmDocx(sem){
       const kk=`${t.n}-${w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
       if(f("li"))lis.push(f("li"));
       f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
-      const kl=f("title")||f("li"); if(kl)titles.push(kl); // key knowledge: the lesson title, or its learning intention when untitled
+      const kl=f("title")||kkFromLI(f("li")); if(kl)titles.push(kl); // key knowledge: the lesson title, or its learning intention when untitled
       if(f("dn"))dos.push([f("title")||ln,f("dn")]);
     });
     let c2="";

@@ -52,6 +52,11 @@
   .legend span{display:inline-block;margin-right:14px}
   .legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
   .msg{max-width:800px;margin:0 auto;background:#fff;border:1px solid var(--line);padding:16px;border-radius:4px}
+  .tools{margin-top:14px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .tools button{font:inherit;font-size:15px;min-height:40px;padding:8px 16px;border:1px solid #fff;background:transparent;color:#fff;border-radius:4px;cursor:pointer}
+  .tools button:hover{background:#fff;color:var(--navy)}
+  @page{size:A3 landscape;margin:10mm}
+  @media print{body{background:#fff}.banner{background:#fff;color:var(--ink);padding:0 0 8px}.banner .back,.tools,.strip,.legend{display:none}.term{break-inside:avoid;page-break-inside:avoid;border:none}}
   @media (prefers-reduced-motion:reduce){*{transition:none}}
 </style>
 </head>
@@ -62,6 +67,7 @@
     <h1>English overview 2027</h1>
     <p>Every year level, term by term: the topic each week, and when assessments are</p>
     <p class="asof" id="asof"></p>
+    <div class="tools"><button type="button" onclick="window.print()">Print</button> <button type="button" id="lapbtn">Learning area plan (Word)</button></div>
   </div>
   <div class="strip"><span></span><span></span><span></span><span></span></div>
 </header>
@@ -140,12 +146,127 @@ function render(plans){
   });
   return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment (CAT)</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:#e6e8eb"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
 }
+// Minimal zip (stored, no compression): all a .docx needs
+function zip(files){
+  const enc=new TextEncoder(),local=[],central=[];let off=0;
+  const T=[...Array(256)].map((_,n)=>{for(let k=0;k<8;k++)n=n&1?0xEDB88320^(n>>>1):n>>>1;return n>>>0;});
+  const le=(...f)=>{const b=new Uint8Array(f.reduce((s,x)=>s+x[1],0)),v=new DataView(b.buffer);let i=0;for(const [x,n] of f){n===2?v.setUint16(i,x,true):v.setUint32(i,x,true);i+=n;}return b;};
+  for(const [name,text] of Object.entries(files)){
+    const nm=enc.encode(name),d=enc.encode(text);let c=~0;for(const b of d)c=T[(c^b)&255]^(c>>>8);c=~c>>>0;
+    const common=[[20,2],[0,2],[0,2],[0,2],[33,2],[c,4],[d.length,4],[d.length,4],[nm.length,2],[0,2]];
+    local.push(le([0x04034b50,4],...common),nm,d);
+    central.push(le([0x02014b50,4],[20,2],...common,[0,2],[0,2],[0,2],[0,4],[off,4]),nm);
+    off+=30+nm.length+d.length;
+  }
+  const size=central.reduce((s,b)=>s+b.length,0), n=Object.keys(files).length;
+  return new Blob([...local,...central,le([0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2])],{type:CT_DOCX});
+}
+const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+// Learning Area Plan (school format), built from the plans. One block per class: a topic row and a codes row per semester.
+// Codes rows are coloured by unit of work.
+const LAP_PAL=["A8D08D","9DC3E6","F7CAAC","FFE699","C5E0B3","D9B3FF","F4B183","BDD7EE","E2EFDA","FCE4D6"];
+const LAP_YEARS=[
+  {name:"Year 7 Mainstream",code:null},{name:"Year 7 Advanced",code:null},
+  {name:"Year 8 Mainstream",code:null},{name:"Year 8 Advanced",code:null},
+  {name:"Year 9 Mainstream",code:"09EN"},{name:"Year 9 Advanced",code:"09ADVEN1"},
+  {name:"Year 10 Mainstream",code:"10EN"},{name:"Year 10 Advanced",code:"10ADVEN1"}];
+function lapWeeks(p,terms){
+  const out=[];
+  terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    const start=new Date(t.start+"T00:00"); start.setDate(start.getDate()+7*(w-1));
+    const k=`${t.n}--${w}`, g=(t.grey||{})[w]||"";
+    if(g==="Step-Up") continue; // Step-Up is the start of the next semester
+    out.push({t,w,k,start,grey:g,topic:((p.store||{})[k]||"").trim()});
+  }});
+  return out;
+}
+// Unit name for each week key (a unit runs to its CAT; exams are not units)
+function lapUnits(p,weeks){
+  const name={}; let cur=[];
+  weeks.forEach(x=>{
+    if((x.t.noLessons||[]).includes(x.w)&&!(x.t.exam||[]).includes(x.w)) return;
+    cur.push(x.k);
+    if(CAT.test(x.topic)){
+      if(!x.topic.startsWith("EXAM")){const nm=x.topic.slice(x.topic.indexOf(":")+1).trim(); cur.forEach(k=>name[k]=nm);}
+      cur=[];
+    }
+  });
+  return name;
+}
+function lapDocx(plans){
+  const WEEKS=20, TOT=22379, YW=572, SW=1427, WW=Math.floor((TOT-YW-SW)/WEEKS);
+  const bdr='<w:tcBorders><w:top w:val="single" w:sz="4" w:color="808080"/><w:left w:val="single" w:sz="4" w:color="808080"/><w:bottom w:val="single" w:sz="4" w:color="808080"/><w:right w:val="single" w:sz="4" w:color="808080"/></w:tcBorders>';
+  const run=(text,o={})=>`<w:r><w:rPr>${o.b?"<w:b/>":""}<w:sz w:val="${o.sz||14}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const par=(text,o={})=>`<w:p><w:pPr><w:spacing w:after="0" w:line="216" w:lineRule="auto"/>${o.c?'<w:jc w:val="center"/>':""}</w:pPr>${text?run(text,o):""}</w:p>`;
+  const tc=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${bdr}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}${o.dir?'<w:textDirection w:val="btLr"/>':""}<w:vAlign w:val="center"/></w:tcPr>${par(o.text||"",o)}</w:tc>`;
+  const tr=cells=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cells.join("")}</w:tr>`;
+  const grid=[YW,SW,...Array(WEEKS).fill(WW)];
+  let rows=[];
+  // header: the week numbers
+  rows.push(tr([tc(YW,{fill:"F2F2F2"}),tc(SW,{text:"Week",b:1,c:1,fill:"F2F2F2"}),...Array.from({length:WEEKS},(_,i)=>tc(WW,{text:String(i+1),b:1,c:1,fill:"F2F2F2"}))]));
+  const legend=[];
+  const ref=plans.find(p=>!p.soon);
+  LAP_YEARS.forEach(y=>{
+    const p=y.code?plans.find(q=>q.code===y.code):null;
+    const sems=[1,2].map(s=>{
+      const terms=(p?p.terms:(ref?ref.terms:[])).filter(t=>s===1?t.n<=2:t.n>=3);
+      const weeks=p?lapWeeks(p,terms):[];
+      const un=p?lapUnits(p,weeks):{};
+      const names=[...new Set(weeks.map(x=>un[x.k]).filter(Boolean))];
+      const colour={}; names.forEach((n,i)=>colour[n]=LAP_PAL[i%LAP_PAL.length]);
+      names.forEach(n=>legend.push({label:`${y.name} · Semester ${s}`,unit:n,fill:colour[n]}));
+      const topicCells=[], codeCells=[];
+      for(let i=0;i<WEEKS;i++){
+        const x=weeks[i];
+        if(!x){topicCells.push(tc(WW)); codeCells.push(tc(WW)); continue;}
+        const isCat=CAT.test(x.topic);
+        topicCells.push(tc(WW,{text:x.topic||x.grey||"",b:isCat}));
+        const codes=((p.store||{})["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean).join(", ");
+        const fill=un[x.k]?colour[un[x.k]]:null;
+        codeCells.push(tc(WW,{text:codes,fill}));
+      }
+      return {s,topicCells,codeCells};
+    });
+    const yr={vm:"restart",dir:1,fill:"F2F2F2",text:y.name,b:1};
+    // rows for this class: S1 topic, S1 codes, S2 topic, S2 codes
+    const [a,b]=sems;
+    rows.push(tr([tc(YW,{...yr}),tc(SW,{vm:"restart",text:"Semester 1",b:1,fill:"FFFFFF"}),...a.topicCells]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...a.codeCells]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"restart",text:"Semester 2",b:1,fill:"FFFFFF"}),...b.topicCells]));
+    rows.push(tr([tc(YW,{vm:"continue",fill:"F2F2F2"}),tc(SW,{vm:"continue",fill:"FFFFFF"}),...b.codeCells]));
+  });
+  const mainTbl=`<w:tbl><w:tblPr><w:tblW w:w="${TOT}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${grid.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.join("")}</w:tbl>`;
+  // unit colour key
+  const LW=[4200,700,8000];
+  const lrows=[tr([tc(LW[0],{text:"Class and semester",b:1,fill:"F2F2F2"}),tc(LW[1],{text:"",fill:"F2F2F2"}),tc(LW[2],{text:"Unit of work",b:1,fill:"F2F2F2"})]),
+    ...legend.map(l=>tr([tc(LW[0],{text:l.label}),tc(LW[1],{text:"",fill:l.fill}),tc(LW[2],{text:l.unit})]))];
+  const keyTbl=`<w:tbl><w:tblPr><w:tblW w:w="${LW.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${LW.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${lrows.join("")}</w:tbl>`;
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CTX="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const title=`<w:p><w:pPr><w:spacing w:after="120"/></w:pPr>${run("Learning Area Plan - Years 7 to 10",{b:1,sz:32})}</w:p>`;
+  const body=title+mainTbl+`<w:p><w:pPr><w:spacing w:after="0"/></w:pPr></w:p>`+par("Unit colours",{b:1,sz:18})+keyTbl+`<w:p/>`;
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CTX}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CTX}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/></Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="14"/><w:szCs w:val="14"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${body}<w:sectPr><w:pgSz w:w="23811" w:h="16838" w:orient="landscape"/><w:pgMar w:top="900" w:right="709" w:bottom="900" w:left="709" w:header="500" w:footer="500" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+
+document.getElementById("lapbtn").onclick=()=>{
+  if(!window.PLANS){alert("The plans are still loading. Try again in a moment.");return;}
+  const b=lapDocx(window.PLANS), a=document.createElement("a"), url=URL.createObjectURL(b);
+  a.href=url;a.download="Learning Area Plan - Years 7 to 10.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 (async()=>{
   document.getElementById("asof").textContent="Showing "+(qd?"the date "+qd:"today")+" ("+fmtD(today)+")";
   const main=document.getElementById("main");
   try{
     const plans=[];
     for(const c of CLASSES) plans.push(c.soon?c:await loadPlan(c));
+    window.PLANS=plans;
     main.innerHTML=render(plans);
   }catch(e){
     main.innerHTML=`<p class="msg">The plans could not be read. Open this page from the website (not from a file on your computer) so the plans can load.</p>`;

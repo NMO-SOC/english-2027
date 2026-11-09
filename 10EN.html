@@ -573,14 +573,14 @@ function cmDocx(sem){
       const kk=`${t.n}-${w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
       if(f("li"))lis.push(f("li"));
       f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
-      if(f("title"))titles.push(f("title"));
+      const kl=f("title")||f("li"); if(kl)titles.push(kl); // key knowledge: the lesson title, or its learning intention when untitled
       if(f("dn"))dos.push([f("title")||ln,f("dn")]);
     });
     let c2="";
     if(three(lis).length)c2+=P("Learning Intentions:",true)+three(lis).map(s=>P("• "+s)).join("");
     if(three(scs).length)c2+=P("Success Criteria:",true)+three(scs).map(s=>P("• "+s)).join("");
     c2=c2||P("Not yet entered");
-    const c3=titles.length?titles.map(s=>P(s)).join(""):P("Lesson titles to be added");
+    const c3=titles.length?titles.map(s=>P(s)).join(""):P("Not yet entered");
     const ui=unitOf[k], name=ui?unitName(ui.u):"", folder=ui?folders[name]:null;
     // A unit sits in the semester of its CAT (S1_ or S2_), even when its first weeks fall in the other semester
     const usem=ui?(/^S2_/.test((store[ui.u[ui.u.length-1].k]||"").trim())?2:1):0;

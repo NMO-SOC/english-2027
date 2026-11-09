@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>English overview 2027</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1f2933;--bg:#f7f7f5;--muted:#4a5562;--navy:#1d2b4f;--line:#ddd;
+    --sans:"Atkinson Hyperlegible",Arial,Helvetica,sans-serif;--serif:"Source Serif 4",Georgia,serif;
+    --t1:#2a5f9e;--t1l:#dce8f6;--t2:#2e7d32;--t2l:#dcefdb;--t3:#a8532a;--t3l:#f6e1d5;--t4:#7e3f84;--t4l:#efdff0;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg)}
+  .banner{background:var(--navy);color:#fff;text-align:center;padding:30px 16px 26px}
+  .banner h1{margin:4px 0 6px;font-family:var(--serif);font-size:clamp(26px,5vw,38px);font-weight:700;line-height:1.1}
+  .banner p{margin:0;opacity:.88;font-size:16px}
+  .banner .back{display:inline-block;margin-bottom:10px;color:#fff;font-size:15px}
+  .banner .asof{margin-top:12px;font-size:14px;opacity:.8}
+  .strip{display:grid;grid-template-columns:repeat(4,1fr);height:6px}
+  .strip span:nth-child(1){background:var(--t1)}.strip span:nth-child(2){background:var(--t2)}
+  .strip span:nth-child(3){background:var(--t3)}.strip span:nth-child(4){background:var(--t4)}
+  .wrap{max-width:1000px;margin:24px auto 0;padding:0 16px 40px}
+  .year{margin-bottom:28px}
+  .year h2{font-family:var(--serif);color:var(--navy);font-size:22px;margin:0 0 12px;border-bottom:2px solid var(--navy);padding-bottom:4px}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media (max-width:700px){.cards{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-top:6px solid var(--c);border-radius:4px;padding:16px 18px}
+  .card h3{margin:0 0 6px;font-family:var(--serif);font-size:20px;color:var(--navy)}
+  .card h3 .code{font-family:var(--sans);font-size:13px;font-weight:normal;color:var(--muted);margin-left:6px}
+  .status{margin:4px 0 10px;font-size:15px;color:var(--muted)}
+  .status.none{font-style:italic}
+  .unit,.topic,.cat{margin:6px 0;font-size:16px;line-height:1.4}
+  .lessons{margin:8px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+  .lessons li{background:var(--bg);border-left:4px solid var(--c);padding:6px 10px;font-size:15px;line-height:1.35}
+  .lessons li span{color:var(--muted)}
+  h4{margin:16px 0 6px;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .assess{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+  .assess li{font-size:15px;padding:6px 10px;border:1px solid var(--line);border-radius:4px;line-height:1.35}
+  .assess li.now{border-color:var(--navy);box-shadow:0 0 0 2px var(--navy) inset}
+  .assess li.done{color:var(--muted)}
+  .assess .tag{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-left:6px}
+  .msg{background:#fff;border:1px solid var(--line);padding:16px;border-radius:4px}
+  .y9{--c:var(--t3)} .y10{--c:var(--t4)}
+  .grey-note{font-size:13px;color:var(--muted)}
+  .ro{display:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="banner">
+    <a class="back" href="index.html">&larr; All plans</a>
+    <h1>English overview 2027</h1>
+    <p>What every class is studying this week, and its assessments</p>
+    <p class="asof" id="asof"></p>
+  </div>
+  <div class="strip"><span></span><span></span><span></span><span></span></div>
+</header>
+<main class="wrap" id="main"><p class="msg" id="loading">Loading the plans&hellip;</p></main>
+<script>
+// Read-only overview. It reads each plan's own data (TERMS and the saved entries), so it always matches the plans.
+const GROUPS=[
+  {year:"Year 9",cls:"y9",classes:[
+    {code:"09EN",name:"Mainstream"},
+    {code:"09ADVEN1",name:"Advanced"}]},
+  {year:"Year 10",cls:"y10",classes:[
+    {code:"10EN",name:"Mainstream"},
+    {code:"10ADVEN1",name:"Advanced"}]}
+];
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmtD=d=>d.getDate()+" "+MON[d.getMonth()];
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CAT=/^(S[12]_|EXAM)/;
+const qd=new URLSearchParams(location.search).get("today");
+const today=qd?new Date(qd+"T00:00"):new Date(); today.setHours(0,0,0,0);
+const lessonNames=(t,w)=>(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];
+
+async function loadPlan(c){
+  const txt=await (await fetch(c.code+".html",{cache:"no-cache"})).text();
+  const terms=new Function("return "+txt.match(/const TERMS=(\[[\s\S]*?\n\]);/)[1])();
+  const dm=txt.match(/^const DEFAULTS=(\{.*\});$/m), sm=txt.match(/^const SAVED=(\{.*\});$/m);
+  const store=Object.assign({},dm?JSON.parse(dm[1]):{},sm?JSON.parse(sm[1]):{});
+  return Object.assign({},c,{terms,store});
+}
+// Every week of the year, with its date range
+function weeksOf(p){
+  const out=[];
+  p.terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    const start=new Date(t.start+"T00:00"); start.setDate(start.getDate()+7*(w-1));
+    const end=new Date(start); end.setDate(end.getDate()+7);
+    const k=`${t.n}--${w}`;
+    out.push({t,w,k,start,end,grey:(t.grey||{})[w]||"",topic:(p.store[k]||"").trim()});
+  }});
+  return out;
+}
+// Unit name for each week: a unit runs to its CAT (exams are not units)
+function unitsOf(p,weeks){
+  const name={}; let cur=[];
+  weeks.forEach(x=>{
+    if((x.t.noLessons||[]).includes(x.w)&&!(x.t.exam||[]).includes(x.w)) return;
+    cur.push(x.k);
+    if(CAT.test(x.topic)){
+      if(!x.topic.startsWith("EXAM")){const nm=x.topic.slice(x.topic.indexOf(":")+1).trim(); cur.forEach(k=>name[k]=nm);}
+      cur=[];
+    }
+  });
+  return name;
+}
+function lessonsHtml(p,cur){
+  return lessonNames(cur.t,cur.w).map((ln,j)=>{
+    const k=`${cur.t.n}-${cur.w}-${j+1}`, g=s=>(p.store[k+"-"+s]||"").trim();
+    const title=g("title"), li=g("li"), dn=g("dn");
+    if(!title&&!li&&!dn) return "";
+    return `<li><b>${esc(ln)}${title?" · "+esc(title):""}</b>${li?`<br><span>${esc(li)}</span>`:""}</li>`;
+  }).filter(Boolean).join("");
+}
+function render(p){
+  const weeks=weeksOf(p), un=unitsOf(p,weeks);
+  const cur=weeks.find(x=>today>=x.start&&today<x.end);
+  let h=`<article class="card ${p.cls}" style="--c:var(--${p.cls==="y9"?"t3":"t4"})"><h3>${esc(p.name)}<span class="code">${esc(p.code)}</span></h3>`;
+  if(!cur){
+    h+=`<p class="status none">Not in term time today.</p>`;
+  } else {
+    h+=`<p class="status">Term ${cur.t.n}, Week ${cur.w} · Monday ${fmtD(cur.start)}${cur.grey?" · "+esc(cur.grey):""}</p>`;
+    if(un[cur.k]) h+=`<p class="unit"><b>Unit:</b> ${esc(un[cur.k])}</p>`;
+    if(cur.topic) h+=`<p class="topic"><b>This week:</b> ${esc(cur.topic)}</p>`;
+    if(CAT.test(cur.topic)){
+      const info=(p.store["info-"+cur.k]||"").trim();
+      h+=`<p class="cat"><b>Assessment this week</b></p>`+(info?`<p class="topic">${esc(info).replace(/\n/g,"<br>")}</p>`:"");
+    }
+    const ls=lessonsHtml(p,cur);
+    if(ls) h+=`<ul class="lessons">${ls}</ul>`;
+  }
+  const as=weeks.filter(x=>CAT.test(x.topic));
+  h+=`<h4>Assessments</h4>`;
+  h+= as.length? `<ul class="assess">`+as.map(x=>{
+      const st=x===cur?"now":(x.end<=today?"done":"up");
+      const tag=st==="now"?"This week":st==="done"?"Done":"Upcoming";
+      return `<li class="${st}"><b>Term ${x.t.n}, Week ${x.w}</b> · ${fmtD(x.start)}<span class="tag">${tag}</span><br>${esc(x.topic)}</li>`;
+    }).join("")+`</ul>` : `<p class="status none">No assessments entered yet.</p>`;
+  return h+`</article>`;
+}
+(async()=>{
+  document.getElementById("asof").textContent="Showing "+(qd?"the date "+qd:"today")+" ("+fmtD(today)+")";
+  const main=document.getElementById("main");
+  try{
+    const all={};
+    for(const g of GROUPS) for(const c of g.classes) all[c.code]=await loadPlan(c);
+    main.innerHTML=GROUPS.map(g=>`<section class="year"><h2>${esc(g.year)}</h2><div class="cards">`+
+      g.classes.map(c=>render(Object.assign({},all[c.code],{name:c.name,cls:g.cls}))).join("")+`</div></section>`).join("");
+  }catch(e){
+    main.innerHTML=`<p class="msg">The plans could not be read. Open this page from the website (not from a file on your computer) so the plans can load.</p>`;
+  }
+})();
+</script>
+</body>
+</html>

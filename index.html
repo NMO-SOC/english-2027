@@ -46,6 +46,11 @@
   footer img{mix-blend-mode:multiply;opacity:.85;height:auto}
   .senior .list{grid-template-columns:1fr 1fr;gap:20px}
   @media (max-width:560px){.cols{grid-template-columns:1fr}.senior .list{grid-template-columns:1fr;gap:16px}}
+  .allbtn-wrap{max-width:800px;margin:20px auto 0;padding:0 16px}
+  .allbtn{display:block;text-align:center;background:var(--navy);color:#fff;padding:16px 20px;border-radius:4px;font-family:var(--serif);font-size:18px;font-weight:700;text-decoration:none}
+  .allbtn:hover{background:#2c3f6b}
+  .allbtn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
+  .allbtn small{display:block;font-family:var(--sans);font-weight:normal;font-size:14px;opacity:.9;margin-top:4px}
   @media (prefers-reduced-motion:reduce){a.plan{transition:none}}
 </style>
 </head>
@@ -90,6 +95,7 @@
   </section>
 </main>
 
+<div class="allbtn-wrap"><a class="allbtn" href="english.html">English overview 2027<small>What every class is studying this week, and their assessments</small></a></div>
 <footer><img src="logo.png" width="120" height="122" alt="English faculty values: Consistency, Culture and Collaboration"></footer>
 <script>
 // Where we are in the 2027 school year (same term dates as the plans). ?today=2027-02-17 previews.

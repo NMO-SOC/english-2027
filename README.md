@@ -18,15 +18,16 @@ The site is plain HTML with no server, database, framework or build tools. Each 
 5. [Reading a plan (live site)](#reading-a-plan-live-site)
 6. [Editing a plan (on your computer)](#editing-a-plan-on-your-computer)
 7. [Printing and PDFs](#printing-and-pdfs)
-8. [Unit plans (Word)](#unit-plans-word)
-9. [Changing the design: template.html and build.py](#changing-the-design-templatehtml-and-buildpy)
-10. [Adding a new plan](#adding-a-new-plan)
-11. [Term dates, holidays and special weeks](#term-dates-holidays-and-special-weeks)
-12. [How the data is stored](#how-the-data-is-stored)
-13. [Links to a week or term](#links-to-a-week-or-term)
-14. [Accessibility, phones and browsers](#accessibility-phones-and-browsers)
-15. [Troubleshooting](#troubleshooting)
-16. [Quick reference](#quick-reference)
+8. [Units, unit plans and curriculum maps (Word)](#units-unit-plans-and-curriculum-maps-word)
+9. [English overview (`english.html`)](#english-overview-englishhtml)
+10. [Changing the design: template.html and build.py](#changing-the-design-templatehtml-and-buildpy)
+11. [Adding a new plan](#adding-a-new-plan)
+12. [Term dates, holidays and special weeks](#term-dates-holidays-and-special-weeks)
+13. [How the data is stored](#how-the-data-is-stored)
+14. [Links to a week or term](#links-to-a-week-or-term)
+15. [Accessibility, phones and browsers](#accessibility-phones-and-browsers)
+16. [Troubleshooting](#troubleshooting)
+17. [Quick reference](#quick-reference)
 
 ---
 
@@ -40,6 +41,7 @@ The site is plain HTML with no server, database, framework or build tools. Each 
 | `10ADVEN1.html` | The Year 10 Advanced English plan: the template design plus Year 10 data. |
 | `09EN.html` | The Year 9 Mainstream English plan (draft): the template design plus Year 9 data. |
 | `10EN.html` | The Year 10 Mainstream English plan (draft): the template design plus Year 10 data. The film for the film study is still to be decided. |
+| `english.html` | The **English overview 2027** page. It shows every year level term by week, with each class's topic and assessments, and offers print and the Learning Area Plan download. It reads the plans' data, so it needs the website (not a file on your computer). |
 | `build.py` | A small script that copies the template's design into the plans and keeps each plan's own title, heading and data. |
 | `logo.png` | The faculty values logo (Consistency, Culture and Collaboration). It is the browser tab icon and sits in the homepage footer. |
 | `README.md` | This file. |
@@ -67,7 +69,8 @@ From top to bottom:
 3. **Mainstream** column: Years 7, 8, 9 and 10.
 4. **Advanced** column: Years 7, 8, 9 and 10.
 5. **VCE** panel across the full width: Years 11 and 12.
-6. **Footer:** the faculty values logo.
+6. **English overview 2027** button under the VCE panel: opens `english.html` (see [English overview](#english-overview-englishhtml)).
+7. **Footer:** the faculty values logo.
 
 ### Plan cards
 
@@ -273,27 +276,49 @@ Plans are laid out for **A3 landscape**: each term starts on a new page, and col
 
 ---
 
-## Unit plans (Word)
+## Units, unit plans and curriculum maps (Word)
 
-**Unit plans (Word)** downloads one unit of work as a `.docx` curriculum map in the school's format (landscape A4, one table). It works on the live site and on a local copy, and it never changes the plan.
+Each plan page has three Word downloads in the header. They are built in the browser from the plan's own data, so they always match what is on the site. None of them change the plan.
 
-**What counts as a unit:** it starts in the first teaching week after the previous assessment and ends with its CAT (a weekly topic starting `S1_` or `S2_`). Exams don't get unit plans: an exam and its revision weeks belong to no unit. Units can cross terms. Grey weeks without lessons (Set-Up, Step-Up and so on) are skipped. Weeks after the last assessment of the year belong to no unit. To move a unit's start, move the CAT before it.
+**What counts as a unit:** a unit starts in the first teaching week after the previous CAT and ends with its CAT (a weekly topic starting `S1_` or `S2_`). Exams are not units. Units can cross terms, and a unit is in the semester of its CAT. Grey weeks without lessons (Set-Up, Step-Up and so on) are skipped. Step-Up is the start of the next semester, so it is left out of Semester 2.
 
-The window lists every unit with its weeks. Click **Download .docx** beside one.
+### Unit plans (Word)
 
-**The document:**
+The **Unit plans (Word)** button lists every unit. **Download .docx** beside a unit gives the school's unit plan template, with:
 
-| Row or column | Contents |
+| Section | Contents |
 |---|---|
-| Row 1 | `CURRICULUM MAP – Year 9 English` (from the plan code; `ADV` gives "Advanced") |
-| Row 2 | Semester and term(s), then "Unit of work:" with the CAT's title and the week range |
-| Week | Week of the unit (Week 1, 2…), the term and week (e.g. Term 1, Week 5) and the Monday's date |
-| TOPIC / Links to VIC Curriculum | The weekly topic, then each curriculum code on its own line |
-| Weekly Learning Intention and Success Criteria | A summary of the week: up to 3 Learning Intentions and 3 Success Criteria, picked from the start, middle and end of the week |
-| Link to lesson plans | Each lesson in full (title, Learning Intention, Success Criteria, Do Now), then an `[embed lesson plan]` placeholder. To fill one in Word: click the placeholder, then **Insert > Object > Create from File > Browse**, tick **Display as icon**, then **OK** |
-| Assessment | Only in the CAT's week: the CAT and its assessment details |
+| Adjustments / Scaffolds | EAL, Integration and Extension guidance, written from the unit's own topic |
+| Mapping to F–10 Victorian Curriculum 2.0 | The unit's curriculum codes, and the achievement standard for Level 9 and Level 9 and 10 |
+| Topic strip | Subject, year level and unit name, the strand (from the codes), and the recommended teaching time |
+| Big idea and essential understandings | The unit name and what students do, with one learning intention and one success criterion for the whole unit |
+| Cross curriculum priorities and capabilities | Tick boxes, chosen from the unit's wording. Check these before use |
+| Common assessments | Pre-assessment (the first Do Now), formative (checks in every lesson) and summative (the CAT), with 21CLD tick boxes |
 
-The download includes unsaved edits currently on screen.
+The achievement standard wording is drafted from the unit's focus, not copied from VCAA. Check it against the official Victorian Curriculum 2.0 text before the plan is used.
+
+Where unit plans live: in each unit's folder on the drive, not in the `Curriculum Map` folder.
+
+### Curriculum map (Word)
+
+The **Curriculum map (Word)** button gives one document per semester, in the school's curriculum map template. Each week has its week number, term week and Monday's date; the weekly topic and its curriculum codes; the weekly learning intentions and success criteria (up to three of each); the key knowledge (lesson titles, or the learning intention where a lesson has no title); a link to the lesson plan for that week's unit; the Do Nows; and the CAT, with a link to its assessment brief.
+
+Save each download in that semester's `Curriculum Map` folder, so the lesson plan and CAT links work. Each `Curriculum Map` folder should hold only its semester curriculum map.
+
+### Learning area plan (Word)
+
+On the English overview page, **Learning area plan (Word)** downloads the school's Learning Area Plan for Years 7 to 10. Each class has a block for each semester, with a topic row and a curriculum codes row for every week. Each unit is coloured the same in both rows. Exam weeks appear in the week columns, and the **Exam Revision** column shows the semester's exam. The download includes the school logo, the Victorian Curriculum header and the VCAA footer from the school's template.
+
+---
+
+## English overview (`english.html`)
+
+**English overview 2027** shows the whole English year, term by term, with weeks as columns. Each class is a row: Year 7 and 8 (Mainstream and Advanced), Year 9 and 10 (Mainstream and Advanced), and Years 11 and 12 (VCE). Each cell shows that week's topic. CAT cells are navy and exam cells are grey, and the current week is highlighted. Years without plans on the site are greyed out with "Coming soon".
+
+- **Print:** the **Print** button prints the timetable (A3 landscape).
+- **Learning area plan (Word):** see above.
+- The page reads each plan's own data, so it updates when a plan changes. It needs the website: opening the file from your computer can't read the plans.
+- To test a date, add `?today=2027-03-01` to the address.
 
 ---
 
@@ -362,7 +387,9 @@ Example: Year 8 Advanced, class code `08ADVEN1`.
 4. **Fill it in:** open the file in Chrome or Edge, type the plan in and **Save** over the same file.
 5. **Link it from the homepage:** change its "Coming soon" card in `index.html` (see [Plan cards](#plan-cards)).
 6. **Add it to future rebuilds:** from now on, run `python build.py 08ADVEN1.html 09ADVEN1.html 10ADVEN1.html 09EN.html 10EN.html`.
-7. **Commit and push** the new file and `index.html`.
+7. **Name its unit folders:** add the plan's unit names and folder names to `CM_FOLDERS` in `template.html`. These drive the lesson plan and CAT links in the curriculum map download.
+8. **Show it on the overview:** add it to `CLASSES` in `english.html` (replace its greyed-out entry) and to `LAP_YEARS` in the same file so it appears in the Learning Area Plan.
+9. **Commit and push** the new file, `index.html`, `template.html` and `english.html`.
 
 ---
 
@@ -503,7 +530,10 @@ Every week and term has its own address. Add it to the end of the plan's URL:
 | Print everything | **Print full plan** |
 | Print an overview | **Print CATs and topics** |
 | Make a PDF | Either print button, then choose Save as PDF |
-| Make a unit plan | **Unit plans (Word)**, then **Download .docx** beside the unit |
+| Make a unit plan | **Unit plans (Word)**, then **Download .docx** beside the unit. Save it in the unit's folder |
+| Make a curriculum map | **Curriculum map (Word)**, then download each semester into its `Curriculum Map` folder |
+| Make the Learning Area Plan | English overview page, **Learning area plan (Word)** |
+| Print the English overview | English overview page, **Print** |
 | Change term dates | `TERMS` in `template.html` and `T` in `index.html`, then rebuild |
 | Link to a week | `10ADVEN1.html#w2-5` |
 | Preview a date | Add `?today=2027-05-12` to the address |

@@ -183,6 +183,7 @@
     <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
     <button id="unitbtn" title="Download a unit of work (first lesson to CAT) as a Word curriculum map">Unit plans (Word)</button>
     <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
+    <button id="upv2btn" title="Test: unit plan in the new school template">Unit plan, new template (test)</button>
     <button id="clear" class="ed">Clear all</button>
   </div>
 </header>
@@ -638,6 +639,125 @@ document.getElementById("clear").onclick=()=>{
   document.querySelectorAll(".les.filled").forEach(el=>el.classList.remove("filled"));
   dirty=true;setStatus("Unsaved changes – click Save");
 };
+
+// Unit plan, new school template (test). One document per unit of work.
+// Tick boxes for cross-curriculum priorities, capabilities and 21CLD are chosen from the unit's own wording; the teacher should check them.
+const UP2_CROSS=[
+ ["Learning about Aboriginal and Torres Strait Islander histories and cultures",/aboriginal|torres|indigenous|first nations/],
+ ["Learning about Sustainability",/sustainab|climate/],
+ ["Learning about Asia and Australia's engagement with Asia",/asia|china|japan|korea|indonesia|vietnam/]];
+const UP2_CAPS=[
+ ["Ethical Capability",/ethic|justice|fair|moral|power|bias|responsib|rights/],
+ ["Critical and Creative Thinking",/analys|argu|persua|creative|essay|evaluat|interpret|critic|imagin/],
+ ["Intercultural Capability",/cultur|identity|m[aā]ori|asia|diverse|perspective|country/],
+ ["Personal and Social Capability",/oral|present|debate|collab|group|team|peer|reflect|feedback|discuss|rehears/]];
+const UP2_CLD=[
+ ["Knowledge Construction",/analys|interpret|evidence|context|understand|theme|explore|explain/],
+ ["Real world",/audience|persua|argu|pitch|letter|advert|media|news|public|community/],
+ ["Collaboration",/collab|group|peer|team|discuss|debate|pair/],
+ ["Self-regulation",/reflect|goal|plan|revis|draft|feedback|self|rehears|checklist/],
+ ["Skillful Communication",/oral|present|write|writ|essay|speech|debate|communicat|letter|pitch/],
+ ["ICT for learning",/film|digital|online|ict|slide|video|podcast|screen|media/]];
+function unitDocxV2(u){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const yearLevel=m?`Year ${+m[1]}${m[2]?" Advanced":""}`:code;
+  const name=unitName(u);
+  const run=(text,o={})=>`<w:r><w:rPr>${o.b?"<w:b/>":""}${o.i?"<w:i/>":""}<w:sz w:val="${o.sz||18}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(text,o={})=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${run(text,o)}</w:p>`;
+  const bullets=items=>items.map(s=>para("• "+s)).join("");
+  const cell=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span>1?`<w:gridSpan w:val="${o.span}"/>`:""}${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}</w:tcPr>${o.body||para("")}</w:tc>`;
+  const tr=cells=>`<w:tr>${cells.join("")}</w:tr>`;
+  const table=(widths,rows)=>`<w:tbl><w:tblPr><w:tblW w:w="${widths.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${widths.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.join("")}</w:tbl>`;
+
+  // Data for this unit
+  const weeks=u.map(x=>({t:TERMS.find(T=>T.n===x.t),w:x.w,k:x.k,topic:(store[x.k]||"").trim(),isCat:x===u[u.length-1]}));
+  const topics=weeks.map(x=>x.topic.replace(/^S[12]_\w+?:\s*/,"").replace(/^EXAM:\s*/,"")).filter(Boolean);
+  const codes=[...new Set(weeks.flatMap(x=>(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean)))];
+  const lis=[],scs=[],dns=[],titles=[];
+  let firstDn="";
+  weeks.forEach(x=>lessonNames(x.t,x.w).forEach((ln,j)=>{
+    const kk=`${x.t.n}-${x.w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+    if(f("li"))lis.push(f("li"));
+    f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+    if(f("dn"))dns.push(f("dn"));
+    if(f("title"))titles.push(f("title"));
+    if(!firstDn&&f("dn"))firstDn=f("dn");
+  }));
+  const uniq=a=>[...new Set(a)];
+  const liU=uniq(lis), scU=uniq(scs);
+  const cat=weeks[weeks.length-1];
+  const catInfo=(store["info-"+cat.k]||"").trim();
+  const strandCounts={};
+  codes.forEach(c=>{const mm=c.match(/^VC2E\d+(LA|LE|LY)/); if(mm) strandCounts[mm[1]]=(strandCounts[mm[1]]||0)+1;});
+  const STRAND={LA:"Language",LE:"Literature",LY:"Literacy"};
+  const top=Object.entries(strandCounts).sort((a,b)=>b[1]-a[1])[0];
+  const strand=top?STRAND[top[0]]:"to be added";
+  const corpus=[name,...topics,...liU,...scU,...dns,...titles,catInfo].join(" ").toLowerCase();
+  const tick=(on,label)=>para((on?"☒ ":"☐ ")+label);
+  const cross=UP2_CROSS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const caps=UP2_CAPS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const cld=UP2_CLD.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const firstWeek=weeks[0];
+  const preText=firstDn?`Week 1 Do Now (diagnostic): ${firstDn}`:"To be added";
+  const catText=para(cat.topic||"To be added",{b:1})+(catInfo?bullets(catInfo.split("\n").filter(s=>s.trim()).map(s=>s.trim())):"");
+  const W=[1421,1421,1421,2549,6045];
+
+  const sec1=table([2850,5110,5110],[
+    tr([cell(13070,{span:3,fill:"FFC0E3",body:para("Adjustments/ Scaffolds",{b:1})})]),
+    tr([cell(2850,{body:para("EAL",{b:1})}),cell(5110,{body:para("Integration",{b:1})}),cell(5110,{body:para("Extension",{b:1})})]),
+    tr([cell(2850,{body:para("To be completed by the teacher")}),cell(5110,{body:para("To be completed by the teacher")}),cell(5110,{body:para("To be completed by the teacher")})])]);
+  const sec2=table([6229,6821],[
+    tr([cell(13050,{span:2,fill:"D9D9D9",body:para("Mapping to F–10 Victorian Curriculum 2.0",{b:1})})]),
+    tr([cell(13050,{span:2,body:para("Content description: "+(codes.join(", ")||"to be added"))})]),
+    tr([cell(13050,{span:2,fill:"D1E8B2",body:para("Achievement standard",{b:1})})]),
+    tr([cell(6229,{body:para("Level 9",{b:1})}),cell(6821,{body:para("Level 9 and 10",{b:1})})]),
+    tr([cell(6229,{body:para("To be added")}),cell(6821,{body:para("To be added")})])]);
+  const sec3=table([3120,3120,6600],[
+    tr([cell(12840,{span:3,fill:"C6ECFF",body:para(`${yearLevel} English: ${name}`,{b:1})})]),
+    tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: to be added")}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
+  const eu=para("Learning Intentions:",{b:1})+bullets(liU)+para("Success Criteria:",{b:1})+bullets(scU);
+  const bigRows=[
+    tr([cell(4263,{fill:"D1E8B2",body:para("The Big Question / Idea",{b:1})}),cell(8594,{fill:"D1E8B2",body:para("Essential Understandings",{b:1})})]),
+    tr([cell(4263,{body:para(name,{b:1})+para("What students do in this unit:",{b:1})+bullets(topics)}),cell(8594,{vm:"restart",body:eu})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Cross Curricular Priorities",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:cross}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Capabilities curriculum",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:caps}),cell(8594,{vm:"continue"})])];
+  const sec4=table([4263,8594],bigRows);
+  const sec5=table(W,[
+    tr([cell(4263,{span:3,fill:"D1E8B2",body:para("Common Assessments",{b:1})}),cell(8594,{span:2,fill:"D1E8B2",body:para("21CLD",{b:1})})]),
+    tr([cell(W[0],{body:para("Pre-assessment",{b:1})+para(preText)}),
+        cell(W[1],{body:para("Formative (ongoing)",{b:1})+para("Weekly Do Nows and success criteria checks across the unit")}),
+        cell(W[2],{body:para("Summative (final)",{b:1})+catText}),
+        cell(W[3],{body:cld}),
+        cell(W[4],{})])]);
+
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  const body=para(`English · ${yearLevel} · ${name}`,{b:1,sz:24})+sec1+para("")+sec2+para("")+sec3+para("")+sec4+para("")+sec5+para("");
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/></Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${body}<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("upv2btn").onclick=()=>{
+  const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
+  dl.innerHTML=`<h2 id="up2h">Unit plan (new template, test)</h2><p>Each unit runs from its first lesson to its CAT. This is a test version: check the ticks and the placeholders before using it.</p>`+
+    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-i]");if(!b)return;
+    const u=us[b.dataset.i], a=document.createElement("a"), url=URL.createObjectURL(unitDocxV2(u));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Unit Plan (new) - ${unitName(u).replace(/[\\/:*?"<>|]/g,"")}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
 </script>
 </body>
 </html>

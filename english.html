@@ -44,7 +44,10 @@
   td.now,thead th.now{box-shadow:inset 0 0 0 3px #e0a800}
   td.now{background-color:#fff8dc}
   td.cat.now{background:var(--navy)}
+  .y7 th.rowhead{border-left:6px solid var(--t1)} .y8 th.rowhead{border-left:6px solid var(--t2)}
   .y9 th.rowhead{border-left:6px solid var(--t3)} .y10 th.rowhead{border-left:6px solid var(--t4)}
+  .y11 th.rowhead,.y12 th.rowhead{border-left:6px solid var(--navy)}
+  .soonrow th.rowhead{color:var(--muted);font-weight:normal}
   .legend{max-width:1400px;margin:0 auto 20px;font-size:14px;color:var(--muted)}
   .legend span{display:inline-block;margin-right:14px}
   .legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
@@ -66,10 +69,16 @@
 <script>
 // Read-only overview. It reads each plan's own data (TERMS and the saved entries), so it always matches the plans.
 const CLASSES=[
+  {soon:true,name:"Year 7 Mainstream",yr:"y7"},
+  {soon:true,name:"Year 7 Advanced",yr:"y7"},
+  {soon:true,name:"Year 8 Mainstream",yr:"y8"},
+  {soon:true,name:"Year 8 Advanced",yr:"y8"},
   {code:"09EN",name:"Year 9 Mainstream",yr:"y9"},
   {code:"09ADVEN1",name:"Year 9 Advanced",yr:"y9"},
   {code:"10EN",name:"Year 10 Mainstream",yr:"y10"},
-  {code:"10ADVEN1",name:"Year 10 Advanced",yr:"y10"}];
+  {code:"10ADVEN1",name:"Year 10 Advanced",yr:"y10"},
+  {soon:true,name:"Year 11 (VCE)",yr:"y11"},
+  {soon:true,name:"Year 12 (VCE)",yr:"y12"}];
 const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const fmtD=d=>d.getDate()+" "+MON[d.getMonth()];
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -96,7 +105,7 @@ function cellFor(p,t,w){
   return {cls:"",html:esc(topic)};
 }
 function render(plans){
-  const ref=plans[0];                  // every plan has the same term calendar
+  const ref=plans.find(p=>!p.soon);    // every plan has the same term calendar
   let out="";
   ref.terms.forEach(t=>{
     const weeks=[];
@@ -114,6 +123,10 @@ function render(plans){
     });
     h+=`</tr></thead><tbody>`;
     plans.forEach(p=>{
+      if(p.soon){
+        h+=`<tr class="${p.yr} soonrow"><th scope="row" class="rowhead">${esc(p.name)}<small>Coming soon</small></th>`+weeks.map(()=>`<td class="grey"></td>`).join("")+`</tr>`;
+        return;
+      }
       h+=`<tr class="${p.yr}"><th scope="row" class="rowhead">${esc(p.name)}<small>${esc(p.code)}</small></th>`;
       weeks.forEach(x=>{
         const c=cellFor(p,t,x.w);
@@ -132,7 +145,7 @@ function render(plans){
   const main=document.getElementById("main");
   try{
     const plans=[];
-    for(const c of CLASSES) plans.push(await loadPlan(c));
+    for(const c of CLASSES) plans.push(c.soon?c:await loadPlan(c));
     main.innerHTML=render(plans);
   }catch(e){
     main.innerHTML=`<p class="msg">The plans could not be read. Open this page from the website (not from a file on your computer) so the plans can load.</p>`;

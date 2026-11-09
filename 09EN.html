@@ -64,6 +64,11 @@
   .ct{display:block;font-size:13.5px}
   .les{margin-top:3px}
   .lh{cursor:pointer;background:#fff;padding:5px 7px;font-weight:bold;border:1px solid var(--line);border-left:4px solid var(--line);user-select:none;font-size:13.5px}
+  .lt{font-weight:normal}
+  /* clickable bars respond on hover */
+  .lh:hover{background:#eef1f6}
+  .cch:hover{background:rgba(0,0,0,.12)}
+  .wn.cat:hover{background:#2c3f6b}
   .lh::before,.cch::before{content:"\25B8  ";content:"\25B8  " / ""}
   .les.open .lh::before,.ccw.open .cch::before{content:"\25BE  ";content:"\25BE  " / ""}
   /* lessons with content get the term colour on their edge */
@@ -261,10 +266,10 @@ TERMS.forEach(t=>{
     const lessons=lessonNames(t,w);
     const nn=(t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w);
     const tcls=[g&&!(t.exam||[]).includes(w)?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
-    h+=`<td id="w${t.n}-${w}" style="--o:${w}"${tcls?` class="${tcls}"`:""}>${nn?"":`<div class="wn" contenteditable="true" data-k="${t.n}--${w}"></div><div class="info" id="i${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="info-${t.n}--${w}" data-ph="Assessment details"></div><div class="ccw"><div class="cch" role="button" tabindex="0" aria-expanded="false" aria-controls="c${t.n}-${w}">Curriculum codes</div><div class="codes" id="c${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="codes-${t.n}--${w}" data-ph="Add curriculum codes"></div></div>`}`;
+    h+=`<td id="w${t.n}-${w}" style="--o:${w}"${tcls?` class="${tcls}"`:""}>${nn?"":`<div class="wn" contenteditable="true" data-k="${t.n}--${w}"></div><div class="info" id="i${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="info-${t.n}--${w}" data-ph="Assessment details"></div><div class="ccw"><div class="cch" role="button" tabindex="0" aria-label="Curriculum codes" aria-expanded="false" aria-controls="c${t.n}-${w}">Codes</div><div class="codes" id="c${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="codes-${t.n}--${w}" data-ph="Add curriculum codes"></div></div>`}`;
     lessons.forEach((name,i)=>{
       const k=`${t.n}-${w}-${i+1}`, title=store[`${k}-title`];
-      h+=`<div class="les"><div class="lh" role="button" tabindex="0" aria-expanded="false" aria-controls="p${k}"${!title&&name==="Ad libitum"?' title="Flexible lesson in a short week"':""}>${esc(title?name+" - "+title:name)}</div><div class="lb" id="p${k}" hidden="until-found">`+
+      h+=`<div class="les"><div class="lh" role="button" tabindex="0" aria-expanded="false" aria-controls="p${k}"${!title&&name==="Ad libitum"?' title="Flexible lesson in a short week"':""}>${esc(name)}${title?`<span class="lt"> - ${esc(title)}</span>`:""}</div><div class="lb" id="p${k}" hidden="until-found">`+
          `<div class="fl">Learning Intention</div><div class="fld" contenteditable="true" data-k="${k}-li" data-ph="What students will learn (student-friendly)"></div>`+
          `<div class="fl">Success Criteria</div><div class="fld" contenteditable="true" data-k="${k}-sc" data-ph="Observable, specific steps to show learning"></div>`+
          `<div class="fl">Do Now</div><div class="fld" contenteditable="true" data-k="${k}-dn" data-ph="Starter task at the start of the lesson"></div>`+

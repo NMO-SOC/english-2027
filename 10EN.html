@@ -560,6 +560,7 @@ function cmDocx(sem){
     row([P(""),P("Topic / Links to VIC Curriculum",true),P("Learning Intentions: / Success Criteria: / (include in lesson plan)",true),P("Key Knowledge",true),P("Link to Lesson plans",true),P("Do Now",true),P("Assessment",true)]);
   const rowsXml=[]; let n=0;
   terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if(t.grey[w]=="Step-Up")continue; // Step-Up is the start of the next semester, so it is left out here
     n++;
     const k=`${t.n}--${w}`, d=new Date(t.start+"T00:00"); d.setDate(d.getDate()+7*(w-1));
     const topic=(store[k]||"").trim(), g=t.grey[w];

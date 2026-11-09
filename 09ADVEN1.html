@@ -686,6 +686,27 @@ function unitDocxV2(u){
   const uniq=a=>[...new Set(a)];
   const liU=uniq(lis), scU=uniq(scs);
   const cat=weeks[weeks.length-1];
+  const UNIT_TEXT=[name,...topics,...titles,...liU,...scU].join(" ");
+  const SUBS=[
+    [/film|viewing|camels/i,"Analysing film","film language and camera techniques"],
+    [/oral|present|debate|speech|rehears/i,"Speaking and presenting","spoken language and presentation"],
+    [/memoir|creative|narrative|crafting|personal text/i,"Creating texts","creative and personal language"],
+    [/grammar|conventions|punctuation|sentence/i,"Language conventions","language conventions and sentence structure"],
+    [/macbeth|romeo|shakespeare|early modern/i,"Shakespearean drama","Shakespearean language and dramatic structure"],
+    [/persua|argu|contention|analys|essay/i,"Analysing argument and texts","persuasive and analytical language"],
+    [/animal farm|allegory|novel|fable/i,"Analysing novels","narrative voice and symbolism"]];
+  const subHits=SUBS.filter(([re])=>re.test(UNIT_TEXT));
+  const sub=subHits.length?[...new Set(subHits.map(x=>x[1]))].slice(0,2).join(", "):"Reading and responding to texts";
+  const focusPhrase=subHits.length?subHits[0][2]:"text structure and language features";
+  const opt=(re,yes)=>re.test(UNIT_TEXT)?yes:"";
+  const adj={
+    eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the CAT in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
+    int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the CAT, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
+    ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the CAT.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
+  };
+  const std9=`By the end of Level 9, students analyse how ${focusPhrase} shape meaning for an audience. They use evidence from the text to support their interpretation and organise their ideas in clear, structured responses.`;
+  const std10=`By the end of Level 10, students evaluate how ${focusPhrase} position the audience and shape meaning. They sustain a clear interpretation or argument using precise, selected evidence, and adapt language and structure to purpose and audience.`;
+  const formText=`Checked in every lesson against the success criteria, with the Do Now as an entry check (Weeks 1–${weeks.length}).`;
   const catInfo=(store["info-"+cat.k]||"").trim();
   const strandCounts={};
   codes.forEach(c=>{const mm=c.match(/^VC2E\d+(LA|LE|LY)/); if(mm) strandCounts[mm[1]]=(strandCounts[mm[1]]||0)+1;});
@@ -698,23 +719,23 @@ function unitDocxV2(u){
   const caps=UP2_CAPS.map(([l,re])=>tick(re.test(corpus),l)).join("");
   const cld=UP2_CLD.map(([l,re])=>tick(re.test(corpus),l)).join("");
   const firstWeek=weeks[0];
-  const preText=firstDn?`Week 1 Do Now (diagnostic): ${firstDn}`:"To be added";
+  const preText=firstDn?`Week 1 Do Now (diagnostic): ${firstDn}`:`Diagnostic at the start of the unit: students write what they already know about "${topics[0]||name}" and one question they have.`;
   const catText=para(cat.topic||"To be added",{b:1})+(catInfo?bullets(catInfo.split("\n").filter(s=>s.trim()).map(s=>s.trim())):"");
   const W=[1421,1421,1421,2549,6045];
 
   const sec1=table([2850,5110,5110],[
     tr([cell(13070,{span:3,fill:"FFC0E3",body:para("Adjustments/ Scaffolds",{b:1})})]),
     tr([cell(2850,{body:para("EAL",{b:1})}),cell(5110,{body:para("Integration",{b:1})}),cell(5110,{body:para("Extension",{b:1})})]),
-    tr([cell(2850,{body:para("To be completed by the teacher")}),cell(5110,{body:para("To be completed by the teacher")}),cell(5110,{body:para("To be completed by the teacher")})])]);
+    tr([cell(2850,{body:para(adj.eal)}),cell(5110,{body:para(adj.int)}),cell(5110,{body:para(adj.ext)})])]);
   const sec2=table([6229,6821],[
     tr([cell(13050,{span:2,fill:"D9D9D9",body:para("Mapping to F–10 Victorian Curriculum 2.0",{b:1})})]),
     tr([cell(13050,{span:2,body:para("Content description: "+(codes.join(", ")||"to be added"))})]),
     tr([cell(13050,{span:2,fill:"D1E8B2",body:para("Achievement standard",{b:1})})]),
     tr([cell(6229,{body:para("Level 9",{b:1})}),cell(6821,{body:para("Level 9 and 10",{b:1})})]),
-    tr([cell(6229,{body:para("To be added")}),cell(6821,{body:para("To be added")})])]);
+    tr([cell(6229,{body:para(std9)}),cell(6821,{body:para(std10)})])]);
   const sec3=table([3120,3120,6600],[
     tr([cell(12840,{span:3,fill:"C6ECFF",body:para(`${yearLevel} English: ${name}`,{b:1})})]),
-    tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: to be added")}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
+    tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: "+sub)}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
   const eu=para("Learning Intentions:",{b:1})+bullets(liU)+para("Success Criteria:",{b:1})+bullets(scU);
   const bigRows=[
     tr([cell(4263,{fill:"D1E8B2",body:para("The Big Question / Idea",{b:1})}),cell(8594,{fill:"D1E8B2",body:para("Essential Understandings",{b:1})})]),
@@ -727,7 +748,7 @@ function unitDocxV2(u){
   const sec5=table(W,[
     tr([cell(4263,{span:3,fill:"D1E8B2",body:para("Common Assessments",{b:1})}),cell(8594,{span:2,fill:"D1E8B2",body:para("21CLD",{b:1})})]),
     tr([cell(W[0],{body:para("Pre-assessment",{b:1})+para(preText)}),
-        cell(W[1],{body:para("Formative (ongoing)",{b:1})+para("Weekly Do Nows and success criteria checks across the unit")}),
+        cell(W[1],{body:para("Formative (ongoing)",{b:1})+para(formText)}),
         cell(W[2],{body:para("Summative (final)",{b:1})+catText}),
         cell(W[3],{body:cld}),
         cell(W[4],{})])]);

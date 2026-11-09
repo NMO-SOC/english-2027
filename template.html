@@ -491,7 +491,7 @@ addEventListener("afterprint",()=>document.body.classList.remove("summary"));
 function units(){
   const out=[];let cur=[];
   TERMS.forEach(t=>{for(let w=1;w<=t.weeks;w++){
-    if((t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on
+    if(((t.noLessons||[]).includes(w)||t.grey[w])&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on (grey weeks are not teaching weeks)
     const k=`${t.n}--${w}`;
     cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
     const v=(store[k]||"").trim();

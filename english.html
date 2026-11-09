@@ -93,6 +93,8 @@ const today=qd?new Date(qd+"T00:00"):new Date(); today.setHours(0,0,0,0);
 async function loadPlan(c){
   const txt=await (await fetch(c.code+".html",{cache:"no-cache"})).text();
   const terms=new Function("return "+txt.match(/const TERMS=(\[[\s\S]*?\n\]);/)[1])();
+  const pm=txt.match(/^const PLAN=(\{.*\});$/m), plan=pm?JSON.parse(pm[1]):{};
+  (plan.noExam||[]).forEach(([n,w])=>{const t=terms.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);}); // same per-plan calendar change as template.html
   const dm=txt.match(/^const DEFAULTS=(\{.*\});$/m), sm=txt.match(/^const SAVED=(\{.*\});$/m);
   const store=Object.assign({},dm?JSON.parse(dm[1]):{},sm?JSON.parse(sm[1]):{});
   return Object.assign({},c,{terms,store});

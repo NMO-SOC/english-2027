@@ -11,7 +11,7 @@
 <style>
   :root{--ink:#1f2933;--bg:#f7f7f5;--muted:#4a5562;--navy:#1d2b4f;--line:#9aa5b1;
     --sans:"Atkinson Hyperlegible",Arial,Helvetica,sans-serif;--serif:"Source Serif 4",Georgia,serif;
-    --t1:#2a5f9e;--t1l:#dce8f6;--t2:#2e7d32;--t2l:#dcefdb;--t3:#a8532a;--t3l:#f6e1d5;--t4:#7e3f84;--t4l:#efdff0;}
+    --t1:#2a5f9e;--t1l:#dce8f6;--t2:#2e7d32;--t2l:#dcefdb;--t3:#a8532a;--t3l:#f6e1d5;--t4:#7e3f84;--t4l:#efdff0;--now:#a87400;}
   *{box-sizing:border-box}
   body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg)}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -33,21 +33,19 @@
   th,td{border:1px solid var(--line);vertical-align:top;text-align:left;font-size:14px;line-height:1.35}
   thead th{background:var(--c);color:#fff;padding:6px 8px;font-weight:700}
   thead th small{display:block;font-weight:normal;font-size:12px;opacity:.95}
-  thead th .tag{display:inline-block;margin-top:3px;font-size:11px;background:#fff;color:var(--navy);padding:0 6px;border-radius:999px}
+  thead th .tag{display:inline-block;margin-top:3px;font-size:12px;background:#fff;color:var(--navy);padding:0 6px;border-radius:999px}
   th.rowhead{background:#fff;color:var(--navy);font-family:var(--serif);font-size:16px;width:150px;min-width:150px}
   th.rowhead small{display:block;font-family:var(--sans);font-size:12px;color:var(--muted);font-weight:normal}
   td{padding:6px 7px;min-width:120px;height:72px}
   td.grey{background:#e6e8eb;color:var(--muted);font-style:italic}
   td.cat{background:var(--navy);color:#fff}
-  td.cat .code{display:block;font-size:11px;opacity:.85;letter-spacing:.02em}
+  td.cat .code{display:block;font-size:12px;opacity:.85;letter-spacing:.02em}
   td.cat.exam{background:#5f666d}
-  td.now,thead th.now{box-shadow:inset 0 0 0 3px #e0a800}
+  td.now,thead th.now{box-shadow:inset 0 0 0 3px var(--now)}
   td.now{background-color:#fff8dc}
   td.cat.now{background:var(--navy)}
-  .y7 th.rowhead{border-left:6px solid var(--t1)} .y8 th.rowhead{border-left:6px solid var(--t2)}
-  .y9 th.rowhead{border-left:6px solid var(--t3)} .y10 th.rowhead{border-left:6px solid var(--t4)}
-  .y11 th.rowhead,.y12 th.rowhead{border-left:6px solid var(--navy)}
-  .soonrow th.rowhead{color:var(--muted);font-weight:normal}
+  th.rowhead{border-left:6px solid var(--navy)}
+  .soonnote{margin:0;padding:8px 14px;font-size:14px;color:var(--muted);font-style:italic}
   .legend{max-width:1400px;margin:0 auto 20px;font-size:14px;color:var(--muted)}
   .legend span{display:inline-block;margin-right:14px}
   .legend i{display:inline-block;width:14px;height:14px;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
@@ -112,6 +110,9 @@ function cellFor(p,t,w){
 }
 function render(plans){
   const ref=plans.find(p=>!p.soon);    // every plan has the same term calendar
+  // year levels without a plan yet: "Years 7, 8, 11 and 12: plans coming soon"
+  const sy=[...new Set(plans.filter(p=>p.soon).map(p=>p.name.match(/\d+/)[0]))];
+  const soonNote=sy.length?`<p class="soonnote">${sy.length>1?"Years "+sy.slice(0,-1).join(", ")+" and "+sy[sy.length-1]:"Year "+sy[0]}: plans coming soon</p>`:"";
   let out="";
   ref.terms.forEach(t=>{
     const weeks=[];
@@ -129,10 +130,7 @@ function render(plans){
     });
     h+=`</tr></thead><tbody>`;
     plans.forEach(p=>{
-      if(p.soon){
-        h+=`<tr class="${p.yr} soonrow"><th scope="row" class="rowhead">${esc(p.name)}<small>Coming soon</small></th>`+weeks.map(()=>`<td class="grey"></td>`).join("")+`</tr>`;
-        return;
-      }
+      if(p.soon)return; // listed once under the table instead
       h+=`<tr class="${p.yr}"><th scope="row" class="rowhead">${esc(p.name)}<small>${esc(p.code)}</small></th>`;
       weeks.forEach(x=>{
         const c=cellFor(p,t,x.w);
@@ -141,7 +139,7 @@ function render(plans){
       });
       h+=`</tr>`;
     });
-    h+=`</tbody></table></div></section>`;
+    h+=`</tbody></table></div>${soonNote}</section>`;
     out+=h;
   });
   return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment (CAT)</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:#e6e8eb"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
@@ -275,7 +273,7 @@ document.getElementById("lapbtn").onclick=()=>{
   a.href=url;a.download="Learning Area Plan - Years 7 to 10.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 (async()=>{
-  document.getElementById("asof").textContent="Showing "+(qd?"the date "+qd:"today")+" ("+fmtD(today)+")";
+  document.getElementById("asof").textContent="Showing "+(qd?"":"today, ")+fmtD(today);
   const main=document.getElementById("main");
   try{
     const plans=[];

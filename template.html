@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#1f2933;--line:#9aa5b1;--bg:#f7f7f5;--navy:#1d2b4f;--muted:#4a5562;--ph:#5b6570;
+  :root{--ink:#1f2933;--line:#9aa5b1;--bg:#f7f7f5;--navy:#1d2b4f;--muted:#4a5562;--ph:#5b6570;--now:#a87400;
     --sans:"Atkinson Hyperlegible",Arial,Helvetica,sans-serif;--serif:"Source Serif 4",Georgia,serif}
   *{box-sizing:border-box}
   body{margin:0;padding:16px;font-family:var(--sans);color:var(--ink);background:var(--bg)}
@@ -24,11 +24,20 @@
   .tools button,.btn{font:inherit;font-size:14px;min-height:36px;padding:7px 14px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
   .tools button:hover,.btn:hover{border-color:var(--navy)}
   #save{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .menu{position:relative}
+  .menu summary{list-style:none}
+  .menu summary::-webkit-details-marker{display:none}
+  .menu summary::after{content:"\25BE";content:"\25BE" / "";margin-left:6px}
+  .menu-list{position:absolute;right:0;top:calc(100% + 4px);z-index:6;display:flex;flex-direction:column;min-width:230px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+  .tools .menu-list button{border:none;width:100%}
+  .tools .menu-list button:hover{background:#eef1f6}
+  .tools #clear{margin-left:12px;color:#9b1c1c;border-color:#d9a8a8}
+  .tools #clear:hover{border-color:#9b1c1c;background:#fdf2f2}
   .home{gap:8px;font-weight:bold;color:var(--navy);border-color:var(--navy)}
   #status{font-size:14px;color:var(--muted)}
   #status:empty{display:none}
   .hint{font-size:14px;color:var(--muted);margin:0 auto 14px;max-width:80ch;text-align:center}
-  @media (max-width:900px){header{grid-template-columns:1fr}header>*{justify-self:start}.tools{justify-content:flex-start}.hint{text-align:left;margin-left:0}}
+  @media (max-width:900px){header{grid-template-columns:1fr}header>*{justify-self:start}.tools{justify-content:flex-start}.menu-list{right:auto;left:0}.hint{text-align:left;margin-left:0}}
   .grid{display:grid;grid-template-columns:1fr;gap:20px}
   .grid:focus{outline:none}
   section,.overview{background:#fff;padding:10px;border:1px solid #ddd;border-top:5px solid var(--c);overflow-x:auto}
@@ -39,37 +48,38 @@
   td{scroll-margin-top:60px}
   thead th{font-size:14px}
   thead th small{display:block;font-weight:normal;font-size:12px}
-  .hol{display:block;font-size:11px;font-weight:normal}
+  .hol{display:block;font-size:12px;font-weight:normal}
   .tag{display:block;font-size:12px;font-weight:bold}
   .t1{--c:#2a5f9e;--l:#dce8f6}.t2{--c:#2e7d32;--l:#dcefdb}.t3{--c:#a8532a;--l:#f6e1d5}.t4{--c:#7e3f84;--l:#efdff0}
   .term thead th{background:var(--c);color:#fff}
   .term thead th.grey{background:#5f666d}
-  td{background:var(--l)}
+  td{background:#fff}
   td.grey{background:#e1e3e5;color:#4a5057}
   /* week topic leads the column */
-  .wn{min-height:26px;font-family:var(--serif);font-size:14px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
+  .wn{min-height:26px;font-family:var(--serif);font-size:15px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
   .wn:empty::before{content:"Notes / CAT";color:var(--ph);font-weight:normal}
-  .wn.cat{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:11.5px;cursor:pointer}
+  .wn.cat{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px;cursor:pointer}
   .wn.cat:empty::before{content:none}
-  .ck{display:block;font-size:10.5px;font-weight:normal;opacity:.9}
-  .ct{display:block;font-size:12.5px}
+  .ck{display:block;font-size:12px;font-weight:normal;opacity:.9}
+  .ct{display:block;font-size:13.5px}
   .les{margin-top:3px}
-  .lh{cursor:pointer;background:rgba(0,0,0,.07);padding:5px 7px;font-weight:bold;border:1px solid var(--line);user-select:none;font-size:13px}
+  .lh{cursor:pointer;background:#fff;padding:5px 7px;font-weight:bold;border:1px solid var(--line);border-left:4px solid var(--line);user-select:none;font-size:13.5px}
   .lh::before,.cch::before{content:"\25B8  ";content:"\25B8  " / ""}
   .les.open .lh::before,.ccw.open .cch::before{content:"\25BE  ";content:"\25BE  " / ""}
-  .les.filled .lh{background:var(--c);color:#fff}
-  td.grey .lh{background:#c3c6c9;color:#363b40}
+  /* lessons with content get the term colour on their edge */
+  .les.filled .lh{border-left-color:var(--c)}
+  td.grey .les.filled .lh{border-left-color:#5f666d}
   /* collapsible panels use hidden="until-found" so Ctrl+F can find and open them */
   .lb,.codes,.info{display:block}
   .lb[hidden],.codes[hidden],.info[hidden]{display:none}
   .uf .lb[hidden],.uf .codes[hidden],.uf .info[hidden]{display:block;min-height:0;padding:0;border:0;margin:0}
   .lb{min-height:50px;padding:4px;border:1px solid var(--line);border-top:none;background:#fff;word-wrap:break-word}
-  .fl{font-size:11px;font-weight:bold;color:var(--muted);margin:6px 0 1px}
+  .fl{font-size:12px;font-weight:bold;color:var(--muted);margin:6px 0 1px}
   .cpall{margin:8px 0 2px;text-align:right}
   .cp{font:inherit;font-size:13px;min-height:30px;padding:4px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:3px;cursor:pointer}
   .cp:hover{border-color:var(--navy)}
   .cp.done{background:var(--navy);color:#fff;border-color:var(--navy)}
-  .fld{min-height:22px;padding:2px 4px;border-bottom:1px dotted #6b7680;outline:none;word-wrap:break-word;font-size:13px}
+  .fld{min-height:22px;padding:2px 4px;border-bottom:1px dotted #6b7680;outline:none;word-wrap:break-word;font-size:13.5px}
   .fld ul{margin:0;padding-left:16px}
   .fld li+li{margin-top:2px}
   .fld:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
@@ -88,12 +98,10 @@
   body.ro .wn:empty::before,body.ro .fld:empty::before,body.ro .info:empty::before,body.ro .codes:empty::before{content:none}
   body.ro .ccw:has(.codes:empty){display:none}
   body.ro .info:empty{display:none!important}
-  /* read-only: quiet lesson bars (solid "filled" colour only matters while editing) */
-  body.ro .lh,body.ro .les.filled .lh{background:#fff;color:var(--ink);border-left:4px solid var(--c)}
-  body.ro td.grey .lh{border-left-color:#5f666d}
-  body.ro .wn.cat{padding:5px 6px}
+  .wn.cat{padding:5px 6px}
   /* this week */
-  th.now,td.now{box-shadow:inset 0 0 0 3px var(--navy)}
+  th.now,td.now{box-shadow:inset 0 0 0 3px var(--now)}
+  td.now{background:#fff8dc}
   th.now .tag{display:inline-block;background:var(--navy);border-radius:3px;padding:1px 6px;margin-top:3px}
   /* term jump links */
   .jump{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 0}
@@ -157,6 +165,7 @@
     .tools,.hint,.jump,.home,.skip{display:none}
     header{grid-template-columns:1fr}
     th.now,td.now,.hit{box-shadow:none}
+    td.now{background:#fff}
     td.dim{opacity:1}
     .overview .more,.overview summary::before{display:none}
     .grid{gap:8px}
@@ -184,10 +193,12 @@
     <span id="status" aria-live="polite"></span>
     <button id="expand">Expand all</button>
     <button id="save" class="ed">Save</button>
-    <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
-    <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
-    <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
-    <button id="upv2btn" title="Download a unit of work (first lesson to CAT) in the school's unit plan template">Unit plans (Word)</button>
+    <details class="menu"><summary class="btn">Print &amp; download</summary><div class="menu-list">
+      <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
+      <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
+      <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
+      <button id="upv2btn" title="Download a unit of work (first lesson to CAT) in the school's unit plan template">Unit plans (Word)</button>
+    </div></details>
     <button id="clear" class="ed">Clear all</button>
   </div>
 </header>
@@ -267,6 +278,8 @@ TERMS.forEach(t=>{
 });
 if(nowId)terms.insertAdjacentHTML("beforeend",`<a class="nowlink" href="#${nowId}">This week</a>`);
 
+// "S1_09EN_CAT1: Title" shows as a small code above the title. Display only.
+const catHTML=v=>{const i=v.indexOf(":");return i<0?`<span class="ct">${esc(v)}</span>`:`<span class="ck">${esc(v.slice(0,i))}</span><span class="ct">${esc(v.slice(i+1).trim())}</span>`;};
 document.querySelectorAll("[data-k]").forEach(el=>{
   el.textContent=store[el.dataset.k]||"";
   const mark=()=>{
@@ -276,7 +289,18 @@ document.querySelectorAll("[data-k]").forEach(el=>{
   };
   mark();
   el.addEventListener("input",()=>{store[el.dataset.k]=el.innerText.trim();dirty=true;setStatus("Unsaved changes");mark();});
+  if(!el.classList.contains("wn"))return;
+  // CATs are formatted when not being edited, and go back to plain text while typing so the stored entry stays exact
+  const fmtCat=()=>{if(el.classList.contains("cat")&&document.activeElement!==el)el.innerHTML=catHTML(store[el.dataset.k]||"");};
+  fmtCat();
+  el.addEventListener("focus",()=>{if(el.isContentEditable&&el.classList.contains("cat")){el.textContent=store[el.dataset.k]||"";const sel=getSelection();sel.selectAllChildren(el);sel.collapseToEnd();}});
+  el.addEventListener("blur",fmtCat);
 });
+// Print & download menu closes after a choice, on a click elsewhere, or with Escape
+const menu=document.querySelector(".menu");
+menu.addEventListener("click",e=>{if(e.target.closest(".menu-list button"))menu.open=false;});
+document.addEventListener("click",e=>{if(!menu.contains(e.target))menu.open=false;});
+menu.addEventListener("keydown",e=>{if(e.key==="Escape"&&menu.open){menu.open=false;menu.querySelector("summary").focus();}});
 
 // Open/close panels. Closed panels are hidden="until-found", so the browser's Find can open them.
 if("onbeforematch" in document.body)document.documentElement.classList.add("uf");
@@ -401,8 +425,6 @@ if(LIVE){
   document.querySelectorAll("[data-k],h1").forEach(el=>el.contentEditable=false);
   // Display-only formatting. The stored entries are untouched and never read back from here.
   document.querySelectorAll(".wn.cat").forEach(w=>{
-    const v=w.textContent, i=v.indexOf(":");
-    w.innerHTML=i<0?`<span class="ct">${esc(v)}</span>`:`<span class="ck">${esc(v.slice(0,i))}</span><span class="ct">${esc(v.slice(i+1).trim())}</span>`;
     w.setAttribute("role","button");w.tabIndex=0;w.setAttribute("aria-expanded","false");w.setAttribute("aria-controls",w.nextElementSibling.id);
     keyClick(w);
   });

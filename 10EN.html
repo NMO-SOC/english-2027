@@ -492,6 +492,7 @@ function units(){
   const out=[];let cur=[];
   TERMS.forEach(t=>{for(let w=1;w<=t.weeks;w++){
     if(((t.noLessons||[]).includes(w)||t.grey[w])&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on (grey weeks are not teaching weeks)
+    if((PLAN.noUnit||[]).some(([n,x])=>n===t.n&&x===w))continue; // in the plan's lessons, but not part of any unit (e.g. post-exam week)
     const k=`${t.n}--${w}`;
     cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
     const v=(store[k]||"").trim();

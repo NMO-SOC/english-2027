@@ -181,9 +181,8 @@
     <button id="save" class="ed">Save</button>
     <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
     <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
-    <button id="unitbtn" title="Download a unit of work (first lesson to CAT) as a Word curriculum map">Unit plans (Word)</button>
     <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
-    <button id="upv2btn" title="Test: unit plan in the new school template">Unit plan, new template (test)</button>
+    <button id="upv2btn" title="Download a unit of work (first lesson to CAT) in the school's unit plan template">Unit plans (Word)</button>
     <button id="clear" class="ed">Clear all</button>
   </div>
 </header>
@@ -447,56 +446,6 @@ function units(){
 }
 const unitName=u=>{const v=store[u[u.length-1].k].trim(),i=v.indexOf(":");return i<0?v:v.slice(i+1).trim();};
 const unitSpan=u=>{const a=u[0],b=u[u.length-1];return `Term ${a.t} Week ${a.w} to Term ${b.t} Week ${b.w} · ${u.length} weeks`;};
-function unitDocx(u){
-  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
-  const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
-  const P=(s,o={})=>`<w:p><w:pPr>${o.li?'<w:numPr><w:ilvl w:val="0"/><w:numId w:val="1"/></w:numPr>':""}${o.c?'<w:jc w:val="center"/>':""}${o.gap?'<w:spacing w:before="120"/>':""}</w:pPr>`+
-    (s?`<w:r>${o.b||o.i?`<w:rPr>${o.b?"<w:b/>":""}${o.i?'<w:i/><w:color w:val="595959"/>':""}</w:rPr>`:""}<w:t xml:space="preserve">${esc(s)}</w:t></w:r>`:"")+"</w:p>";
-  const W=[1129,2835,5245,2552,2409];
-  const C=(ps,i)=>`<w:tc><w:tcPr><w:tcW w:w="${i<0?14170:W[i]}" w:type="dxa"/>${i<0?'<w:gridSpan w:val="5"/>':""}</w:tcPr>${ps||P("")}</w:tc>`;
-  const terms=[...new Set(u.map(x=>x.t))], sem=u[u.length-1].t<=2?1:2;
-  let rows=`<w:tr>${C(P("CURRICULUM MAP – "+subject,{b:1,c:1}),-1)}</w:tr>`+
-    `<w:tr>${C(P(`Semester ${sem} – Term ${terms.join(" and ")}`)+P("")+P("Unit of work:")+P(unitName(u),{li:1})+P(unitSpan(u),{i:1}),-1)}</w:tr>`+
-    `<w:tr><w:trPr><w:tblHeader/></w:trPr>${C(P(""),0)}${C(P("TOPIC",{b:1,c:1})+P("Links to VIC Curriculum",{b:1,c:1}),1)}${C(P("Weekly Learning Intention and Success Criteria",{b:1,c:1}),2)}`+
-    `${C(P("Link to lesson plans",{b:1,c:1})+P("Insert > Object > Create from File > Display as icon",{i:1,c:1}),3)}${C(P("Assessment",{b:1,c:1}),4)}</w:tr>`;
-  u.forEach((x,n)=>{
-    const topic=(store[x.k]||"").trim(), cat=CAT.test(topic);
-    const codes=(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean);
-    // Weekly column: every lesson's LIs and SCs for the week, duplicates removed. Lesson column: each lesson in full.
-    let links="";const lis=new Set(),scs=new Set();
-    x.lessons.forEach((name,i)=>{
-      const k=`${x.t}-${x.w}-${i+1}`, f=s=>(store[`${k}-${s}`]||"").trim(), sc=f("sc").split(/\s*\|\s*/).filter(Boolean);
-      if(f("li"))lis.add(f("li"));sc.forEach(s=>scs.add(s));
-      links+=P(f("title")||name,{b:1,gap:i>0});
-      if(f("li"))links+=P("Learning Intention:",{b:1})+P(f("li"));
-      if(sc.length)links+=P("Success Criteria:",{b:1})+sc.map(s=>P(s,{li:1})).join("");
-      if(f("dn"))links+=P("Do Now:",{b:1})+P(f("dn"));
-      links+=P("[embed lesson plan]",{i:1});
-    });
-    // ponytail: "summary" = 3 picks spread across the week (first, middle, last); add weekly summary fields if picks read poorly
-    const three=a=>a.length<=3?a:[0,1,2].map(i=>a[Math.round(i*(a.length-1)/2)]);
-    const kk=(lis.size?P("Learning Intentions:",{b:1})+three([...lis]).map(s=>P(s,{li:1})).join(""):"")+
-      (scs.size?P("Success Criteria:",{b:1,gap:lis.size>0})+three([...scs]).map(s=>P(s,{li:1})).join(""):"");
-    rows+=`<w:tr><w:trPr><w:cantSplit/></w:trPr>${C(P("Week "+(n+1),{b:1})+P(`Term ${x.t}, Week ${x.w}`)+P(weekDate[x.k],{i:1}),0)}`+
-      `${C(P(topic,{b:1})+codes.map(c=>P(c)).join(""),1)}${C(kk,2)}${C(links,3)}`+
-      `${C(cat?P(topic,{b:1})+(store["info-"+x.k]||"").split("\n").filter(s=>s.trim()).map(s=>P(s)).join(""):"",4)}</w:tr>`;
-  });
-  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"', X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
-  const B=["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="auto"/>`).join("");
-  const R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
-  return zip({
-    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>`+
-      `<Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/><Override PartName="/word/numbering.xml" ContentType="${CT}numbering+xml"/></Types>`,
-    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
-    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/><Relationship Id="rId2" Type="${R}/numbering" Target="numbering.xml"/></Relationships>`,
-    "word/styles.xml":X+`<w:styles ${NS}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos Display" w:hAnsi="Aptos Display" w:eastAsia="Aptos Display" w:cs="Aptos Display"/><w:sz w:val="20"/><w:szCs w:val="20"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault>`+
-      `<w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
-    "word/numbering.xml":X+`<w:numbering ${NS}><w:abstractNum w:abstractNumId="0"><w:lvl w:ilvl="0"><w:start w:val="1"/><w:numFmt w:val="bullet"/><w:lvlText w:val="•"/><w:lvlJc w:val="left"/><w:pPr><w:ind w:left="360" w:hanging="360"/></w:pPr></w:lvl></w:abstractNum><w:num w:numId="1"><w:abstractNumId w:val="0"/></w:num></w:numbering>`,
-    "word/document.xml":X+`<w:document ${NS}><w:body><w:tbl><w:tblPr><w:tblW w:w="14170" w:type="dxa"/><w:tblBorders>${B}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr>`+
-      `<w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows}</w:tbl><w:p/>`+
-      `<w:sectPr><w:pgSz w:w="16838" w:h="11906" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
-  });
-}
 // Minimal zip (stored, no compression): all a .docx needs
 function zip(files){
   const enc=new TextEncoder(),local=[],central=[];let off=0;
@@ -513,22 +462,7 @@ function zip(files){
   return new Blob([...local,...central,le([0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2])],{type:CT_DOCX});
 }
 const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-document.getElementById("unitbtn").onclick=()=>{
-  const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","unitsh");
-  dl.innerHTML=`<h2 id="unitsh">Unit plans</h2><p>Each unit runs from its first lesson to its CAT. Download one as a Word curriculum map.</p>`+
-    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
-    `<form method="dialog"><button class="btn">Close</button></form>`;
-  dl.addEventListener("click",e=>{
-    if(e.target===dl)return dl.close();
-    const b=e.target.closest("[data-i]");if(!b)return;
-    const u=us[b.dataset.i], a=document.createElement("a");
-    a.href=URL.createObjectURL(unitDocx(u));
-    a.download=`${document.title.split(" ")[0]} Unit Plan - ${unitName(u).replace(/[\\/:*?"<>|]/g,"")}.docx`;
-    a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
-  });
-  dl.addEventListener("close",()=>dl.remove());
-  document.body.appendChild(dl);dl.showModal();
-};
+
 
 // Curriculum map (Word): one document per semester in the school's template layout.
 // Lesson plan and CAT links are relative: save the download into that semester's Curriculum Map folder.
@@ -640,7 +574,7 @@ document.getElementById("clear").onclick=()=>{
   dirty=true;setStatus("Unsaved changes – click Save");
 };
 
-// Unit plan, new school template (test). One document per unit of work.
+// Unit plans (Word): one document per unit of work, in the school's unit plan template.
 // Tick boxes for cross-curriculum priorities, capabilities and 21CLD are chosen from the unit's own wording; the teacher should check them.
 const UP2_CROSS=[
  ["Learning about Aboriginal and Torres Strait Islander histories and cultures",/aboriginal|torres|indigenous|first nations/],
@@ -736,7 +670,10 @@ function unitDocxV2(u){
   const sec3=table([3120,3120,6600],[
     tr([cell(12840,{span:3,fill:"C6ECFF",body:para(`${yearLevel} English: ${name}`,{b:1})})]),
     tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: "+sub)}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
-  const eu=para("Learning Intentions:",{b:1})+bullets(liU)+para("Success Criteria:",{b:1})+bullets(scU);
+  const catName=((cat.topic||"").split(":").slice(1).join(":")||cat.topic||name).trim();
+  const euLI=`We will explore how ${focusPhrase} shape meaning, and apply this in ${catName}.`;
+  const euSC=`I can use evidence from the text to explain how ${focusPhrase} shape meaning, and structure this in ${catName}.`;
+  const eu=para("Learning Intention:",{b:1})+para(euLI)+para("Success Criteria:",{b:1})+para(euSC);
   const bigRows=[
     tr([cell(4263,{fill:"D1E8B2",body:para("The Big Question / Idea",{b:1})}),cell(8594,{fill:"D1E8B2",body:para("Essential Understandings",{b:1})})]),
     tr([cell(4263,{body:para(name,{b:1})+para("What students do in this unit:",{b:1})+bullets(topics)}),cell(8594,{vm:"restart",body:eu})]),
@@ -766,14 +703,14 @@ function unitDocxV2(u){
 }
 document.getElementById("upv2btn").onclick=()=>{
   const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
-  dl.innerHTML=`<h2 id="up2h">Unit plan (new template, test)</h2><p>Each unit runs from its first lesson to its CAT. This is a test version: check the ticks and the placeholders before using it.</p>`+
+  dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its CAT.</p>`+
     (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
     `<form method="dialog"><button class="btn">Close</button></form>`;
   dl.addEventListener("click",e=>{
     if(e.target===dl)return dl.close();
     const b=e.target.closest("[data-i]");if(!b)return;
     const u=us[b.dataset.i], a=document.createElement("a"), url=URL.createObjectURL(unitDocxV2(u));
-    a.href=url;a.download=`${document.title.split(" ")[0]} Unit Plan (new) - ${unitName(u).replace(/[\\/:*?"<>|]/g,"")}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    a.href=url;a.download=`${document.title.split(" ")[0]} Unit Plan - ${unitName(u).replace(/[\\/:*?"<>|]/g,"")}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
   });
   dl.addEventListener("close",()=>dl.remove());
   document.body.appendChild(dl);dl.showModal();

@@ -236,7 +236,7 @@ const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov",
 const fmt=d=>d.getDate()+" "+MONTHS[d.getMonth()];
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const CAT=/^(S[12]_|EXAM)/;
-const lessonNames=(t,w)=>(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];
+const lessonNames=(t,w)=>{const c=(PLAN.lessonCount||[]).find(([n,x])=>n===t.n&&x===w);const all=(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];return c?all.slice(0,c[2]):all;}; // PLAN.lessonCount [[term,week,n]] sets how many lessons a week has
 function setStatus(t){statusEl.textContent=t;}
 // ?today=2027-02-17 previews the "This week" highlight
 const qd=new URLSearchParams(location.search).get("today");

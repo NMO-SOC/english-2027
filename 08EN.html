@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08EN Curriculum Plan 2027</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1f2933;--line:#9aa5b1;--bg:#f7f7f5;--navy:#1d2b4f;--muted:#4a5562;--ph:#5b6570;--now:#a87400;
+    --sans:"Atkinson Hyperlegible",Arial,Helvetica,sans-serif;--serif:"Source Serif 4",Georgia,serif}
+  *{box-sizing:border-box}
+  body{margin:0;padding:16px;font-family:var(--sans);color:var(--ink);background:var(--bg)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:16px;top:8px;z-index:5;background:#fff;color:var(--navy);padding:8px 12px;border:2px solid var(--navy);font-weight:bold}
+  header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:12px}
+  header h1{text-align:center}
+  .home{justify-self:start}
+  h1{margin:0;background:var(--navy);color:#fff;padding:8px 18px;font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:0;outline-offset:3px}
+  .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  .tools button,.btn{font:inherit;font-size:14px;min-height:36px;padding:7px 14px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+  .tools button:hover,.btn:hover{border-color:var(--navy)}
+  #save{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .menu{position:relative}
+  .menu summary{list-style:none}
+  .menu summary::-webkit-details-marker{display:none}
+  .menu summary::after{content:"\25BE";content:"\25BE" / "";margin-left:6px}
+  .menu-list{position:absolute;right:0;top:calc(100% + 4px);z-index:6;display:flex;flex-direction:column;min-width:230px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+  .tools .menu-list button{border:none;width:100%}
+  .tools .menu-list button:hover{background:#eef1f6}
+  .tools #clear{margin-left:12px;color:#9b1c1c;border-color:#d9a8a8}
+  .tools #clear:hover{border-color:#9b1c1c;background:#fdf2f2}
+  .home{gap:8px;font-weight:bold;color:var(--navy);border-color:var(--navy)}
+  #status{font-size:14px;color:var(--muted)}
+  #status:empty{display:none}
+  .hint{font-size:14px;color:var(--muted);margin:0 auto 14px;max-width:80ch;text-align:center}
+  @media (max-width:900px){header{grid-template-columns:1fr}header>*{justify-self:start}.tools{justify-content:flex-start}.menu-list{right:auto;left:0}.hint{text-align:left;margin-left:0}}
+  .grid{display:grid;grid-template-columns:1fr;gap:20px}
+  .grid:focus{outline:none}
+  section,.overview{background:#fff;padding:10px;border:1px solid #ddd;border-top:5px solid var(--c);overflow-x:auto}
+  h2{text-align:center;margin:4px 0 2px;font-family:var(--serif);font-size:21px;font-weight:700;color:var(--c)}
+  .dates{text-align:center;font-size:13px;color:var(--muted);margin-bottom:8px}
+  table{border-collapse:collapse;table-layout:fixed;font-size:13px}
+  th,td{border:1px solid var(--line);padding:4px;vertical-align:top}
+  td{scroll-margin-top:60px}
+  thead th{font-size:14px}
+  thead th small{display:block;font-weight:normal;font-size:12px}
+  .hol{display:block;font-size:12px;font-weight:normal}
+  .tag{display:block;font-size:12px;font-weight:bold}
+  .t1{--c:#2a5f9e;--l:#dce8f6}.t2{--c:#2e7d32;--l:#dcefdb}.t3{--c:#a8532a;--l:#f6e1d5}.t4{--c:#7e3f84;--l:#efdff0}
+  .term thead th{background:var(--c);color:#fff}
+  .term thead th.grey{background:#5f666d}
+  td{background:#fff}
+  td.grey{background:#e1e3e5;color:#4a5057}
+  /* week topic leads the column */
+  .wn{min-height:26px;font-family:var(--serif);font-size:15px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
+  .wn:empty::before{content:"Notes / CAT";color:var(--ph);font-weight:normal}
+  .wn.cat{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px;cursor:pointer}
+  .wn.cat:empty::before{content:none}
+  .ck{display:block;font-size:12px;font-weight:normal;opacity:.9}
+  .ct{display:block;font-size:13.5px}
+  .les{margin-top:3px}
+  .lh{cursor:pointer;background:#fff;padding:5px 7px;font-weight:bold;border:1px solid var(--line);border-left:4px solid var(--line);user-select:none;font-size:13.5px}
+  .lt{font-weight:normal}
+  /* clickable bars respond on hover */
+  .lh:hover{background:#eef1f6}
+  .cch:hover{background:rgba(0,0,0,.12)}
+  .wn.cat:hover{background:#2c3f6b}
+  .lh::before,.cch::before{content:"\25B8  ";content:"\25B8  " / ""}
+  .les.open .lh::before,.ccw.open .cch::before{content:"\25BE  ";content:"\25BE  " / ""}
+  /* lessons with content get the term colour on their edge */
+  .les.filled .lh{border-left-color:var(--c)}
+  td.grey .les.filled .lh{border-left-color:#5f666d}
+  /* collapsible panels use hidden="until-found" so Ctrl+F can find and open them */
+  .lb,.codes,.info{display:block}
+  .lb[hidden],.codes[hidden],.info[hidden]{display:none}
+  .uf .lb[hidden],.uf .codes[hidden],.uf .info[hidden]{display:block;min-height:0;padding:0;border:0;margin:0}
+  .lb{min-height:50px;padding:4px;border:1px solid var(--line);border-top:none;background:#fff;word-wrap:break-word}
+  .fl{font-size:12px;font-weight:bold;color:var(--muted);margin:6px 0 1px}
+  .cpall{margin:8px 0 2px;text-align:right}
+  .cp{font:inherit;font-size:13px;min-height:30px;padding:4px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:3px;cursor:pointer}
+  .cp:hover{border-color:var(--navy)}
+  .cp.done{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .fld{min-height:22px;padding:2px 4px;border-bottom:1px dotted #6b7680;outline:none;word-wrap:break-word;font-size:13.5px}
+  .fld ul{margin:0;padding-left:16px}
+  .fld li+li{margin-top:2px}
+  .fld:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  .fld:focus,.codes:focus{background:#fffbe6}
+  .info{background:#fff;border:1px solid var(--line);border-radius:3px;padding:5px 6px;margin:0 0 6px;font-size:13px;outline:none;word-wrap:break-word}
+  .info:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  .ccw{margin:0 0 4px}
+  .cch{cursor:pointer;font-size:12px;font-weight:bold;color:#2d3748;background:rgba(0,0,0,.06);border:1px solid var(--line);padding:3px 7px;user-select:none}
+  .codes{font-size:12px;color:#2d3748;padding:3px 4px;border:1px solid var(--line);border-top:none;background:#fff;word-wrap:break-word;outline:none}
+  .codes:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  :focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+  .wn.cat:focus-visible{outline:3px solid #f2b705;outline-offset:1px}
+  .wn:focus,.info:focus{outline:2px solid var(--navy)}
+  /* live site is read-only (body.ro): .ed = editing only, .rd = read-only only */
+  body.ro .ed,body:not(.ro) .rd{display:none!important}
+  body.ro .wn:empty::before,body.ro .fld:empty::before,body.ro .info:empty::before,body.ro .codes:empty::before{content:none}
+  body.ro .ccw:has(.codes:empty){display:none}
+  body.ro .info:empty{display:none!important}
+  .wn.cat{padding:5px 6px}
+  /* this week */
+  th.now,td.now{box-shadow:inset 0 0 0 3px var(--now)}
+  td.now{background:#fff8dc}
+  th.now .tag{display:inline-block;background:var(--navy);border-radius:3px;padding:1px 6px;margin-top:3px}
+  /* term jump links */
+  .jump{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 0}
+  .jump a{color:#fff;background:var(--c);min-height:36px;display:inline-flex;align-items:center;padding:0 14px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:14px}
+  .jump a.nowlink{--c:var(--navy)}
+  section{scroll-margin-top:60px}
+  /* assessments at a glance (collapsible) */
+  .overview{--c:var(--navy)}
+  .overview summary{list-style:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;padding:2px 0;border-radius:4px}
+  .overview summary::-webkit-details-marker{display:none}
+  .overview summary h2{margin:0;color:var(--navy)}
+  .overview summary::before{content:"\25B8";content:"\25B8" / "";color:var(--navy);font-size:16px;transition:transform .15s}
+  .overview[open] summary::before{transform:rotate(90deg)}
+  .overview .count{font-size:13px;font-weight:bold;color:#fff;background:var(--navy);border-radius:999px;padding:2px 9px}
+  .overview .more{font-size:13px;color:var(--muted)}
+  .overview .more::after{content:"Show"}
+  .overview[open] .more::after{content:"Hide"}
+  .overview summary:hover h2{text-decoration:underline}
+  .overview table{width:100%;table-layout:auto;margin-top:8px}
+  .overview th{background:var(--navy);color:#fff;text-align:left;font-size:13px}
+  .overview td{background:#fff;padding:6px}
+  .overview td:first-child{white-space:nowrap}
+  .overview td small{display:block;color:var(--muted)}
+  .overview .ck{color:var(--muted);opacity:1}
+  .overview a{color:var(--navy);font-weight:bold}
+  /* plan search */
+  .search{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .search input{font:inherit;font-size:14px;min-height:36px;width:260px;padding:6px 10px;border:1px solid #6b7680;border-radius:4px;background:#fff}
+  .search button{font:inherit;font-size:14px;min-height:36px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:4px;cursor:pointer}
+  #qcount{font-size:13px;color:var(--muted)}
+  td.dim{opacity:.4}
+  .hit{box-shadow:0 0 0 2px #e0a800}
+  .hit.cur{box-shadow:0 0 0 3px var(--navy)}
+  ::highlight(search){background:#ffe066;color:#1f2933}
+  @media (prefers-reduced-motion:reduce){.overview summary::before{transition:none}}
+  /* unit plan (Word) picker */
+  .units{max-width:min(680px,calc(100vw - 32px));border:none;border-radius:8px;padding:20px 24px;color:var(--ink)}
+  .units::backdrop{background:rgba(0,0,0,.45)}
+  .units h2{margin:0 0 4px;color:var(--navy)}
+  .units p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .units ul{list-style:none;margin:0 0 16px;padding:0}
+  .units li{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #e3e6ea}
+  .units li span{flex:1}.units small{display:block;color:var(--muted)}
+  /* bigger targets on touch screens */
+  @media (pointer:coarse){.lh,.cch{min-height:40px;display:flex;align-items:center}.cp{min-height:44px}.jump a,.tools button,.btn{min-height:44px}}
+  /* phones: weeks stack vertically instead of scrolling sideways */
+  @media (max-width:640px){
+    body{padding:12px}
+    .term table{display:flex;flex-direction:column;width:100%!important;min-width:0!important}
+    .term thead,.term tbody,.term tr{display:contents}
+    .term th{order:calc(var(--o) * 2 - 1);display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;text-align:left;margin-top:10px}
+    .term th small,.term th .hol,.term th .tag{display:inline}
+    .term td{order:calc(var(--o) * 2);border-top:none}
+    .overview td:first-child{white-space:normal}
+    .search{margin-left:0;width:100%}.search input{flex:1;width:auto}
+    section,td{scroll-margin-top:120px}
+  }
+  @media print{
+    @page{size:A3 landscape;margin:8mm}
+    body{background:#fff;padding:0}
+    .tools,.hint,.jump,.home,.skip{display:none}
+    header{grid-template-columns:1fr}
+    th.now,td.now,.hit{box-shadow:none}
+    td.now{background:#fff}
+    td.dim{opacity:1}
+    .overview .more,.overview summary::before{display:none}
+    .grid{gap:8px}
+    section,.overview{border:none;border-top:4px solid var(--c)}
+    section+section{break-before:page}
+    .lb,.lb[hidden]{display:block!important;content-visibility:visible!important;min-height:30px!important;padding:4px!important;border:1px solid var(--line)!important;border-top:none!important}
+    .lh::before,.cch::before,.wn:empty::before,.fld:empty::before{content:""}
+    .cpall{display:none}
+    .codes:not(:empty),.wn.cat + .info:not(:empty){display:block!important;content-visibility:visible!important;padding:3px 4px!important;border:1px solid var(--line)!important;margin:0 0 4px!important}
+    .ccw:has(.codes:empty){display:none}
+    .fld ul{padding:0;list-style:none}.fld li{display:inline}.fld li+li::before{content:" | "}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    /* "Print CATs and topics": weekly topics and CATs only */
+    body.summary .les,body.summary .ccw{display:none!important}
+    body.summary .wn{border-bottom:none}
+  }
+</style>
+<!-- Analytics: GoatCounter (no cookies, no personal data). Replace YOUR-CODE with your GoatCounter code. -->
+<script data-goatcounter="https://YOUR-CODE.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<a class="skip" href="#grid">Skip to the plan</a>
+<header>
+  <a class="home btn" href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>All plans</a>
+  <h1 contenteditable="true">08EN Curriculum Plan 2027</h1>
+  <div class="tools">
+    <span id="status" aria-live="polite"></span>
+    <button id="expand">Expand all</button>
+    <button id="save" class="ed">Save</button>
+    <details class="menu"><summary class="btn">Print &amp; download</summary><div class="menu-list">
+      <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
+      <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
+      <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
+      <button id="upv2btn" title="Download a unit of work (first lesson to CAT) in the school's unit plan template">Unit plans (Word)</button>
+    </div></details>
+    <button id="clear" class="ed">Clear all</button>
+  </div>
+</header>
+<p class="hint"><span class="ed">Click a lesson to open it, then type. Press Save (or Ctrl+S) to save your changes.</span><span class="rd">Click a lesson, assessment or curriculum codes to see the details.</span> Prints on A3 landscape.</p>
+<main class="grid" id="grid" tabindex="-1"></main>
+<script>
+const TERMS=[
+ {n:1,start:"2027-01-25",weeks:9,label:"Wed 27 Jan – Thu 25 Mar (students start Thu 28 Jan)",
+  notes:{1:"Starts Wed",7:"Labour Day Mon",9:"Ends Thu (Good Fri)"},grey:{},hol:[7,9]},
+ {n:2,start:"2027-04-12",weeks:11,label:"Mon 12 Apr – Fri 25 Jun",
+  notes:{10:"King's Bday Mon"},grey:{9:"Exams",11:"Set-Up"},hol:[10],noLessons:[9],exam:[9]},
+ {n:3,start:"2027-07-12",weeks:10,label:"Mon 12 Jul – Fri 17 Sep",notes:{},grey:{},hol:[]},
+ {n:4,start:"2027-10-04",weeks:11,label:"Mon 4 Oct – Fri 17 Dec",
+  notes:{5:"Cup Day Tue"},grey:{6:"Exams",8:"Step-Up",9:"Step-Up",10:"Activities Week",11:"Clean-Up Week"},hol:[5],noLessons:[6,8,9,10,11],exam:[6]}
+];
+// Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
+const PLAN={};
+(PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
+const DEFAULTS={};
+const SAVED={"1--1": "Introduction to speaking skills", "codes-1--1": "VC2E8LY01, VC2E8LY08, VC2E8LY05", "1-1-1-title": "Course launch", "1-1-1-li": "We will understand the Year 8 English routines and assessment tasks.", "1-1-1-sc": "I can name the four assessment tasks. | I can explain class routines. | I can set one goal for the year.", "1-1-1-dn": "Write one thing you want to improve this year.", "1-1-2-title": "What makes a strong speaker", "1-1-2-li": "We will identify what makes a speaker clear and engaging.", "1-1-2-sc": "I can name three features of a strong speaker. | I can explain why they matter. | I can give an example.", "1-1-2-dn": "Watch a short talk and note two strengths.", "1-1-3-title": "Structuring a short talk", "1-1-3-li": "We will plan a talk with an introduction, body and conclusion.", "1-1-3-sc": "I can write an introduction that hooks the audience. | I can order points logically. | I can end with a clear conclusion.", "1-1-3-dn": "Draft a three-part outline for a talk on a hobby.", "1-1-4-title": "Speaking to an audience", "1-1-4-li": "We will practise eye contact, body language and pace.", "1-1-4-sc": "I can make eye contact with an audience. | I can use open gestures. | I can pace my speech.", "1-1-4-dn": "Practise one sentence while looking up at an imaginary audience.", "1--2": "Organising ideas for a talk", "codes-1--2": "VC2E8LY05, VC2E8LY08, VC2E8LA03", "1-2-1-title": "Choosing a topic", "1-2-1-li": "We will choose a topic we can talk about for two minutes.", "1-2-1-sc": "I can state my topic. | I can explain why I chose it. | I can say what my audience will learn.", "1-2-1-dn": "Write your topic and one reason you chose it.", "1-2-2-title": "Gathering information", "1-2-2-li": "We will gather information from reliable sources.", "1-2-2-sc": "I can find two sources. | I can note key facts. | I can record where each fact came from.", "1-2-2-dn": "Find one reliable source for your topic.", "1-2-3-title": "Planning key points", "1-2-3-li": "We will plan three key points for our talk.", "1-2-3-sc": "I can list three key points. | I can add an example to each. | I can order them.", "1-2-3-dn": "Write three key points for your talk.", "1-2-4-title": "Cue cards", "1-2-4-li": "We will make cue cards that support, not replace, our speaking.", "1-2-4-sc": "I can write short prompts. | I can keep cards to one side of paper. | I can check my cards work.", "1-2-4-dn": "Write four cue-card prompts for your talk.", "1--3": "Vocabulary and tone for speaking", "codes-1--3": "VC2E8LA08, VC2E8LY01, VC2E8LY05", "1-3-1-title": "Formal and informal language", "1-3-1-li": "We will choose formal language for a presentation.", "1-3-1-sc": "I can identify formal and informal words. | I can rewrite slang formally. | I can explain my choice.", "1-3-1-dn": "Rewrite one informal sentence formally.", "1-3-2-title": "Precise vocabulary", "1-3-2-li": "We will use precise vocabulary to explain ideas.", "1-3-2-sc": "I can replace vague words. | I can use topic vocabulary. | I can explain each word I use.", "1-3-2-dn": "Replace three vague words in your notes.", "1-3-3-title": "Tone and emphasis", "1-3-3-li": "We will use tone and emphasis to shape meaning.", "1-3-3-sc": "I can vary my tone. | I can stress key words. | I can explain the effect on the audience.", "1-3-3-dn": "Read one sentence three ways and note the effect.", "1-3-4-title": "Using examples", "1-3-4-li": "We will use examples to support our points.", "1-3-4-sc": "I can give a relevant example. | I can explain how it supports my point. | I can keep examples short.", "1-3-4-dn": "Add one example to each of your key points.", "1--4": "Rehearsing and refining", "codes-1--4": "VC2E8LY01, VC2E8LY09", "1-4-1-title": "Timing your talk", "1-4-1-li": "We will time our talks and adjust our content.", "1-4-1-sc": "I can time each section. | I can keep to the time limit. | I can cut what is not needed.", "1-4-1-dn": "Time your introduction.", "1-4-2-title": "Rehearsing in pairs", "1-4-2-li": "We will rehearse with a partner.", "1-4-2-sc": "I can deliver my talk to a partner. | I can listen to feedback. | I can keep going if I make a mistake.", "1-4-2-dn": "Rehearse your opening with a partner.", "1-4-3-title": "Giving feedback", "1-4-3-li": "We will give specific, kind feedback.", "1-4-3-sc": "I can name one strength. | I can give one suggestion. | I can explain why.", "1-4-3-dn": "Write one strength and one suggestion for a partner.", "1-4-4-title": "Refining the talk", "1-4-4-li": "We will refine our talk using feedback.", "1-4-4-sc": "I can change one section. | I can improve one example. | I can check the time.", "1-4-4-dn": "Mark one change you will make.", "1--5": "Visual aids and presenting", "codes-1--5": "VC2E8LY08, VC2E8LY05", "1-5-1-title": "Choosing visual aids", "1-5-1-li": "We will choose visual aids that support our talk.", "1-5-1-sc": "I can explain how a visual supports a point. | I can avoid text-heavy visuals. | I can choose one visual.", "1-5-1-dn": "Choose one visual aid and say what it shows.", "1-5-2-title": "Designing slides", "1-5-2-li": "We will design clear slides.", "1-5-2-sc": "I can use one idea per slide. | I can use readable fonts. | I can check contrast.", "1-5-2-dn": "Draft three slides for your talk.", "1-5-3-title": "Presenting with a visual", "1-5-3-li": "We will present while using a visual aid.", "1-5-3-sc": "I can point to a visual at the right time. | I can keep eye contact. | I can explain the visual.", "1-5-3-dn": "Practise pointing to one visual.", "1-5-4-title": "Peer evaluation", "1-5-4-li": "We will evaluate peers' use of visual aids.", "1-5-4-sc": "I can name one effective visual. | I can suggest one improvement. | I can explain why.", "1-5-4-dn": "Write one comment on a peer's visual.", "1--6": "Oral CAT preparation", "codes-1--6": "VC2E8LY01, VC2E8LY09", "1-6-1-title": "CAT criteria", "1-6-1-li": "We will review the oral CAT criteria and check our plan.", "1-6-1-sc": "I can state the criteria. | I can check my plan against them. | I can name my focus.", "1-6-1-dn": "Tick each criterion against your plan.", "1-6-2-title": "Timed rehearsal", "1-6-2-li": "We will rehearse our talk within the time limit.", "1-6-2-sc": "I can finish within time. | I can use my cue cards. | I can keep eye contact.", "1-6-2-dn": "Rehearse the whole talk once.", "1-6-3-title": "Final feedback", "1-6-3-li": "We will get final feedback on our talks.", "1-6-3-sc": "I can use feedback. | I can improve one section. | I can explain my change.", "1-6-3-dn": "Note one improvement from feedback.", "1-6-4-title": "Final rehearsal", "1-6-4-li": "We will do a final rehearsal before the CAT.", "1-6-4-sc": "I can deliver my talk confidently. | I can keep to time. | I can speak clearly.", "1-6-4-dn": "Rehearse your opening once more.", "1--7": "S1_08EN_CAT1: Oral Language Presentation", "codes-1--7": "VC2E8LY01, VC2E8LY08, VC2E8LY05", "1-7-1-title": "Oral CAT checklist", "1-7-1-li": "We will check our readiness for the oral CAT.", "1-7-1-sc": "I can state the task. | I can check my cue cards. | I can check my timing.", "1-7-1-dn": "Tick each item on your checklist.", "1-7-2-title": "Warm-up delivery", "1-7-2-li": "We will warm up with a short delivery.", "1-7-2-sc": "I can deliver my opening. | I can use my voice. | I can make eye contact.", "1-7-2-dn": "Deliver your opening aloud.", "1-7-3-title": "Final checks", "1-7-3-li": "We will do final checks before the CAT.", "1-7-3-sc": "I can check my notes. | I can check my visual. | I can calm nerves.", "1-7-3-dn": "Check your notes once more.", "1-7-4-title": "Ad libitum: calm and ready", "1-7-4-li": "We will settle nerves and prepare to speak.", "1-7-4-sc": "I can breathe calmly. | I can focus on my first line. | I can speak clearly.", "1-7-4-dn": "Write your first sentence on a card.", "1--8": "Film study: Hunt for the Wilderpeople", "codes-1--8": "VC2E8LE01, VC2E8LE03, VC2E8LY05", "1-8-1-title": "Introducing the film", "1-8-1-li": "We will understand the film's context and story.", "1-8-1-sc": "I can summarise the opening. | I can name the main characters. | I can describe the setting.", "1-8-1-dn": "Summarise the opening in two sentences.", "1-8-2-title": "New Zealand setting", "1-8-2-li": "We will explore how the setting shapes the story.", "1-8-2-sc": "I can describe the setting. | I can explain its effect. | I can use evidence.", "1-8-2-dn": "Describe one setting shot and its effect.", "1-8-3-title": "Narrative structure", "1-8-3-li": "We will identify the structure of the film.", "1-8-3-sc": "I can identify the beginning, middle and end. | I can explain the structure. | I can predict what comes next.", "1-8-3-dn": "Map the film's three parts.", "1-8-4-title": "Film language", "1-8-4-li": "We will introduce the language of film analysis.", "1-8-4-sc": "I can name a shot type. | I can name a sound technique. | I can explain each effect.", "1-8-4-dn": "Name one shot and its effect.", "1--9": "Film techniques: camera and sound", "codes-1--9": "VC2E8LE03, VC2E8LY05, VC2E8LY07", "1-9-1-title": "Shot types", "1-9-1-li": "We will identify shot types and their effects.", "1-9-1-sc": "I can name close-up, mid and long shots. | I can explain each effect. | I can use evidence.", "1-9-1-dn": "Name one shot type in a scene and its effect.", "1-9-2-title": "Sound and music", "1-9-2-li": "We will analyse sound and music choices.", "1-9-2-sc": "I can identify a sound choice. | I can explain its effect. | I can link it to mood.", "1-9-2-dn": "Name one sound and what it makes you feel.", "1-9-3-title": "Editing and pace", "1-9-3-li": "We will analyse how editing controls pace.", "1-9-3-sc": "I can identify a cut. | I can explain pace. | I can link it to tension.", "1-9-3-dn": "Note the pace of one scene.", "1-9-4-title": "Ad libitum: film vocabulary", "1-9-4-li": "We will practise using film vocabulary.", "1-9-4-sc": "I can use three film terms. | I can define each. | I can use them in a sentence.", "1-9-4-dn": "Write a sentence with two film terms.", "2--1": "Film study: characters and humour", "codes-2--1": "VC2E8LE01, VC2E8LE03, VC2E8LY05", "2-1-1-title": "Ricky Baker", "2-1-1-li": "We will analyse the main character, Ricky.", "2-1-1-sc": "I can describe Ricky. | I can find evidence of his character. | I can explain how the film shows it.", "2-1-1-dn": "Describe Ricky in three words with evidence.", "2-1-2-title": "Uncle Hec", "2-1-2-li": "We will analyse Uncle Hec and his relationship with Ricky.", "2-1-2-sc": "I can describe Hec. | I can explain how their relationship changes. | I can use evidence.", "2-1-2-dn": "Describe one moment between Ricky and Hec.", "2-1-3-title": "Humour and tone", "2-1-3-li": "We will analyse how humour shapes the film's tone.", "2-1-3-sc": "I can identify a comic moment. | I can explain how it works. | I can link it to tone.", "2-1-3-dn": "Name one funny moment and why it works.", "2-1-4-title": "Character change", "2-1-4-li": "We will track how characters change across the film.", "2-1-4-sc": "I can identify a change. | I can explain its cause. | I can use evidence.", "2-1-4-dn": "Name one change a character makes.", "2--2": "Film study: theme and symbolism", "codes-2--2": "VC2E8LE03, VC2E8LY07, VC2E8LY05", "2-2-1-title": "Belonging", "2-2-1-li": "We will explore the theme of belonging.", "2-2-1-sc": "I can state the theme. | I can find evidence. | I can explain how it develops.", "2-2-1-dn": "Name one moment that shows belonging.", "2-2-2-title": "Symbols", "2-2-2-li": "We will identify symbols in the film.", "2-2-2-sc": "I can identify a symbol. | I can explain its meaning. | I can link it to a theme.", "2-2-2-dn": "Name one symbol and what it suggests.", "2-2-3-title": "Setting as meaning", "2-2-3-li": "We will explore how setting carries meaning.", "2-2-3-sc": "I can identify a setting. | I can explain what it shows. | I can use evidence.", "2-2-3-dn": "Describe a setting and its meaning.", "2-2-4-title": "Using evidence", "2-2-4-li": "We will select strong evidence for a claim.", "2-2-4-sc": "I can choose a relevant shot. | I can explain its effect. | I can link it to my claim.", "2-2-4-dn": "Choose one shot that supports a claim about belonging.", "2--3": "TEEL paragraphs: structure", "codes-2--3": "VC2E8LY05, VC2E8LY09", "2-3-1-title": "TEEL structure", "2-3-1-li": "We will learn the TEEL paragraph: Topic, Evidence, Explanation, Link.", "2-3-1-sc": "I can name each TEEL part. | I can explain its purpose. | I can use the structure.", "2-3-1-dn": "Label a model paragraph with TEEL.", "2-3-2-title": "Topic sentences", "2-3-2-li": "We will write clear topic sentences.", "2-3-2-sc": "I can state a clear point. | I can link it to the question. | I can avoid vague openings.", "2-3-2-dn": "Write one topic sentence about the film.", "2-3-3-title": "Choosing evidence", "2-3-3-li": "We will choose evidence to support a topic.", "2-3-3-sc": "I can choose a quote or shot. | I can explain why it fits. | I can cite it correctly.", "2-3-3-dn": "Find one quote or shot for your topic sentence.", "2-3-4-title": "Explaining the effect", "2-3-4-li": "We will explain the effect of our evidence.", "2-3-4-sc": "I can explain the effect. | I can use technical terms. | I can link back to the topic.", "2-3-4-dn": "Explain the effect of one piece of evidence.", "2--4": "TEEL paragraphs: writing", "codes-2--4": "VC2E8LY08, VC2E8LY09", "2-4-1-title": "Writing paragraph one", "2-4-1-li": "We will write our first TEEL paragraph.", "2-4-1-sc": "I can write a topic sentence. | I can add evidence. | I can explain it.", "2-4-1-dn": "Draft the first TEEL paragraph.", "2-4-2-title": "Writing paragraph two", "2-4-2-li": "We will write our second TEEL paragraph.", "2-4-2-sc": "I can use a different piece of evidence. | I can explain its effect. | I can link back.", "2-4-2-dn": "Draft the second TEEL paragraph.", "2-4-3-title": "Linking paragraphs", "2-4-3-li": "We will link our paragraphs together.", "2-4-3-sc": "I can use a connective. | I can refer back to the question. | I can keep ideas flowing.", "2-4-3-dn": "Add one connective between your paragraphs.", "2-4-4-title": "Editing", "2-4-4-li": "We will edit our paragraphs for clarity.", "2-4-4-sc": "I can remove repetition. | I can check spelling. | I can check punctuation.", "2-4-4-dn": "Edit one paragraph for clarity.", "2--5": "Film study practice", "codes-2--5": "VC2E8LY07, VC2E8LY09", "2-5-1-title": "Timed practice", "2-5-1-li": "We will write a TEEL paragraph under time.", "2-5-1-sc": "I can write within time. | I can use TEEL. | I can use evidence.", "2-5-1-dn": "Write one TEEL paragraph in 15 minutes.", "2-5-2-title": "Feedback", "2-5-2-li": "We will give and receive feedback on TEEL paragraphs.", "2-5-2-sc": "I can name a strength. | I can give one suggestion. | I can explain why.", "2-5-2-dn": "Swap paragraphs and name one strength.", "2-5-3-title": "Revising", "2-5-3-li": "We will revise paragraphs using feedback.", "2-5-3-sc": "I can use feedback. | I can improve one part. | I can explain my change.", "2-5-3-dn": "Mark one revision in your paragraph.", "2-5-4-title": "Final checks", "2-5-4-li": "We will do final checks before the CAT.", "2-5-4-sc": "I can check my TEEL structure. | I can check quotes. | I can check my time.", "2-5-4-dn": "Check your TEEL structure once.", "2--6": "S1_08EN_CAT2: Hunt for the Wilderpeople Film Study (TEEL)", "codes-2--6": "VC2E8LE03, VC2E8LY05, VC2E8LY09", "2-6-1-title": "CAT criteria", "2-6-1-li": "We will review the TEEL film study criteria.", "2-6-1-sc": "I can state the criteria. | I can check my plan. | I can choose my evidence.", "2-6-1-dn": "Tick each criterion.", "2-6-2-title": "Warm-up paragraph", "2-6-2-li": "We will warm up with a short TEEL paragraph.", "2-6-2-sc": "I can write in ten minutes. | I can use TEEL. | I can use evidence.", "2-6-2-dn": "Write one paragraph in ten minutes.", "2-6-3-title": "Revision of film technique", "2-6-3-li": "We will revise film techniques and their effects.", "2-6-3-sc": "I can name each technique. | I can explain its effect. | I can link it to meaning.", "2-6-3-dn": "Name one technique and its effect.", "2-6-4-title": "CAT: Hunt for the Wilderpeople", "2-6-4-li": "We will complete the film study CAT.", "2-6-4-sc": "I can complete the task in time. | I can use TEEL. | I can use evidence.", "2-6-4-dn": "Read the question twice before you begin.", "2--7": "The Giver: introduction", "codes-2--7": "VC2E8LE01, VC2E8LY07", "2-7-1-title": "Introducing the novel", "2-7-1-li": "We will understand the context of The Giver.", "2-7-1-sc": "I can summarise the opening. | I can name Jonas. | I can describe his community.", "2-7-1-dn": "Summarise the opening in two sentences.", "2-7-2-title": "What is a dystopia?", "2-7-2-li": "We will define a dystopia and its features.", "2-7-2-sc": "I can define dystopia. | I can name features. | I can link them to The Giver.", "2-7-2-dn": "List three features of Jonas's community.", "2-7-3-title": "Community rules", "2-7-3-li": "We will analyse the rules of Jonas's community.", "2-7-3-sc": "I can name a rule. | I can explain why it exists. | I can use evidence.", "2-7-3-dn": "Name one rule and why the community has it.", "2-7-4-title": "Jonas's world", "2-7-4-li": "We will explore how Jonas's world is presented.", "2-7-4-sc": "I can describe his world. | I can explain its effect on the reader. | I can use evidence.", "2-7-4-dn": "Describe Jonas's world in one sentence.", "2--8": "The Giver: memory and choice", "codes-2--8": "VC2E8LE03, VC2E8LY05", "2-8-1-title": "Memories", "2-8-1-li": "We will explore the idea of memory in the novel.", "2-8-1-sc": "I can explain what a memory is. | I can explain why memories matter. | I can use evidence.", "2-8-1-dn": "Write one memory you value.", "2-8-2-title": "Choice", "2-8-2-li": "We will analyse the choices characters make.", "2-8-2-sc": "I can identify a choice. | I can explain its consequences. | I can use evidence.", "2-8-2-dn": "Name one choice Jonas makes.", "2-8-3-title": "Symbols of the novel", "2-8-3-li": "We will identify symbols and their meaning.", "2-8-3-sc": "I can identify a symbol. | I can explain its meaning. | I can link it to a theme.", "2-8-3-dn": "Name one symbol and what it suggests.", "2-8-4-title": "Using evidence", "2-8-4-li": "We will select evidence for an essay point.", "2-8-4-sc": "I can select a quote. | I can explain it. | I can link it to my point.", "2-8-4-dn": "Find one quote about memory.", "2--10": "The Giver: characters and conflict", "codes-2--10": "VC2E8LE01, VC2E8LY07", "2-10-1-title": "Jonas and the Giver", "2-10-1-li": "We will analyse the relationship between Jonas and the Giver.", "2-10-1-sc": "I can describe their relationship. | I can explain how it changes. | I can use evidence.", "2-10-1-dn": "Describe their first meeting.", "2-10-2-title": "Jonas's family", "2-10-2-li": "We will analyse Jonas's family.", "2-10-2-sc": "I can describe a family member. | I can explain their role. | I can use evidence.", "2-10-2-dn": "Describe one family member and their role.", "2-10-3-title": "Conflict", "2-10-3-li": "We will identify internal and external conflict.", "2-10-3-sc": "I can identify internal conflict. | I can identify external conflict. | I can explain its effect.", "2-10-3-dn": "Name one internal and one external conflict.", "2-10-4-title": "Ad libitum: reading check", "2-10-4-li": "We will check our understanding of the novel.", "2-10-4-sc": "I can answer a literal question. | I can answer an inferential question. | I can use evidence.", "2-10-4-dn": "Answer one literal and one inferential question.", "3--1": "The Giver: essay structure", "codes-3--1": "VC2E8LY05, VC2E8LY08", "3-1-1-title": "The essay question", "3-1-1-li": "We will understand the essay question and its requirements.", "3-1-1-sc": "I can explain the question. | I can identify key words. | I can state the requirements.", "3-1-1-dn": "Underline the key words in the question.", "3-1-2-title": "Writing a thesis", "3-1-2-li": "We will write a clear thesis statement.", "3-1-2-sc": "I can state a clear position. | I can link it to the question. | I can preview my points.", "3-1-2-dn": "Write a thesis for the question.", "3-1-3-title": "Body paragraphs", "3-1-3-li": "We will plan body paragraphs.", "3-1-3-sc": "I can plan one idea per paragraph. | I can add evidence. | I can order the paragraphs.", "3-1-3-dn": "Plan two body paragraphs.", "3-1-4-title": "Conclusions", "3-1-4-li": "We will write conclusions that reflect on meaning.", "3-1-4-sc": "I can restate my thesis. | I can summarise my points. | I can reflect on the wider meaning.", "3-1-4-dn": "Write a one-sentence conclusion.", "3--2": "The Giver: evidence and analysis", "codes-3--2": "VC2E8LY05, VC2E8LY09", "3-2-1-title": "Using quotations", "3-2-1-li": "We will embed quotations accurately.", "3-2-1-sc": "I can embed a quote. | I can cite it correctly. | I can explain it.", "3-2-1-dn": "Embed one quote in a sentence.", "3-2-2-title": "Analysing language", "3-2-2-li": "We will analyse language in the novel.", "3-2-2-sc": "I can identify a language choice. | I can explain its effect. | I can use technical terms.", "3-2-2-dn": "Analyse one sentence from the novel.", "3-2-3-title": "Linking ideas", "3-2-3-li": "We will link ideas across paragraphs.", "3-2-3-sc": "I can use a linking phrase. | I can connect two ideas. | I can explain the link.", "3-2-3-dn": "Link two ideas with a connective.", "3-2-4-title": "Editing", "3-2-4-li": "We will edit our essay sentences for clarity.", "3-2-4-sc": "I can remove repetition. | I can check punctuation. | I can check tense.", "3-2-4-dn": "Edit one paragraph for clarity.", "3--3": "The Giver: planning the essay", "codes-3--3": "VC2E8LY08, VC2E8LY05", "3-3-1-title": "Essay plan", "3-3-1-li": "We will plan the full essay.", "3-3-1-sc": "I can list my points. | I can match evidence to points. | I can order my plan.", "3-3-1-dn": "Write your essay plan in five points.", "3-3-2-title": "Counter-arguments", "3-3-2-li": "We will consider a different view.", "3-3-2-sc": "I can state a different view. | I can respond to it. | I can keep my thesis.", "3-3-2-dn": "Write one counter-argument and a response.", "3-3-3-title": "Drafting the introduction", "3-3-3-li": "We will draft the introduction.", "3-3-3-sc": "I can write a hook. | I can state my thesis. | I can preview my points.", "3-3-3-dn": "Draft your introduction.", "3-3-4-title": "Drafting body paragraph one", "3-3-4-li": "We will draft our first body paragraph.", "3-3-4-sc": "I can write a topic sentence. | I can add evidence. | I can explain it.", "3-3-4-dn": "Draft body paragraph one.", "3--4": "The Giver: drafting", "codes-3--4": "VC2E8LY08, VC2E8LY09", "3-4-1-title": "Drafting body paragraph two", "3-4-1-li": "We will draft our second body paragraph.", "3-4-1-sc": "I can write a topic sentence. | I can add evidence. | I can explain it.", "3-4-1-dn": "Draft body paragraph two.", "3-4-2-title": "Feedback", "3-4-2-li": "We will get feedback on our drafts.", "3-4-2-sc": "I can use feedback. | I can improve one part. | I can explain my change.", "3-4-2-dn": "Note one improvement from feedback.", "3-4-3-title": "Revising", "3-4-3-li": "We will revise our draft.", "3-4-3-sc": "I can strengthen my thesis. | I can improve one paragraph. | I can check evidence.", "3-4-3-dn": "Mark one revision in your draft.", "3-4-4-title": "Final checks", "3-4-4-li": "We will do final checks on the draft.", "3-4-4-sc": "I can check quotes. | I can check spelling. | I can check punctuation.", "3-4-4-dn": "Check your quotes once more.", "3--5": "The Giver: timed practice", "codes-3--5": "VC2E8LY05, VC2E8LY07", "3-5-1-title": "Timed plan", "3-5-1-li": "We will plan an essay under time.", "3-5-1-sc": "I can plan in ten minutes. | I can state my thesis. | I can match evidence.", "3-5-1-dn": "Plan a three-point essay in ten minutes.", "3-5-2-title": "Timed paragraph", "3-5-2-li": "We will write a paragraph under time.", "3-5-2-sc": "I can write within time. | I can use evidence. | I can explain it.", "3-5-2-dn": "Write one paragraph in 15 minutes.", "3-5-3-title": "Feedback", "3-5-3-li": "We will give and receive feedback on timed work.", "3-5-3-sc": "I can name a strength. | I can give one suggestion. | I can explain why.", "3-5-3-dn": "Swap paragraphs and name one strength.", "3-5-4-title": "Polishing", "3-5-4-li": "We will polish our writing for the CAT.", "3-5-4-sc": "I can improve one sentence. | I can check spelling. | I can check time.", "3-5-4-dn": "Polish one sentence.", "3--6": "S2_08EN_CAT3: The Giver Essay", "codes-3--6": "VC2E8LE01, VC2E8LE03, VC2E8LY05, VC2E8LY08", "3-6-1-title": "CAT criteria", "3-6-1-li": "We will review the essay criteria.", "3-6-1-sc": "I can state the criteria. | I can check my plan. | I can choose my evidence.", "3-6-1-dn": "Tick each criterion.", "3-6-2-title": "Essay checklist", "3-6-2-li": "We will check the structure of our essay.", "3-6-2-sc": "I can check my thesis. | I can check my paragraphs. | I can check my conclusion.", "3-6-2-dn": "Check your thesis and conclusion.", "3-6-3-title": "Final drafting", "3-6-3-li": "We will complete our final plan for the CAT.", "3-6-3-sc": "I can finish my plan. | I can choose quotes. | I can plan my time.", "3-6-3-dn": "Finish your plan.", "3-6-4-title": "CAT: The Giver Essay", "3-6-4-li": "We will complete The Giver essay CAT.", "3-6-4-sc": "I can complete the essay in time. | I can use evidence. | I can explain my thesis.", "3-6-4-dn": "Re-read your thesis before you begin.", "3--7": "Article analysis: features of articles", "codes-3--7": "VC2E8LA03, VC2E8LY05", "3-7-1-title": "Types of article", "3-7-1-li": "We will identify news and opinion articles.", "3-7-1-sc": "I can name the types. | I can explain their purpose. | I can give an example.", "3-7-1-dn": "Sort three articles into news or opinion.", "3-7-2-title": "Headlines", "3-7-2-li": "We will analyse the purpose of headlines.", "3-7-2-sc": "I can identify a headline's purpose. | I can explain its effect. | I can use evidence.", "3-7-2-dn": "Analyse one headline.", "3-7-3-title": "Structure of articles", "3-7-3-li": "We will analyse how articles are structured.", "3-7-3-sc": "I can identify the structure. | I can explain why it works. | I can link it to purpose.", "3-7-3-dn": "Draw the structure of one article.", "3-7-4-title": "Audience", "3-7-4-li": "We will identify the audience of an article.", "3-7-4-sc": "I can name the audience. | I can explain how language targets them. | I can use evidence.", "3-7-4-dn": "Name the audience of one article and why.", "3--8": "Article analysis: language and persuasion", "codes-3--8": "VC2E8LY05, VC2E8LA02", "3-8-1-title": "Emotive language", "3-8-1-li": "We will identify emotive language.", "3-8-1-sc": "I can identify emotive language. | I can explain its effect. | I can use evidence.", "3-8-1-dn": "Find one emotive word and explain it.", "3-8-2-title": "Facts and opinions", "3-8-2-li": "We will separate facts from opinions.", "3-8-2-sc": "I can identify a fact. | I can identify an opinion. | I can explain the difference.", "3-8-2-dn": "Sort five sentences into facts and opinions.", "3-8-3-title": "Rhetorical devices", "3-8-3-li": "We will identify rhetorical devices in articles.", "3-8-3-sc": "I can name a device. | I can explain its effect. | I can use evidence.", "3-8-3-dn": "Find one rhetorical question and explain it.", "3-8-4-title": "Analysis practice", "3-8-4-li": "We will practise analysing an article.", "3-8-4-sc": "I can state a claim. | I can use evidence. | I can explain effects.", "3-8-4-dn": "Write one claim about an article.", "3--9": "Article analysis: evidence and sources", "codes-3--9": "VC2E8LY05, VC2E8LY07", "3-9-1-title": "Sources", "3-9-1-li": "We will identify the sources in an article.", "3-9-1-sc": "I can identify a source. | I can explain its role. | I can judge its reliability.", "3-9-1-dn": "Name the sources in one article.", "3-9-2-title": "Reliability", "3-9-2-li": "We will judge the reliability of evidence.", "3-9-2-sc": "I can judge evidence. | I can explain why. | I can use criteria.", "3-9-2-dn": "Judge one piece of evidence.", "3-9-3-title": "Quotations", "3-9-3-li": "We will analyse how quotations are used.", "3-9-3-sc": "I can identify a quotation. | I can explain its purpose. | I can link it to the claim.", "3-9-3-dn": "Explain one quotation in an article.", "3-9-4-title": "Evaluating", "3-9-4-li": "We will evaluate how convincing an article is.", "3-9-4-sc": "I can state a judgement. | I can support it. | I can explain it.", "3-9-4-dn": "Write one judgement about an article.", "3--10": "Article analysis: writing the analysis", "codes-3--10": "VC2E8LY05, VC2E8LY09", "3-10-1-title": "Introductions", "3-10-1-li": "We will write an introduction for an article analysis.", "3-10-1-sc": "I can name the article. | I can state a claim. | I can preview points.", "3-10-1-dn": "Write one introduction.", "3-10-2-title": "Body paragraphs", "3-10-2-li": "We will write body paragraphs of an analysis.", "3-10-2-sc": "I can use a topic sentence. | I can use evidence. | I can explain effects.", "3-10-2-dn": "Write one body paragraph.", "3-10-3-title": "Conclusions", "3-10-3-li": "We will write conclusions for article analyses.", "3-10-3-sc": "I can restate my claim. | I can summarise. | I can reflect on the wider meaning.", "3-10-3-dn": "Write one conclusion sentence.", "3-10-4-title": "Editing", "3-10-4-li": "We will edit our analysis.", "3-10-4-sc": "I can remove repetition. | I can check spelling. | I can check punctuation.", "3-10-4-dn": "Edit one paragraph.", "4--1": "Article analysis: practice", "codes-4--1": "VC2E8LY07, VC2E8LY09", "4-1-1-title": "Timed practice", "4-1-1-li": "We will analyse an article under time.", "4-1-1-sc": "I can finish in time. | I can identify two techniques. | I can explain their effects.", "4-1-1-dn": "Skim an article for techniques in two minutes.", "4-1-2-title": "Feedback", "4-1-2-li": "We will give and receive feedback.", "4-1-2-sc": "I can name a strength. | I can give one suggestion. | I can explain why.", "4-1-2-dn": "Swap plans and name one strength.", "4-1-3-title": "Revising", "4-1-3-li": "We will revise our analysis.", "4-1-3-sc": "I can use feedback. | I can improve one paragraph. | I can check evidence.", "4-1-3-dn": "Mark one revision.", "4-1-4-title": "Checking", "4-1-4-li": "We will check our analysis.", "4-1-4-sc": "I can check my claim. | I can check quotes. | I can check my time.", "4-1-4-dn": "Check one quotation.", "4--2": "Article analysis: CAT preparation", "codes-4--2": "VC2E8LY05, VC2E8LY08", "4-2-1-title": "CAT criteria", "4-2-1-li": "We will review the article analysis criteria.", "4-2-1-sc": "I can state the criteria. | I can check my plan. | I can choose my article.", "4-2-1-dn": "Tick each criterion.", "4-2-2-title": "Planning", "4-2-2-li": "We will plan our analysis under time.", "4-2-2-sc": "I can plan in ten minutes. | I can match evidence. | I can order my plan.", "4-2-2-dn": "Plan a three-point analysis.", "4-2-3-title": "Practice paragraph", "4-2-3-li": "We will write a practice paragraph.", "4-2-3-sc": "I can write within time. | I can use evidence. | I can explain effects.", "4-2-3-dn": "Write one practice paragraph.", "4-2-4-title": "Final checks", "4-2-4-li": "We will do final checks before the CAT.", "4-2-4-sc": "I can check my claim. | I can check quotes. | I can check my time.", "4-2-4-dn": "Check your claim.", "4--3": "S2_08EN_CAT4: Article Analysis", "codes-4--3": "VC2E8LA03, VC2E8LY05, VC2E8LY07, VC2E8LY09", "4-3-1-title": "CAT checklist", "4-3-1-li": "We will check our readiness for the article analysis CAT.", "4-3-1-sc": "I can state the task. | I can check my plan. | I can check my timing.", "4-3-1-dn": "Tick each item.", "4-3-2-title": "Warm-up analysis", "4-3-2-li": "We will warm up with a short analysis.", "4-3-2-sc": "I can write in ten minutes. | I can use evidence. | I can explain effects.", "4-3-2-dn": "Write one analysis sentence.", "4-3-3-title": "Revision of techniques", "4-3-3-li": "We will revise article techniques.", "4-3-3-sc": "I can name each technique. | I can explain its effect. | I can link it to purpose.", "4-3-3-dn": "Match five techniques to their effects.", "4-3-4-title": "CAT: Article Analysis", "4-3-4-li": "We will complete the article analysis CAT.", "4-3-4-sc": "I can complete the task in time. | I can use evidence. | I can explain effects.", "4-3-4-dn": "Read the question twice.", "4--4": "Reflection on the year", "codes-4--4": "VC2E8LY09, VC2E8LY01", "4-4-1-title": "Reflecting on CATs", "4-4-1-li": "We will reflect on our assessment tasks this year.", "4-4-1-sc": "I can name one strength. | I can name one area to grow. | I can explain why.", "4-4-1-dn": "Write one strength and one area to grow.", "4-4-2-title": "Setting goals", "4-4-2-li": "We will set goals for next year.", "4-4-2-sc": "I can state a goal. | I can state a plan. | I can explain how I will measure it.", "4-4-2-dn": "Write one goal for next year.", "4-4-3-title": "Reading choice", "4-4-3-li": "We will choose a text to read over the break.", "4-4-3-sc": "I can state a choice. | I can explain why. | I can plan my reading.", "4-4-3-dn": "Choose one text for the holidays.", "4-4-4-title": "Speaking reflection", "4-4-4-li": "We will reflect on our speaking growth.", "4-4-4-sc": "I can compare my first and last talks. | I can name a change. | I can explain it.", "4-4-4-dn": "Name one speaking change you made.", "4--5": "End-of-year reading and writing", "codes-4--5": "VC2E8LY07, VC2E8LY08", "4-5-1-title": "Reading practice", "4-5-1-li": "We will practise reading for meaning.", "4-5-1-sc": "I can summarise a text. | I can infer meaning. | I can use evidence.", "4-5-1-dn": "Summarise one short text.", "4-5-2-title": "Writing practice", "4-5-2-li": "We will practise writing a short response.", "4-5-2-sc": "I can write a claim. | I can use evidence. | I can explain it.", "4-5-2-dn": "Write one claim with evidence.", "4-5-3-title": "Feedback", "4-5-3-li": "We will give and receive feedback.", "4-5-3-sc": "I can name a strength. | I can give one suggestion. | I can explain why.", "4-5-3-dn": "Give feedback on one paragraph.", "4-5-4-title": "Ad libitum: free reading", "4-5-4-li": "We will read for enjoyment.", "4-5-4-sc": "I can read for ten minutes. | I can note one favourite line. | I can explain why.", "4-5-4-dn": "Note one line you enjoyed."};
+let store=Object.assign({},DEFAULTS,SAVED);
+let dirty=false, handle=null;
+const grid=document.getElementById("grid");
+const statusEl=document.getElementById("status");
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt=d=>d.getDate()+" "+MONTHS[d.getMonth()];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CAT=/^(S[12]_|EXAM)/;
+const lessonNames=(t,w)=>(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];
+function setStatus(t){statusEl.textContent=t;}
+// ?today=2027-02-17 previews the "This week" highlight
+const qd=new URLSearchParams(location.search).get("today");
+const today=qd?new Date(qd+"T00:00"):new Date();today.setHours(0,0,0,0);
+let nowId=null;
+const weekDate={};
+const jump=document.createElement("nav");jump.className="jump";jump.setAttribute("aria-label","Terms and search");
+grid.appendChild(jump);
+const terms=document.createElement("div");terms.style.cssText="display:contents";jump.appendChild(terms);
+jump.insertAdjacentHTML("beforeend",`<div class="search" role="search"><label class="sr" for="q">Search this plan</label>`+
+  `<input id="q" type="search" placeholder="Search this plan, e.g. Macbeth" autocomplete="off">`+
+  `<button type="button" id="qnext" hidden>Next match</button><span id="qcount" role="status"></span></div>`);
+
+TERMS.forEach(t=>{
+  const s=document.createElement("section");s.className="term t"+t.n;s.id="term"+t.n;
+  terms.insertAdjacentHTML("beforeend",`<a class="t${t.n}" href="#term${t.n}">Term ${t.n}</a>`);
+  const now={};
+  let h=`<h2>Term ${t.n}</h2><div class="dates">${t.label} · ${t.weeks} weeks</div>`+
+        `<table style="width:${(t.weeks/11*100).toFixed(2)}%;min-width:${t.weeks*120}px"><caption class="sr">Term ${t.n} weekly plan</caption><thead><tr>`;
+  for(let w=1;w<=t.weeks;w++){
+    const g=t.grey[w];
+    const d=new Date(t.start+"T00:00");d.setDate(d.getDate()+7*(w-1));
+    weekDate[`${t.n}--${w}`]=fmt(d);
+    const e=new Date(d);e.setDate(e.getDate()+7);
+    if(today>=d&&today<e){now[w]=true;nowId="term"+t.n;}
+    const cls=[g?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
+    h+=`<th scope="col" style="--o:${w}"${cls?` class="${cls}"`:""}>Week ${w}<small>${fmt(d)}</small>`+
+       `${t.notes[w]?`<span class="hol">${t.notes[w]}</span>`:""}`+
+       `${g?`<span class="tag">${g}</span>`:""}${now[w]?`<span class="tag">This week</span>`:""}</th>`;
+  }
+  h+="</tr></thead><tbody><tr>";
+  for(let w=1;w<=t.weeks;w++){
+    const g=t.grey[w];
+    const lessons=lessonNames(t,w);
+    const nn=(t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w);
+    const tcls=[g&&!(t.exam||[]).includes(w)?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
+    h+=`<td id="w${t.n}-${w}" style="--o:${w}"${tcls?` class="${tcls}"`:""}>${nn?"":`<div class="wn" contenteditable="true" data-k="${t.n}--${w}"></div><div class="info" id="i${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="info-${t.n}--${w}" data-ph="Assessment details"></div><div class="ccw"><div class="cch" role="button" tabindex="0" aria-label="Curriculum codes" aria-expanded="false" aria-controls="c${t.n}-${w}">Codes</div><div class="codes" id="c${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="codes-${t.n}--${w}" data-ph="Add curriculum codes"></div></div>`}`;
+    lessons.forEach((name,i)=>{
+      const k=`${t.n}-${w}-${i+1}`, title=store[`${k}-title`];
+      h+=`<div class="les"><div class="lh" role="button" tabindex="0" aria-expanded="false" aria-controls="p${k}"${!title&&name==="Ad libitum"?' title="Flexible lesson in a short week"':""}>${esc(name)}${title?`<span class="lt"> - ${esc(title)}</span>`:""}</div><div class="lb" id="p${k}" hidden="until-found">`+
+         `<div class="fl">Learning Intention</div><div class="fld" contenteditable="true" data-k="${k}-li" data-ph="What students will learn (student-friendly)"></div>`+
+         `<div class="fl">Success Criteria</div><div class="fld" contenteditable="true" data-k="${k}-sc" data-ph="Observable, specific steps to show learning"></div>`+
+         `<div class="fl">Do Now</div><div class="fld" contenteditable="true" data-k="${k}-dn" data-ph="Starter task at the start of the lesson"></div>`+
+         `<div class="cpall"><button type="button" class="cp" title="Copy this lesson's learning intention, success criteria and Do Now">Copy lesson</button></div>`+
+         `</div></div>`;
+    });
+    h+="</td>";
+  }
+  h+="</tr></tbody></table>";
+  s.innerHTML=h;grid.appendChild(s);
+});
+if(nowId)terms.insertAdjacentHTML("beforeend",`<a class="nowlink" href="#${nowId}">This week</a>`);
+
+// "S1_09EN_CAT1: Title" shows as a small code above the title. Display only.
+const catHTML=v=>{const i=v.indexOf(":");return i<0?`<span class="ct">${esc(v)}</span>`:`<span class="ck">${esc(v.slice(0,i))}</span><span class="ct">${esc(v.slice(i+1).trim())}</span>`;};
+document.querySelectorAll("[data-k]").forEach(el=>{
+  el.textContent=store[el.dataset.k]||"";
+  const mark=()=>{
+    if(el.classList.contains("wn"))el.classList.toggle("cat",CAT.test(el.innerText.trim()));
+    const les=el.closest(".les");
+    if(les&&el.classList.contains("fld"))les.classList.toggle("filled",[...les.querySelectorAll(".fld")].some(f=>f.innerText.trim()));
+  };
+  mark();
+  el.addEventListener("input",()=>{store[el.dataset.k]=el.innerText.trim();dirty=true;setStatus("Unsaved changes");mark();});
+  if(!el.classList.contains("wn"))return;
+  // CATs are formatted when not being edited, and go back to plain text while typing so the stored entry stays exact
+  const fmtCat=()=>{if(el.classList.contains("cat")&&document.activeElement!==el)el.innerHTML=catHTML(store[el.dataset.k]||"");};
+  fmtCat();
+  el.addEventListener("focus",()=>{if(el.isContentEditable&&el.classList.contains("cat")){el.textContent=store[el.dataset.k]||"";const sel=getSelection();sel.selectAllChildren(el);sel.collapseToEnd();}});
+  el.addEventListener("blur",fmtCat);
+});
+// Print & download menu closes after a choice, on a click elsewhere, or with Escape
+const menu=document.querySelector(".menu");
+menu.addEventListener("click",e=>{if(e.target.closest(".menu-list button"))menu.open=false;});
+document.addEventListener("click",e=>{if(!menu.contains(e.target))menu.open=false;});
+menu.addEventListener("keydown",e=>{if(e.key==="Escape"&&menu.open){menu.open=false;menu.querySelector("summary").focus();}});
+
+// Open/close panels. Closed panels are hidden="until-found", so the browser's Find can open them.
+if("onbeforematch" in document.body)document.documentElement.classList.add("uf");
+function setOpen(btn,panel,open){
+  (btn.classList.contains("wn")?btn:btn.parentElement).classList.toggle("open",open);
+  if(btn.hasAttribute("aria-expanded"))btn.setAttribute("aria-expanded",open);
+  panel.hidden=open?false:"until-found";
+}
+const keyClick=b=>b.addEventListener("keydown",e=>{if(e.target===b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();b.click();}});
+document.querySelectorAll(".lh,.cch").forEach(b=>{
+  const p=b.nextElementSibling;
+  b.addEventListener("click",()=>setOpen(b,p,!!p.hidden));
+  p.addEventListener("beforematch",()=>setOpen(b,p,true));
+  keyClick(b);
+});
+document.querySelectorAll(".wn").forEach(w=>{
+  const p=w.nextElementSibling;
+  w.addEventListener("click",()=>{if(w.classList.contains("cat"))setOpen(w,p,!!p.hidden);});
+  p.addEventListener("beforematch",()=>setOpen(w,p,true));
+});
+let allOpen=false;
+document.getElementById("expand").onclick=e=>{
+  allOpen=!allOpen;
+  document.querySelectorAll(".lh,.cch,.wn.cat").forEach(b=>setOpen(b,b.nextElementSibling,allOpen));
+  e.currentTarget.textContent=allOpen?"Collapse all":"Expand all";
+};
+document.querySelector("h1").addEventListener("input",()=>{dirty=true;setStatus("Unsaved changes");});
+
+// Copy lesson: the learning intention, success criteria and Do Now as plain text, in one go. Read-only: works on the live site too.
+const flash=(b,msg)=>{b.textContent=msg;b.classList.add("done");setTimeout(()=>{b.textContent="Copy lesson";b.classList.remove("done");},1500);};
+grid.addEventListener("click",async e=>{
+  const b=e.target.closest(".cp");if(!b)return;
+  const les=b.closest(".les"), field=s=>les.querySelector(`.fld[data-k$="-${s}"]`).innerText.trim();
+  // success criteria become a bulleted list, one per line
+  const sc=field("sc").split(/\s*\|\s*|\n/).map(s=>s.trim()).filter(Boolean).map(s=>"• "+s).join("\n");
+  const sec=(label,body)=>body?label+"\n"+body:"";
+  const text=[sec("Learning Intention:",field("li")),sec("Success Criteria:",sc),sec("Do Now:",field("dn"))].filter(Boolean).join("\n\n");
+  if(!text)return flash(b,"Nothing to copy");
+  try{await navigator.clipboard.writeText(text);}
+  catch(err){ // fallback for browsers or pages where the clipboard API is blocked
+    const t=document.createElement("textarea");t.value=text;t.setAttribute("readonly","");t.style.position="fixed";t.style.opacity="0";
+    document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();
+    if(!ok)return flash(b,"Copy failed");
+  }
+  flash(b,"Copied");
+});
+
+// Assessment overview, built from the CAT entries (display only)
+(()=>{
+  const rows=[...document.querySelectorAll(".wn.cat")].map(w=>{
+    const k=w.dataset.k, [tn,wk]=k.split("--"), v=store[k]||"", i=v.indexOf(":");
+    return `<tr><td><a href="#w${tn}-${wk}">Term ${tn}, Week ${wk}</a><small>${weekDate[k]}</small></td>`+
+      `<td><span class="ck">${esc(i<0?v:v.slice(0,i))}</span>${esc(i<0?"":v.slice(i+1).trim())}</td>`+
+      `<td>${esc(store["codes-"+k]||"")}</td></tr>`;
+  });
+  if(!rows.length)return;
+  jump.insertAdjacentHTML("afterend",`<details class="overview" id="overview"><summary><h2>Assessments at a glance</h2><span class="count">${rows.length}</span><span class="more"></span></summary>`+
+    `<table><caption class="sr">All assessments in this plan</caption>`+
+    `<thead><tr><th scope="col">When</th><th scope="col">Assessment</th><th scope="col">Curriculum codes</th></tr></thead><tbody>${rows.join("")}</tbody></table></details>`);
+  const ov=document.getElementById("overview");
+  // a "When" link jumps to that week and opens its assessment details
+  ov.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;const w=document.querySelector(a.getAttribute("href")+" .wn.cat");if(w)setOpen(w,w.nextElementSibling,true);});
+  // always print the table, then restore
+  let was;addEventListener("beforeprint",()=>{was=ov.open;ov.open=true;});addEventListener("afterprint",()=>{ov.open=was;});
+})();
+
+// Search: highlights matches, opens the lessons they're in, fades other weeks. Display only.
+(()=>{
+  const q=document.getElementById("q"),cnt=document.getElementById("qcount"),next=document.getElementById("qnext");
+  const HL=window.CSS&&CSS.highlights&&window.Highlight;
+  let hits=[],cur=-1,opened=[],timer;
+  function clear(){
+    opened.forEach(([b,p])=>setOpen(b,p,false));opened=[];
+    document.querySelectorAll(".hit,.dim").forEach(e=>e.classList.remove("hit","cur","dim"));
+    if(HL)CSS.highlights.delete("search");
+    hits=[];cur=-1;next.hidden=true;cnt.textContent="";
+  }
+  function open(b,p){if(p.hidden){setOpen(b,p,true);opened.push([b,p]);}}
+  function run(){
+    clear();
+    const term=q.value.trim().toLowerCase();
+    if(term.length<2)return;
+    const ranges=[];let weeks=0;
+    document.querySelectorAll(".term td").forEach(td=>{
+      let found=false;
+      td.querySelectorAll(".wn,.info,.codes,.lh,.fld").forEach(el=>{
+        if(!el.textContent.toLowerCase().includes(term))return;
+        found=true;
+        const les=el.closest(".les");
+        if(les){const b=les.querySelector(".lh");open(b,b.nextElementSibling);}
+        else if(el.classList.contains("codes"))open(el.previousElementSibling,el);
+        else if(el.classList.contains("info")&&el.previousElementSibling.classList.contains("cat"))open(el.previousElementSibling,el);
+        const box=les||el;if(!hits.includes(box)){hits.push(box);box.classList.add("hit");}
+        if(HL){const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;
+          while((n=tw.nextNode())){const s=n.data.toLowerCase();let i=s.indexOf(term);
+            while(i>-1){const r=new Range();r.setStart(n,i);r.setEnd(n,i+term.length);ranges.push(r);i=s.indexOf(term,i+term.length);}}}
+      });
+      if(found)weeks++;else td.classList.add("dim");
+    });
+    if(HL&&ranges.length)CSS.highlights.set("search",new Highlight(...ranges));
+    cnt.textContent=hits.length?`${hits.length} match${hits.length>1?"es":""} in ${weeks} week${weeks>1?"s":""}`:"No matches. Check the spelling or try a shorter word.";
+    next.hidden=!hits.length;
+  }
+  function go(){
+    if(!hits.length)return;
+    if(cur>-1)hits[cur].classList.remove("cur");
+    cur=(cur+1)%hits.length;hits[cur].classList.add("cur");
+    hits[cur].scrollIntoView({block:"center",inline:"center"});
+    if(hits.length>1)cnt.textContent=`Match ${cur+1} of ${hits.length}`;
+  }
+  q.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(run,150);});
+  q.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearTimeout(timer);if(!hits.length)run();go();}if(e.key==="Escape"){q.value="";clear();}});
+  next.addEventListener("click",go);
+})();
+
+if(location.hash){const el=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start",inline:"center"}));}
+
+// Live site (GitHub Pages) is read-only; edit a local copy and push it to update the site.
+const LIVE=location.hostname.endsWith("github.io");
+if(LIVE){
+  document.body.classList.add("ro");
+  document.querySelectorAll("[data-k],h1").forEach(el=>el.contentEditable=false);
+  // Display-only formatting. The stored entries are untouched and never read back from here.
+  document.querySelectorAll(".wn.cat").forEach(w=>{
+    w.setAttribute("role","button");w.tabIndex=0;w.setAttribute("aria-expanded","false");w.setAttribute("aria-controls",w.nextElementSibling.id);
+    keyClick(w);
+  });
+  document.querySelectorAll('.fld[data-k$="-sc"]').forEach(f=>{
+    const parts=f.textContent.split(/\s*\|\s*/).filter(Boolean);
+    if(parts.length>1)f.innerHTML="<ul>"+parts.map(p=>"<li>"+esc(p)+"</li>").join("")+"</ul>";
+  });
+}
+
+// Build the file text: original page with the current entries written into SAVED
+function fileText(){
+  const c=document.documentElement.cloneNode(true);
+  c.removeAttribute("class");
+  c.querySelector("#grid").innerHTML="";
+  c.querySelector("#status").textContent="";
+  // \u2028/\u2029 would break the line match below and "<" could end the script early; escaping keeps the data identical
+  const data=JSON.stringify(store).replace(/[<\u2028\u2029]/g,ch=>"\\u"+ch.charCodeAt(0).toString(16).padStart(4,"0"));
+  const html="<!doctype html>\n"+c.outerHTML;
+  let found=false;
+  const out=html.replace(/const SAVED=.*;\n/, ()=>{found=true;return "const SAVED="+data+";\n";});
+  if(!found)throw new Error("SAVED line not found");
+  return out;
+}
+async function save(){
+  if(LIVE)return;
+  let text;
+  try{text=fileText();}catch(e){setStatus("Not saved: this file's data line is missing. Your changes are still on screen.");return;}
+  if(window.showSaveFilePicker){
+    try{
+      if(!handle)handle=await window.showSaveFilePicker({suggestedName:document.title+".html",
+        types:[{description:"HTML file",accept:{"text/html":[".html"]}}]});
+      const w=await handle.createWritable();
+      await w.write(text);
+      await w.close();
+      dirty=false;
+      setStatus("Saved at "+new Date().toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"}));
+      return;
+    }catch(e){
+      if(e.name==="AbortError")return;
+      handle=null;
+    }
+  }
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:"text/html"}));
+  a.download=document.title+".html";
+  a.click();
+  dirty=false;
+  setStatus("Downloaded – replace the file in your folder with it");
+}
+document.getElementById("save").onclick=save;
+function printPlan(mode){document.body.classList.toggle("summary",mode==="summary");window.print();}
+addEventListener("afterprint",()=>document.body.classList.remove("summary"));
+
+// Unit plans: a unit runs from the first week after the previous assessment to its CAT. Exams have no unit plan.
+// Exported as a Word curriculum map in the school's format. Read-only: works on the live site too.
+function units(){
+  const out=[];let cur=[];
+  TERMS.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if(((t.noLessons||[]).includes(w)||t.grey[w])&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on (grey weeks are not teaching weeks)
+    if((PLAN.noUnit||[]).some(([n,x])=>n===t.n&&x===w))continue; // in the plan's lessons, but not part of any unit (e.g. post-exam week)
+    const k=`${t.n}--${w}`;
+    cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
+    const v=(store[k]||"").trim();
+    if(CAT.test(v)){if(!v.startsWith("EXAM"))out.push(cur);cur=[];} // exam revision weeks get no unit plan
+  }});
+  return out; // weeks after the last assessment have no CAT, so they form no unit
+}
+const unitName=u=>{const v=store[u[u.length-1].k].trim(),i=v.indexOf(":");return i<0?v:v.slice(i+1).trim();};
+const unitSpan=u=>{const a=u[0],b=u[u.length-1];return `Term ${a.t} Week ${a.w} to Term ${b.t} Week ${b.w} · ${u.length} weeks`;};
+// Minimal zip (stored, no compression): all a .docx needs
+function zip(files){
+  const enc=new TextEncoder(),local=[],central=[];let off=0;
+  const T=[...Array(256)].map((_,n)=>{for(let k=0;k<8;k++)n=n&1?0xEDB88320^(n>>>1):n>>>1;return n>>>0;});
+  const le=(...f)=>{const b=new Uint8Array(f.reduce((s,x)=>s+x[1],0)),v=new DataView(b.buffer);let i=0;for(const [x,n] of f){n===2?v.setUint16(i,x,true):v.setUint32(i,x,true);i+=n;}return b;};
+  for(const [name,text] of Object.entries(files)){
+    const nm=enc.encode(name),d=enc.encode(text);let c=~0;for(const b of d)c=T[(c^b)&255]^(c>>>8);c=~c>>>0;
+    const common=[[20,2],[0,2],[0,2],[0,2],[33,2],[c,4],[d.length,4],[d.length,4],[nm.length,2],[0,2]];
+    local.push(le([0x04034b50,4],...common),nm,d);
+    central.push(le([0x02014b50,4],[20,2],...common,[0,2],[0,2],[0,2],[0,4],[off,4]),nm);
+    off+=30+nm.length+d.length;
+  }
+  const size=central.reduce((s,b)=>s+b.length,0), n=Object.keys(files).length;
+  return new Blob([...local,...central,le([0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2])],{type:CT_DOCX});
+}
+const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+
+// Curriculum map (Word): one document per semester in the school's template layout.
+// Lesson plan and CAT links are relative: save the download into that semester's Curriculum Map folder.
+// Folder name for each unit (Year Level Folder structure). Plans without an entry get no links.
+const CM_FOLDERS={
+ "09ADVEN1":{"NAPLAN Practice":"1. NAPLAN Practice","Scene Analysis (12 Angry Men)":"2. Scene Analysis (12 Angry Men)","Crafting Texts":"3. Crafting Texts","Oral Presentation":"1. Oral Presentation","Analysing Argument":"2. Analysing Argument","Analytical Text Response Essay (Julius Caesar)":"3. Julius Caesar"},
+ "10ADVEN1":{"Personal Text Response Essay (Rear Window)":"1. Rear Window","English Conventions":"2. English Conventions","Love Framework of Ideas":"3. Love Framework of Ideas","Oral Presentation":"1. Oral Presentation","Early Modern English":"2. Early Modern English","Analytical Text Response Essay (Macbeth)":"3. Macbeth"},
+ "09EN":{"Presenting Argument":"1. Presenting Argument","Whale Rider Analytical Essay":"2. Whale Rider","Creative Writing (Memoir)":"1. Creative Writing (Memoir)","Animal Farm Analytical Essay":"2. Animal Farm"},
+ "10EN":{"Creative Writing":"1. Creative Writing","Film Text Response":"2. Film Text Response","Debate or Oral Presentation":"1. Debate or Oral Presentation","Romeo and Juliet":"2. Romeo and Juliet"},
+ "07ADVEN1":{"Creative Writing - Newspaper Report":"1. Creative Writing - Newspaper Report","\"Trash\" Chapter Expert Task":"2. Trash Chapter Expert Task","\"Trash\" Passage Analysis":"3. Trash Passage Analysis","Visual Persuasion":"1. Visual Persuasion","Back to the Future - Film Study":"2. Back to the Future - Film Study"},
+ "08ADVEN1":{"Creative Writing - Developing a Character":"1. Creative Writing - Developing a Character","Understanding Neurodivergence":"2. Understanding Neurodivergence","Passage Analysis: The Curious Incident of the Dog":"3. Passage Analysis - The Curious Incident of the Dog","Dystopian Reading Journal":"1. Dystopian Reading Journal","Dystopian Research Project":"2. Dystopian Research Project","Oral Issues Presentation":"3. Oral Issues Presentation"}
+};
+// File names as saved on Windows: ":" becomes " -" (matching the folder names), other characters Windows forbids are dropped
+const fileSafe=s=>s.replace(/:/g," -").replace(/[\\/*?"<>|]/g,"").replace(/\s+/g," ").trim();
+// Relative link target: each folder or file name is URL-encoded, so spaces and "&" in names resolve in Word
+const relLink=(...parts)=>parts.map(p=>encodeURIComponent(p)).join("/");
+// Key knowledge reads as the content itself: "We will explore how memory shapes a story." -> "How memory shapes a story"
+const kkFromLI=li=>{
+  let t=(li||"").trim().replace(/^we will\s+/i,"");
+  if(/^be\s+/i.test(t)) t=t.replace(/^be\s+/i,"");
+  else t=t.replace(/^[a-z]+\s+/i,"");
+  t=t.replace(/\.$/,"").trim();
+  return t?t.charAt(0).toUpperCase()+t.slice(1):"";
+};
+function cmDocx(sem){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
+  const folders=CM_FOLDERS[code]||{};
+  const terms=TERMS.filter(t=>sem===1?t.n<=2:t.n>=3);
+  const unitOf={};
+  units().forEach(u=>u.forEach(x=>{unitOf[x.k]={u,cat:x===u[u.length-1]};}));
+  const rels=[];
+  const link=(text,target)=>{
+    const id="rIdL"+(rels.length+1);
+    rels.push(`<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(target)}" TargetMode="External"/>`);
+    return `<w:hyperlink r:id="${id}"><w:r><w:rPr><w:color w:val="0563C1"/><w:sz w:val="18"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:hyperlink>`;};
+  const run=(text,b)=>`<w:r><w:rPr>${b?"<w:b/>":""}<w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(runs)=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${runs}</w:p>`;
+  const P=(text,b)=>para(run(text,b));
+  const W=[1035,1941,2070,1797,1830,2414,1873], SH=[null,null,"DAE8F8",null,null,"DAE8F8",null];
+  const cell=(i,paras)=>`<w:tc><w:tcPr><w:tcW w:w="${W[i]}" w:type="dxa"/>${SH[i]?`<w:shd w:val="clear" w:color="auto" w:fill="${SH[i]}"/>`:""}</w:tcPr>${paras||para("")}</w:tc>`;
+  const row=(cells)=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cells.map((c,i)=>cell(i,c)).join("")}</w:tr>`;
+  const three=a=>{const u=[...new Set(a)];return u.length<=3?u:[0,1,2].map(i=>u[Math.round(i*(u.length-1)/2)]);};
+  const header=row(["",P("Semester "+sem,true),"","","","",""])+
+    row([P(""),P("Topic / Links to VIC Curriculum",true),P("Learning Intentions: / Success Criteria: / (include in lesson plan)",true),P("Key Knowledge",true),P("Link to Lesson plans",true),P("Do Now",true),P("Assessment",true)]);
+  const rowsXml=[]; let n=0;
+  terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if(t.grey[w]=="Step-Up")continue; // Step-Up is the start of the next semester, so it is left out here
+    n++;
+    const k=`${t.n}--${w}`, d=new Date(t.start+"T00:00"); d.setDate(d.getDate()+7*(w-1));
+    const topic=(store[k]||"").trim(), g=t.grey[w];
+    const c0=P("Week "+n,true)+P(`Term ${t.n}, Week ${w}`)+P("Monday "+fmt(d));
+    if(g&&!topic){rowsXml.push(row([c0,P(g,true),"","","","",""]));continue;}
+    const codes=(store["codes-"+k]||"").trim();
+    const c1=P(topic||"Not yet entered",true)+P("Curriculum codes: "+(codes||"to be added"));
+    const lis=[],scs=[],titles=[],dos=[];
+    lessonNames(t,w).forEach((ln,j)=>{
+      const kk=`${t.n}-${w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+      if(f("li"))lis.push(f("li"));
+      f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+      const kl=f("title")||kkFromLI(f("li")); if(kl)titles.push(kl); // key knowledge: the lesson title, or its learning intention when untitled
+      if(f("dn"))dos.push([f("title")||ln,f("dn")]);
+    });
+    let c2="";
+    if(three(lis).length)c2+=P("Learning Intentions:",true)+three(lis).map(s=>P("• "+s)).join("");
+    if(three(scs).length)c2+=P("Success Criteria:",true)+three(scs).map(s=>P("• "+s)).join("");
+    c2=c2||P("Not yet entered");
+    const c3=titles.length?titles.map(s=>P(s)).join(""):P("Not yet entered");
+    const ui=unitOf[k], name=ui?unitName(ui.u):"", folder=ui?folders[name]:null;
+    // A unit sits in the semester of its CAT (S1_ or S2_), even when its first weeks fall in the other semester
+    const usem=ui?(/^S2_/.test((store[ui.u[ui.u.length-1].k]||"").trim())?2:1):0;
+    let c4="";
+    if(ui){
+      if(folder){const file=`${code} - ${fileSafe(name)} - Lesson Plans.docx`;
+        c4=para(link("Lesson plans: "+name,relLink("..","..",`Semester ${usem}`,folder,"Lesson Plans",file)));}
+      else c4=P("Lesson plans: "+name);
+    }
+    const c5=dos.length?dos.map(([l,dn])=>P(l+": "+dn)).join(""):P("Do Nows to be added");
+    let c6="";
+    if(ui&&ui.cat){c6=P(topic,true)+(folder?para(link("CAT assessment brief",relLink("..","..",`Semester ${usem}`,folder,"Assessments & Rubrics",`${code} - ${fileSafe(name)} - CAT Assessment.docx`))):"");}
+    rowsXml.push(row([c0,c1,c2,c3,c4,c5,c6]));
+  }});
+  const tbl=`<w:tbl><w:tblPr><w:tblW w:w="${W.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="9AA5B1"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${header}${rowsXml.join("")}</w:tbl>`;
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/>${rels.join("")}</Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${P("Semester "+sem,true)}${P("KLA: English")}${P("Subject: "+subject)}${tbl}<w:p/><w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("cmbtn").onclick=()=>{
+  const dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","cmh");
+  dl.innerHTML=`<h2 id="cmh">Curriculum map</h2><p>One curriculum map per semester, in the school's Word format. Save each download into that semester's Curriculum Map folder so the lesson plan and assessment links work.</p>`+
+    `<ul>${[1,2].map(s=>`<li><span><b>Semester ${s}</b><small>${s===1?"Terms 1 and 2":"Terms 3 and 4"}</small></span><button type="button" class="btn" data-s="${s}">Download .docx</button></li>`).join("")}</ul>`+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-s]");if(!b)return;
+    const s=+b.dataset.s, a=document.createElement("a"), url=URL.createObjectURL(cmDocx(s));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Semester ${s} Curriculum Map.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"){e.preventDefault();save();}});
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue="";}});
+document.getElementById("clear").onclick=()=>{
+  if(!window.confirm("Clear every entry?"))return;
+  store={};
+  document.querySelectorAll("[data-k]").forEach(el=>{el.textContent="";});
+  document.querySelectorAll(".les.filled").forEach(el=>el.classList.remove("filled"));
+  dirty=true;setStatus("Unsaved changes – click Save");
+};
+
+// Unit plans (Word): one document per unit of work, in the school's unit plan template.
+// Tick boxes for cross-curriculum priorities, capabilities and 21CLD are chosen from the unit's own wording; the teacher should check them.
+const UP2_CROSS=[
+ ["Learning about Aboriginal and Torres Strait Islander histories and cultures",/aboriginal|torres|indigenous|first nations/],
+ ["Learning about Sustainability",/sustainab|climate/],
+ ["Learning about Asia and Australia's engagement with Asia",/asia|china|japan|korea|indonesia|vietnam/]];
+const UP2_CAPS=[
+ ["Ethical Capability",/ethic|justice|fair|moral|power|bias|responsib|rights/],
+ ["Critical and Creative Thinking",/analys|argu|persua|creative|essay|evaluat|interpret|critic|imagin/],
+ ["Intercultural Capability",/cultur|identity|m[aā]ori|asia|diverse|perspective|country/],
+ ["Personal and Social Capability",/oral|present|debate|collab|group|team|peer|reflect|feedback|discuss|rehears/]];
+const UP2_CLD=[
+ ["Knowledge Construction",/analys|interpret|evidence|context|understand|theme|explore|explain/],
+ ["Real world",/audience|persua|argu|pitch|letter|advert|media|news|public|community/],
+ ["Collaboration",/collab|group|peer|team|discuss|debate|pair/],
+ ["Self-regulation",/reflect|goal|plan|revis|draft|feedback|self|rehears|checklist/],
+ ["Skillful Communication",/oral|present|write|writ|essay|speech|debate|communicat|letter|pitch/],
+ ["ICT for learning",/film|digital|online|ict|slide|video|podcast|screen|media/]];
+function unitDocxV2(u){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const yearLevel=m?`Year ${+m[1]}${m[2]?" Advanced":""}`:code;
+  const name=unitName(u);
+  // Lesson plans sit beside the Unit Plan folder (../Lesson Plans/<file>), so the link resolves from there
+  const lpRels=[], lpFolder=(CM_FOLDERS[code]||{})[name];
+  const lpLine=lpFolder?`<w:p><w:pPr><w:spacing w:after="120"/></w:pPr><w:r><w:rPr><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">Lesson plans: </w:t></w:r><w:hyperlink r:id="rIdLP1"><w:r><w:rPr><w:color w:val="0563C1"/><w:sz w:val="18"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">${esc(name)}</w:t></w:r></w:hyperlink></w:p>`:"";
+  if(lpFolder)lpRels.push(`<Relationship Id="rIdLP1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(relLink("..","Lesson Plans",`${code} - ${fileSafe(name)} - Lesson Plans.docx`))}" TargetMode="External"/>`);
+  const run=(text,o={})=>`<w:r><w:rPr>${o.b?"<w:b/>":""}${o.i?"<w:i/>":""}<w:sz w:val="${o.sz||18}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(text,o={})=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${run(text,o)}</w:p>`;
+  const bullets=items=>items.map(s=>para("• "+s)).join("");
+  const cell=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span>1?`<w:gridSpan w:val="${o.span}"/>`:""}${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}</w:tcPr>${o.body||para("")}</w:tc>`;
+  const tr=cells=>`<w:tr>${cells.join("")}</w:tr>`;
+  const table=(widths,rows)=>`<w:tbl><w:tblPr><w:tblW w:w="${widths.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${widths.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.join("")}</w:tbl>`;
+
+  // Data for this unit
+  const weeks=u.map(x=>({t:TERMS.find(T=>T.n===x.t),w:x.w,k:x.k,topic:(store[x.k]||"").trim(),isCat:x===u[u.length-1]}));
+  const topics=weeks.map(x=>x.topic.replace(/^S[12]_\w+?:\s*/,"").replace(/^EXAM:\s*/,"")).filter(Boolean);
+  const codes=[...new Set(weeks.flatMap(x=>(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean)))];
+  const lis=[],scs=[],dns=[],titles=[];
+  let firstDn="";
+  weeks.forEach(x=>lessonNames(x.t,x.w).forEach((ln,j)=>{
+    const kk=`${x.t.n}-${x.w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+    if(f("li"))lis.push(f("li"));
+    f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+    if(f("dn"))dns.push(f("dn"));
+    if(f("title"))titles.push(f("title"));
+    if(!firstDn&&f("dn"))firstDn=f("dn");
+  }));
+  const uniq=a=>[...new Set(a)];
+  const liU=uniq(lis), scU=uniq(scs);
+  const cat=weeks[weeks.length-1];
+  const UNIT_TEXT=[name,...topics,...titles,...liU,...scU].join(" ");
+  const SUBS=[
+    [/film|viewing|camels/i,"Analysing film","film language and camera techniques"],
+    [/oral|present|debate|speech|rehears/i,"Speaking and presenting","spoken language and presentation"],
+    [/memoir|creative|narrative|crafting|personal text/i,"Creating texts","creative and personal language"],
+    [/grammar|conventions|punctuation|sentence/i,"Language conventions","language conventions and sentence structure"],
+    [/macbeth|romeo|shakespeare|early modern/i,"Shakespearean drama","Shakespearean language and dramatic structure"],
+    [/persua|argu|contention|analys|essay/i,"Analysing argument and texts","persuasive and analytical language"],
+    [/animal farm|allegory|novel|fable/i,"Analysing novels","narrative voice and symbolism"]];
+  const subHits=SUBS.filter(([re])=>re.test(UNIT_TEXT));
+  const sub=subHits.length?[...new Set(subHits.map(x=>x[1]))].slice(0,2).join(", "):"Reading and responding to texts";
+  const focusPhrase=subHits.length?subHits[0][2]:"text structure and language features";
+  const opt=(re,yes)=>re.test(UNIT_TEXT)?yes:"";
+  const adj={
+    eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the CAT in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
+    int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the CAT, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
+    ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the CAT.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
+  };
+  const std9=`By the end of Level 9, students analyse how ${focusPhrase} shape meaning for an audience. They use evidence from the text to support their interpretation and organise their ideas in clear, structured responses.`;
+  const std10=`By the end of Level 10, students evaluate how ${focusPhrase} position the audience and shape meaning. They sustain a clear interpretation or argument using precise, selected evidence, and adapt language and structure to purpose and audience.`;
+  const formText=`Checked in every lesson against the success criteria, with the Do Now as an entry check (Weeks 1–${weeks.length}).`;
+  const catInfo=(store["info-"+cat.k]||"").trim();
+  const strandCounts={};
+  codes.forEach(c=>{const mm=c.match(/^VC2E\d+(LA|LE|LY)/); if(mm) strandCounts[mm[1]]=(strandCounts[mm[1]]||0)+1;});
+  const STRAND={LA:"Language",LE:"Literature",LY:"Literacy"};
+  const top=Object.entries(strandCounts).sort((a,b)=>b[1]-a[1])[0];
+  const strand=top?STRAND[top[0]]:"to be added";
+  const corpus=[name,...topics,...liU,...scU,...dns,...titles,catInfo].join(" ").toLowerCase();
+  const tick=(on,label)=>para((on?"☒ ":"☐ ")+label);
+  const cross=UP2_CROSS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const caps=UP2_CAPS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const cld=UP2_CLD.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const firstWeek=weeks[0];
+  const preText=firstDn?`Week 1 Do Now (diagnostic): ${firstDn}`:`Diagnostic at the start of the unit: students write what they already know about "${topics[0]||name}" and one question they have.`;
+  const catText=para(cat.topic||"To be added",{b:1})+(catInfo?bullets(catInfo.split("\n").filter(s=>s.trim()).map(s=>s.trim())):"");
+  const W=[1421,1421,1421,2549,6045];
+
+  const sec1=table([2850,5110,5110],[
+    tr([cell(13070,{span:3,fill:"FFC0E3",body:para("Adjustments/ Scaffolds",{b:1})})]),
+    tr([cell(2850,{body:para("EAL",{b:1})}),cell(5110,{body:para("Integration",{b:1})}),cell(5110,{body:para("Extension",{b:1})})]),
+    tr([cell(2850,{body:para(adj.eal)}),cell(5110,{body:para(adj.int)}),cell(5110,{body:para(adj.ext)})])]);
+  const sec2=table([6229,6821],[
+    tr([cell(13050,{span:2,fill:"D9D9D9",body:para("Mapping to F–10 Victorian Curriculum 2.0",{b:1})})]),
+    tr([cell(13050,{span:2,body:para("Content description: "+(codes.join(", ")||"to be added"))})]),
+    tr([cell(13050,{span:2,fill:"D1E8B2",body:para("Achievement standard",{b:1})})]),
+    tr([cell(6229,{body:para("Level 9",{b:1})}),cell(6821,{body:para("Level 9 and 10",{b:1})})]),
+    tr([cell(6229,{body:para(std9)}),cell(6821,{body:para(std10)})])]);
+  const sec3=table([3120,3120,6600],[
+    tr([cell(12840,{span:3,fill:"C6ECFF",body:para(`${yearLevel} English: ${name}`,{b:1})})]),
+    tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: "+sub)}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
+  const catName=((cat.topic||"").split(":").slice(1).join(":")||cat.topic||name).trim();
+  const euLI=`We will explore how ${focusPhrase} shape meaning, and apply this in ${catName}.`;
+  const euSC=`I can use evidence from the text to explain how ${focusPhrase} shape meaning, and structure this in ${catName}.`;
+  const eu=para("Learning Intention:",{b:1})+para(euLI)+para("Success Criteria:",{b:1})+para(euSC);
+  const bigRows=[
+    tr([cell(4263,{fill:"D1E8B2",body:para("The Big Question / Idea",{b:1})}),cell(8594,{fill:"D1E8B2",body:para("Essential Understandings",{b:1})})]),
+    tr([cell(4263,{body:para(name,{b:1})+para("What students do in this unit:",{b:1})+bullets(topics)}),cell(8594,{vm:"restart",body:eu})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Cross Curricular Priorities",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:cross}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Capabilities curriculum",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:caps}),cell(8594,{vm:"continue"})])];
+  const sec4=table([4263,8594],bigRows);
+  const sec5=table(W,[
+    tr([cell(4263,{span:3,fill:"D1E8B2",body:para("Common Assessments",{b:1})}),cell(8594,{span:2,fill:"D1E8B2",body:para("21CLD",{b:1})})]),
+    tr([cell(W[0],{body:para("Pre-assessment",{b:1})+para(preText)}),
+        cell(W[1],{body:para("Formative (ongoing)",{b:1})+para(formText)}),
+        cell(W[2],{body:para("Summative (final)",{b:1})+catText}),
+        cell(W[3],{body:cld}),
+        cell(W[4],{})])]);
+
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  const body=para(`English · ${yearLevel} · ${name}`,{b:1,sz:24})+lpLine+sec1+para("")+sec2+para("")+sec3+para("")+sec4+para("")+sec5+para("");
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/>${lpRels.join("")}</Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${body}<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("upv2btn").onclick=()=>{
+  const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
+  dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its CAT.</p>`+
+    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-i]");if(!b)return;
+    const u=us[b.dataset.i], a=document.createElement("a"), url=URL.createObjectURL(unitDocxV2(u));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Unit Plan - ${fileSafe(unitName(u))}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
+</script>
+</body>
+</html>

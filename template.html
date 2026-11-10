@@ -225,6 +225,7 @@ const TERMS=[
 const PLAN={};
 (PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
 (PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
+(PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
 const DEFAULTS={};
 const SAVED={};
 let store=Object.assign({},DEFAULTS,SAVED);
@@ -533,7 +534,8 @@ const CM_FOLDERS={
  "10EN":{"Creative Writing":"1. Creative Writing","Film Text Response":"2. Film Text Response","Debate or Oral Presentation":"1. Debate or Oral Presentation","Romeo and Juliet":"2. Romeo and Juliet"},
  "07ADVEN1":{"Creative Writing - Newspaper Report":"1. Creative Writing - Newspaper Report","\"Trash\" Chapter Expert Task":"2. Trash Chapter Expert Task","\"Trash\" Passage Analysis":"3. Trash Passage Analysis","Visual Persuasion":"1. Visual Persuasion","Back to the Future - Film Study":"2. Back to the Future - Film Study"},
  "08ADVEN1":{"Creative Writing - Developing a Character":"1. Creative Writing - Developing a Character","Understanding Neurodivergence":"2. Understanding Neurodivergence","Passage Analysis: The Curious Incident of the Dog":"3. Passage Analysis - The Curious Incident of the Dog","Dystopian Reading Journal":"1. Dystopian Reading Journal","Dystopian Research Project":"2. Dystopian Research Project","Oral Issues Presentation":"3. Oral Issues Presentation"},
- "08EN":{"Oral Language Presentation":"1. Oral Language Presentation","Hunt for the Wilderpeople Film Study (TEEL)":"2. Hunt for the Wilderpeople Film Study (TEEL)","The Giver Essay":"1. The Giver Essay","Article Analysis":"2. Article Analysis"}
+ "08EN":{"Oral Language Presentation":"1. Oral Language Presentation","Hunt for the Wilderpeople Film Study (TEEL)":"2. Hunt for the Wilderpeople Film Study (TEEL)","The Giver Essay":"1. The Giver Essay","Article Analysis":"2. Article Analysis"},
+ "07EN":{"Persuasive Poster":"1. Persuasive Poster","Coraline: Comprehension Questions":"2. Coraline Comprehension Questions","His Name was Walter TEEL Paragraph":"1. His Name was Walter TEEL Paragraph","Article Analysis Podcast":"2. Article Analysis Podcast"}
 };
 // File names as saved on Windows: ":" becomes " -" (matching the folder names), other characters Windows forbids are dropped
 const fileSafe=s=>s.replace(/:/g," -").replace(/[\\/*?"<>|]/g,"").replace(/\s+/g," ").trim();

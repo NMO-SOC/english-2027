@@ -75,7 +75,7 @@
 <script>
 // Read-only overview. It reads each plan's own data (TERMS and the saved entries), so it always matches the plans.
 const CLASSES=[
-  {soon:true,name:"Year 7 Mainstream",yr:"y7"},
+  {code:"07EN",name:"Year 7 Mainstream",yr:"y7"},
   {code:"07ADVEN1",name:"Year 7 Advanced",yr:"y7"},
   {code:"08EN",name:"Year 8 Mainstream",yr:"y8"},
   {code:"08ADVEN1",name:"Year 8 Advanced",yr:"y8"},
@@ -97,6 +97,7 @@ async function loadPlan(c){
   const terms=new Function("return "+txt.match(/const TERMS=(\[[\s\S]*?\n\]);/)[1])();
   const pm=txt.match(/^const PLAN=(\{.*\});$/m), plan=pm?JSON.parse(pm[1]):{};
   (plan.normalWeeks||[]).forEach(([n,w])=>{const t=terms.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);}); // same per-plan calendar change as template.html
+  (plan.greyWeeks||[]).forEach(([n,w,l])=>{const t=terms.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);});
   const dm=txt.match(/^const DEFAULTS=(\{.*\});$/m), sm=txt.match(/^const SAVED=(\{.*\});$/m);
   const store=Object.assign({},dm?JSON.parse(dm[1]):{},sm?JSON.parse(sm[1]):{});
   return Object.assign({},c,{terms,store});
@@ -173,7 +174,7 @@ const LAP_TITLE_P="<w:p><w:pPr><w:pStyle w:val=\"Heading1\" /><w:spacing w:befor
 // Each unit's topic and codes cells are coloured by unit of work.
 const LAP_PAL=["A8D08D","9DC3E6","F7CAAC","FFE699","C5E0B3","D9B3FF","F4B183","8FD3E8","FFB3C6","B4A7D6"];
 const LAP_YEARS=[
-  {name:"Year 7 Mainstream",code:null},{name:"Year 7 Advanced",code:"07ADVEN1"},
+  {name:"Year 7 Mainstream",code:"07EN"},{name:"Year 7 Advanced",code:"07ADVEN1"},
   {name:"Year 8 Mainstream",code:"08EN"},{name:"Year 8 Advanced",code:"08ADVEN1"},
   {name:"Year 9 Mainstream",code:"09EN"},{name:"Year 9 Advanced",code:"09ADVEN1"},
   {name:"Year 10 Mainstream",code:"10EN"},{name:"Year 10 Advanced",code:"10ADVEN1"}];

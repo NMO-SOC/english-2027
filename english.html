@@ -149,7 +149,7 @@ async function loadPlan(c){
 function cellFor(p,t,w){
   const k=`${t.n}--${w}`, topic=(p.store[k]||"").trim(), g=(t.grey||{})[w]||"";
   if(g&&!topic) return {cls:"grey",html:esc(g)};
-  if(/^Developmental task/.test(topic)) return {cls:"dev",html:esc(topic)};
+  if(/^Developmental task/.test(topic)) return {cls:"dev",html:esc(topic).replace(/^Developmental task/,"Developmental Task")};
   if(CAT.test(topic)){
     const i=topic.indexOf(":");
     const code=i<0?topic:topic.slice(0,i), title=i<0?"":topic.slice(i+1).trim();
@@ -192,7 +192,7 @@ function render(plans){
     h+=`</tbody></table></div>${soonNote}</section>`;
     out+=h;
   });
-  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment</span><span><i style="background:var(--dev)"></i>Developmental task</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:repeating-linear-gradient(135deg,#eceef1 0 4px,#e2e5e9 4px 8px)"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
+  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment</span><span><i style="background:var(--dev)"></i>Developmental Task</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:repeating-linear-gradient(135deg,#eceef1 0 4px,#e2e5e9 4px 8px)"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
 }
 // Minimal zip (stored, no compression): all a .docx needs
 function zip(files){

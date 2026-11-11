@@ -78,7 +78,16 @@
   td:not(.grey):hover{outline:2px solid var(--navy);outline-offset:-2px}
   td.now:hover{outline-color:var(--now)}
   .note{max-width:1400px;margin:0 auto 14px;font-size:14px;color:var(--muted)}
+  .sbox{max-width:1400px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+  .sbox label{display:block;font-weight:700;color:var(--navy);margin-bottom:6px}
+  .sbox input{font:inherit;font-size:16px;width:100%;max-width:520px;padding:9px 11px;border:1px solid var(--line);border-radius:4px}
+  .sres{margin:10px 0 0;padding:0;list-style:none;font-size:15px}
+  .sres li{padding:6px 0;border-top:1px solid #eceef1}
+  .sres a{color:var(--navy);font-weight:700;text-decoration:underline}
+  .sres small{display:block;color:var(--muted)}
+  .sres .none{color:var(--muted);font-style:italic}
   @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .sbox{display:none}
     .scroll{overflow:visible}
     table{min-width:0;width:100%;table-layout:fixed}
     th,td{font-size:9.5px;line-height:1.2}
@@ -314,6 +323,33 @@ document.getElementById("lapbtn").onclick=()=>{
   const b=lapDocx(window.PLANS), a=document.createElement("a"), url=URL.createObjectURL(b);
   a.href=url;a.download="Learning Area Plan - Years 7 to 10.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
+// Search every plan's weekly topics, assessments and lesson text; each result links to its week
+function searchPlans(q){
+  q=q.trim().toLowerCase(); if(q.length<2) return [];
+  const out=[];
+  (window.PLANS||[]).forEach(p=>{
+    if(p.soon) return;
+    Object.entries(p.store||{}).forEach(([k,v])=>{
+      const text=String(v==null?"":v).trim(); if(!text) return;
+      let m=k.match(/^(\d)--(\d+)$/), kind="Topic";
+      if(!m){ m=k.match(/^(\d)-(\d+)-\d-(title|li|sc|dn)$/); kind="Lesson"; }
+      if(!m) return;
+      if(!text.toLowerCase().includes(q)) return;
+      out.push({code:p.code,name:p.name,t:+m[1],w:+m[2],kind,text});
+    });
+  });
+  out.sort((a,b)=>a.code.localeCompare(b.code)||a.t-b.t||a.w-b.w);
+  return out.slice(0,80);
+}
+function showResults(q){
+  const box=document.getElementById("sres"); if(!box) return;
+  if(q.trim().length<2){box.innerHTML="";return;}
+  const r=searchPlans(q);
+  box.innerHTML=r.length?r.map(x=>{
+    const snip=x.text.length>140?x.text.slice(0,140)+"…":x.text;
+    return `<li><a href="${x.code}.html#w${x.t}-${x.w}">${esc(x.name)}: Term ${x.t}, Week ${x.w}</a> <span>(${x.kind})</span><small>${esc(snip)}</small></li>`;
+  }).join(""):`<li class="none">No matches. Check the spelling or try a shorter word.</li>`;
+}
 (async()=>{
   document.getElementById("asof").textContent="Showing "+(qd?"":"today, ")+fmtD(today);
   const main=document.getElementById("main");
@@ -321,7 +357,8 @@ document.getElementById("lapbtn").onclick=()=>{
     const plans=[];
     for(const c of CLASSES) plans.push(c.soon?c:await loadPlan(c));
     window.PLANS=plans;
-    main.innerHTML=render(plans);
+    main.innerHTML=`<div class="sbox"><label for="osearch">Search all plans</label><input id="osearch" type="search" placeholder="e.g. Macbeth, Oral, CAT, Coraline" autocomplete="off"><ul class="sres" id="sres" aria-live="polite"></ul></div>`+render(plans);
+    document.getElementById("osearch").addEventListener("input",e=>showResults(e.target.value));
   }catch(e){
     main.innerHTML=`<p class="msg">The plans could not be read. Open this page from the website (not from a file on your computer) so the plans can load.</p>`;
   }

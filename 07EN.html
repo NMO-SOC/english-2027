@@ -57,7 +57,7 @@
   td.grey{background:#e1e3e5;color:#4a5057}
   /* week topic leads the column */
   .wn{min-height:26px;font-family:var(--serif);font-size:15px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
-  .wn:empty::before{content:"Notes / CAT";color:var(--ph);font-weight:normal}
+  .wn:empty::before{content:var(--wnl,"Notes / CAT");color:var(--ph);font-weight:normal}
   .wn.cat{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px;cursor:pointer}
   .wn.cat:empty::before{content:none}
   .ck{display:block;font-size:12px;font-weight:normal;opacity:.9}
@@ -223,6 +223,10 @@ const TERMS=[
 ];
 // Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
 const PLAN={"normalWeeks":[[2,9],[2,11]],"greyWeeks":[[1,1,"Induction"],[1,5,"Camp 24-26 Feb"]],"notes":[[1,2,"Starts Thu"]],"lessonCount":[[1,2,2]]};
+// Assessment word on the page: "CAT" by default, "SAC" for Year 12 (set by PLAN.assessWord)
+const ASSESS=PLAN.assessWord||"CAT";
+document.documentElement.style.setProperty("--wnl",JSON.stringify("Notes / "+ASSESS));
+{const b=document.querySelector('button[onclick="printPlan(\'summary\')"]');if(b)b.textContent="Print "+ASSESS+"s and topics";}
 (PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
 (PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
 (PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
@@ -551,7 +555,7 @@ const kkFromLI=li=>{
 };
 function cmDocx(sem){
   const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
-  const subject=m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code;
+  const subject=code==="EN34"?"Year 12 English":(m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code);
   const folders=CM_FOLDERS[code]||{};
   const terms=TERMS.filter(t=>sem===1?t.n<=2:t.n>=3);
   const unitOf={};
@@ -604,7 +608,7 @@ function cmDocx(sem){
     }
     const c5=dos.length?dos.map(([l,dn])=>P(l+": "+dn)).join(""):P("Do Nows to be added");
     let c6="";
-    if(ui&&ui.cat){c6=P(topic,true)+(folder?para(link("CAT assessment brief",relLink("..","..",`Semester ${usem}`,folder,"Assessments & Rubrics",`${code} - ${fileSafe(name)} - CAT Assessment.docx`))):"");}
+    if(ui&&ui.cat){c6=P(topic,true)+(folder?para(link(ASSESS+" assessment brief",relLink("..","..",`Semester ${usem}`,folder,"Assessments & Rubrics",`${code} - ${fileSafe(name)} - ${ASSESS} Assessment.docx`))):"");}
     rowsXml.push(row([c0,c1,c2,c3,c4,c5,c6]));
   }});
   const tbl=`<w:tbl><w:tblPr><w:tblW w:w="${W.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="9AA5B1"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${header}${rowsXml.join("")}</w:tbl>`;
@@ -707,8 +711,8 @@ function unitDocxV2(u){
   const focusPhrase=subHits.length?subHits[0][2]:"text structure and language features";
   const opt=(re,yes)=>re.test(UNIT_TEXT)?yes:"";
   const adj={
-    eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the CAT in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
-    int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the CAT, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
+    eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the ${ASSESS} in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
+    int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the ${ASSESS}, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
     ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the CAT.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
   };
   const std9=`By the end of Level 9, students analyse how ${focusPhrase} shape meaning for an audience. They use evidence from the text to support their interpretation and organise their ideas in clear, structured responses.`;
@@ -777,7 +781,7 @@ function unitDocxV2(u){
 document.getElementById("upv2btn").onclick=()=>{
   const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
   dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its CAT.</p>`+
-    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No CATs in this plan yet.</p>")+
+    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No "+ASSESS+"s in this plan yet.</p>")+
     `<form method="dialog"><button class="btn">Close</button></form>`;
   dl.addEventListener("click",e=>{
     if(e.target===dl)return dl.close();

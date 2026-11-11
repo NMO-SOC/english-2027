@@ -77,6 +77,8 @@
   td.cat.exam{background:#5f666d}
   td:not(.grey):hover{outline:2px solid var(--navy);outline-offset:-2px}
   td.now:hover{outline-color:var(--now)}
+  .swipe{display:none;margin:6px 0 0;font-size:14px;color:var(--muted)}
+  @media (max-width:700px){.swipe{display:block}}
   .sbox{max-width:1400px;margin:0 auto 18px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px}
   .sbox label{display:block;font-weight:700;color:var(--navy);margin-bottom:6px}
   .sbox input{font:inherit;font-size:16px;width:100%;max-width:520px;padding:9px 11px;border:1px solid var(--line);border-radius:4px}
@@ -192,7 +194,7 @@ function render(plans){
     h+=`</tbody></table></div>${soonNote}</section>`;
     out+=h;
   });
-  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment</span><span><i style="background:var(--dev)"></i>Developmental Task</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:repeating-linear-gradient(135deg,#eceef1 0 4px,#e2e5e9 4px 8px)"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
+  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment</span><span><i style="background:var(--dev)"></i>Developmental Task</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:repeating-linear-gradient(135deg,#eceef1 0 4px,#e2e5e9 4px 8px)"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div><p class="swipe">On a phone, swipe sideways inside a term to see every week.</p>`+out;
 }
 // Minimal zip (stored, no compression): all a .docx needs
 function zip(files){
@@ -344,10 +346,11 @@ function showResults(q){
   const box=document.getElementById("sres"); if(!box) return;
   if(q.trim().length<2){box.innerHTML="";return;}
   const r=searchPlans(q);
-  box.innerHTML=r.length?r.map(x=>{
+  const cnt=r.length?`<li class="none">${r.length}${r.length>=80?"+":""} result${r.length===1?"":"s"}</li>`:"";
+  box.innerHTML=cnt+(r.length?r.map(x=>{
     const snip=x.text.length>140?x.text.slice(0,140)+"…":x.text;
     return `<li><a href="${x.code}.html#w${x.t}-${x.w}">${esc(x.name)}: Term ${x.t}, Week ${x.w}</a> <span>(${x.kind})</span><small>${esc(snip)}</small></li>`;
-  }).join(""):`<li class="none">No matches. Check the spelling or try a shorter word.</li>`;
+  }).join(""):`<li class="none">No matches. Check the spelling or try a shorter word.</li>`);
 }
 (async()=>{
   document.getElementById("asof").textContent="Showing "+(qd?"":"today, ")+fmtD(today);

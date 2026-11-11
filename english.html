@@ -78,7 +78,18 @@
   td:not(.grey):hover{outline:2px solid var(--navy);outline-offset:-2px}
   td.now:hover{outline-color:var(--now)}
   .note{max-width:1400px;margin:0 auto 14px;font-size:14px;color:var(--muted)}
-  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .scroll{overflow:visible}
+    table{min-width:0;width:100%;table-layout:fixed}
+    th,td{font-size:9.5px;line-height:1.2}
+    th.rowhead{position:static;width:100px;min-width:0;font-size:11px}
+    thead th.rowhead{font-size:10px}
+    td{min-width:0;padding:3px 3px;height:auto}
+    thead th{padding:3px 3px}
+    thead th small,.term .dates{font-size:8.5px}
+    .term h2{font-size:16px;padding:6px 10px 0}
+    .term{margin-bottom:12px}
+    .wrap{padding:0}}
   @media (prefers-reduced-motion:reduce){*{transition:none}}
 </style>
 <!-- Analytics: GoatCounter (no cookies, no personal data). Replace YOUR-CODE with your GoatCounter code. -->

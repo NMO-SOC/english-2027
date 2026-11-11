@@ -232,7 +232,7 @@ const TERMS=[
   notes:{5:"Cup Day Tue"},grey:{6:"Exams",8:"Step-Up",9:"Step-Up",10:"Activities Week",11:"Clean-Up Week"},hol:[5],noLessons:[6,8,9,10,11],exam:[6]}
 ];
 // Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
-const PLAN={"noUnit": [[2, 10]], "updated": "2026-11-11", "notes": [[3, 2, "Camp 21-23 Jul"]]};
+const PLAN={"noUnit": [[2, 10]], "updated": "2026-11-11", "notes": [[3, 2, "Camp 21-23 Jul"]], "lessonCount": [[3, 2, 2]]};
 // Assessment word on the page: "CAT" by default, "SAC" for Year 12 (set by PLAN.assessWord)
 const ASSESS=PLAN.assessWord||"CAT";
 {const up=document.getElementById("updated");if(up&&PLAN.updated){const d=new Date(PLAN.updated+"T00:00");up.textContent="Last updated "+d.toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});}}

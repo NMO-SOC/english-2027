@@ -231,7 +231,7 @@ document.documentElement.style.setProperty("--wnl",JSON.stringify("Notes / "+ASS
 {const b=document.querySelector('button[onclick="printPlan(\'summary\')"]');if(b)b.textContent="Print "+ASSESS+"s and topics";}
 (PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
 (PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
-(PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
+(PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);t.exam=(t.exam||[]).filter(x=>x!==w);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
 const DEFAULTS={};
 const SAVED={};
 let store=Object.assign({},DEFAULTS,SAVED);

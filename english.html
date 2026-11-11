@@ -97,7 +97,7 @@ async function loadPlan(c){
   const terms=new Function("return "+txt.match(/const TERMS=(\[[\s\S]*?\n\]);/)[1])();
   const pm=txt.match(/^const PLAN=(\{.*\});$/m), plan=pm?JSON.parse(pm[1]):{};
   (plan.normalWeeks||[]).forEach(([n,w])=>{const t=terms.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);}); // same per-plan calendar change as template.html
-  (plan.greyWeeks||[]).forEach(([n,w,l])=>{const t=terms.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);});
+  (plan.greyWeeks||[]).forEach(([n,w,l])=>{const t=terms.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);t.exam=(t.exam||[]).filter(x=>x!==w);});
   const dm=txt.match(/^const DEFAULTS=(\{.*\});$/m), sm=txt.match(/^const SAVED=(\{.*\});$/m);
   const store=Object.assign({},dm?JSON.parse(dm[1]):{},sm?JSON.parse(sm[1]):{});
   return Object.assign({},c,{terms,store});

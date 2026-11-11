@@ -55,6 +55,30 @@
   .tools button:hover{background:#fff;color:var(--navy)}
   @page{size:A3 landscape;margin:10mm}
   @media print{body{background:#fff}.banner{background:#fff;color:var(--ink);padding:0 0 8px}.banner .back,.tools,.strip,.legend{display:none}.term{break-inside:avoid;page-break-inside:avoid;border:none}}
+  /* overview polish */
+  :root{--y7:#2a5f9e;--y8:#2e7d32;--y9:#a8532a;--y10:#7e3f84;--y12:#1d2b4f;--dev:#0f6e6a}
+  table{border-collapse:separate;border-spacing:0}
+  th,td{border-color:#d9dee4}
+  tbody tr:nth-child(odd) td:not(.grey):not(.dev):not(.cat){background:#fcfcfb}
+  td{font-size:15px;padding:8px 9px;min-width:124px}
+  .term h2{color:var(--c);display:flex;align-items:center;gap:12px}
+  .term h2::after{content:"";height:8px;flex:1;background:var(--c);border-radius:999px;opacity:.25}
+  th.rowhead{position:sticky;left:0;z-index:2;background:#fff;box-shadow:2px 0 0 #d9dee4}
+  thead th.rowhead{z-index:3;background:var(--navy);color:#fff;font-family:var(--sans);font-size:14px}
+  thead th.rowhead small{color:#fff;opacity:.85}
+  tr.y7 th.rowhead{border-left:6px solid var(--y7)}
+  tr.y8 th.rowhead{border-left:6px solid var(--y8)}
+  tr.y9 th.rowhead{border-left:6px solid var(--y9)}
+  tr.y10 th.rowhead{border-left:6px solid var(--y10)}
+  tr.y11 th.rowhead,tr.y12 th.rowhead{border-left:6px solid var(--y12)}
+  td.grey{background:repeating-linear-gradient(135deg,#eceef1 0 8px,#e2e5e9 8px 16px);color:var(--muted)}
+  td.dev{background:var(--dev);color:#fff;border-radius:3px;margin:2px}
+  td.cat{box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);border-radius:3px}
+  td.cat.exam{background:#5f666d}
+  td:not(.grey):hover{outline:2px solid var(--navy);outline-offset:-2px}
+  td.now:hover{outline-color:var(--now)}
+  .note{max-width:1400px;margin:0 auto 14px;font-size:14px;color:var(--muted)}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
   @media (prefers-reduced-motion:reduce){*{transition:none}}
 </style>
 <!-- Analytics: GoatCounter (no cookies, no personal data). Replace YOUR-CODE with your GoatCounter code. -->
@@ -65,7 +89,7 @@
   <div class="banner">
     <a class="back" href="index.html">&larr; All plans</a>
     <h1>English overview 2027</h1>
-    <p>Every year level, term by term: the topic each week, and when assessments are</p>
+    <p>Every year level, term by term: the topic each week, and when assessments are. Hover a cell to see its full topic.</p>
     <p class="asof" id="asof"></p>
     <div class="tools"><button type="button" onclick="window.print()">Print</button> <button type="button" id="lapbtn">Learning area plan (Word)</button></div>
   </div>
@@ -106,6 +130,7 @@ async function loadPlan(c){
 function cellFor(p,t,w){
   const k=`${t.n}--${w}`, topic=(p.store[k]||"").trim(), g=(t.grey||{})[w]||"";
   if(g&&!topic) return {cls:"grey",html:esc(g)};
+  if(/^Developmental task/.test(topic)) return {cls:"dev",html:esc(topic)};
   if(CAT.test(topic)){
     const i=topic.indexOf(":");
     const code=i<0?topic:topic.slice(0,i), title=i<0?"":topic.slice(i+1).trim();
@@ -140,14 +165,15 @@ function render(plans){
       weeks.forEach(x=>{
         const c=cellFor(p,t,x.w);
         const cls=[c.cls,x.now?"now":""].filter(Boolean).join(" ");
-        h+=`<td${cls?` class="${cls}"`:""}>${c.html}</td>`;
+        const full=(p.store[`${t.n}--${x.w}`]||"").trim();
+        h+=`<td${cls?` class="${cls}"`:""}${full?` title="${esc(full)}"`:""}>${c.html}</td>`;
       });
       h+=`</tr>`;
     });
     h+=`</tbody></table></div>${soonNote}</section>`;
     out+=h;
   });
-  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment (CAT)</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:#e6e8eb"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
+  return `<div class="legend"><span><i style="background:var(--navy)"></i>Assessment</span><span><i style="background:var(--dev)"></i>Developmental task</span><span><i style="background:#5f666d"></i>Exam</span><span><i style="background:repeating-linear-gradient(135deg,#eceef1 0 4px,#e2e5e9 4px 8px)"></i>Not a teaching week</span><span><i style="background:#fff8dc"></i>This week</span></div>`+out;
 }
 // Minimal zip (stored, no compression): all a .docx needs
 function zip(files){

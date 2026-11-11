@@ -167,6 +167,11 @@
     .overview td:first-child{white-space:normal}
     .search{margin-left:0;width:100%}.search input{flex:1;width:auto}
     section,td{scroll-margin-top:120px}
+    header,header>*,.jump,.tools,.search{min-width:0;max-width:100%}
+    .tools{flex-wrap:wrap;justify-content:flex-start}
+    .tools>*{flex:0 1 auto}
+    .jump{flex-wrap:wrap;justify-content:flex-start}
+    .jump>*{flex:0 0 auto}
   }
   @media print{
     @page{size:A3 landscape;margin:8mm}

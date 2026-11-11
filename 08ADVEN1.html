@@ -58,6 +58,7 @@
   /* week topic leads the column */
   .wn{min-height:26px;font-family:var(--serif);font-size:15px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
   .wn:empty::before{content:var(--wnl,"Notes / CAT");color:var(--ph);font-weight:normal}
+  .updated{margin:4px 0 0;font-size:13px;color:var(--muted)}
   .wn.cat,.wn.dev{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px;cursor:pointer}
   .wn.cat:empty::before,.wn.dev:empty::before{content:none}
   .ck{display:block;font-size:12px;font-weight:normal;opacity:.9}
@@ -199,6 +200,7 @@
 <header>
   <a class="home btn" href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>All plans</a>
   <h1 contenteditable="true">08ADVEN1 Curriculum Plan 2027</h1>
+  <p class="updated" id="updated"></p>
   <div class="tools">
     <span id="status" aria-live="polite"></span>
     <button id="expand">Expand all</button>
@@ -225,11 +227,12 @@ const TERMS=[
   notes:{5:"Cup Day Tue"},grey:{6:"Exams",8:"Step-Up",9:"Step-Up",10:"Activities Week",11:"Clean-Up Week"},hol:[5],noLessons:[6,8,9,10,11],exam:[6]}
 ];
 // Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
-const PLAN={"noUnit":[[2,10]]};
+const PLAN={"noUnit": [[2, 10]], "updated": "2026-11-11"};
 // Assessment word on the page: "CAT" by default, "SAC" for Year 12 (set by PLAN.assessWord)
 const ASSESS=PLAN.assessWord||"CAT";
+{const up=document.getElementById("updated");if(up&&PLAN.updated){const d=new Date(PLAN.updated+"T00:00");up.textContent="Last updated "+d.toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});}}
 document.documentElement.style.setProperty("--wnl",JSON.stringify("Notes / "+ASSESS));
-{const b=document.querySelector('button[onclick="printPlan(\'summary\')"]');if(b)b.textContent="Print "+ASSESS+"s and topics";}
+{const b=document.querySelector('button[onclick="printPlan(\'summary\')"]');if(b){b.textContent="Print "+ASSESS+"s and topics";b.title="Weekly topics and "+ASSESS+"s only. Print or save as PDF.";}const u=document.getElementById("upv2btn");if(u)u.title="Download a unit of work (first lesson to "+ASSESS+") in the school's unit plan template";}
 (PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
 (PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
 (PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);t.exam=(t.exam||[]).filter(x=>x!==w);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
@@ -717,7 +720,7 @@ function unitDocxV2(u){
   const adj={
     eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the ${ASSESS} in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
     int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the ${ASSESS}, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
-    ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the CAT.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
+    ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the ${ASSESS}.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
   };
   const std9=`By the end of Level 9, students analyse how ${focusPhrase} shape meaning for an audience. They use evidence from the text to support their interpretation and organise their ideas in clear, structured responses.`;
   const std10=`By the end of Level 10, students evaluate how ${focusPhrase} position the audience and shape meaning. They sustain a clear interpretation or argument using precise, selected evidence, and adapt language and structure to purpose and audience.`;
@@ -784,7 +787,7 @@ function unitDocxV2(u){
 }
 document.getElementById("upv2btn").onclick=()=>{
   const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
-  dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its CAT.</p>`+
+  dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its ${ASSESS}.</p>`+
     (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No "+ASSESS+"s in this plan yet.</p>")+
     `<form method="dialog"><button class="btn">Close</button></form>`;
   dl.addEventListener("click",e=>{

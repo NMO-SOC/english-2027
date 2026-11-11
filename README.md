@@ -91,6 +91,10 @@ to:
 
 Use `y7`, `y8`, `y9`, `y10`, `y11` or `y12` for the colour.
 
+### Next assessment
+
+Each plan card shows the next assessment for that class and the week it falls in. It's read from the plan itself, so it updates when the plan changes.
+
 ### Current-week line
 
 The banner line works out where the school year is from today's date:
@@ -173,6 +177,8 @@ There is one table per term, with one column per week.
 - Other grey weeks have no boxes at all.
 
 ### CATs and exams
+
+Year 12 uses SAC instead of CAT (see `assessWord` in [Per-plan settings](#per-plan-settings-the-plan-line)). Developmental tasks are described there too.
 
 A weekly topic is treated as an assessment when it **starts with** `S1_`, `S2_` or `EXAM`. For example:
 
@@ -313,6 +319,11 @@ On the English overview page, **Learning area plan (Word)** downloads the school
 
 ## English overview (`english.html`)
 
+- **Search:** the box at the top searches the topics, assessments and lesson text of every plan. Each result links to its week.
+- **Colours:** each class has its year colour; developmental tasks are teal; grey weeks are striped.
+- **Hover:** hovering a cell shows its full topic.
+- **Print:** each term is fitted to the A3 page width.
+
 **English overview 2027** shows the whole English year, term by term, with weeks as columns. Each class is a row: Year 7 and 8 (Mainstream and Advanced), Year 9 and 10 (Mainstream and Advanced), and Years 11 and 12 (VCE). Each cell shows that week's topic. CAT cells are navy and exam cells are grey, and the current week is highlighted. Years without plans on the site are greyed out with "Coming soon".
 
 - **Print:** the **Print** button prints the timetable (A3 landscape).
@@ -374,6 +385,25 @@ The second command should print nothing. Any output means a data line changed.
 | Term 4 | `#7e3f84` / light `#efdff0` |
 
 These are set as CSS variables at the top of the `<style>` block in `template.html` and `index.html`.
+
+---
+
+## Per-plan settings (the `PLAN` line)
+
+Each plan has one line near its data: `const PLAN={...};`. `build.py` keeps it for each plan, so these settings only apply to the plan they are written in. After changing a setting, rebuild the plan (see [Changing the design](#changing-the-design-templatehtml-and-buildpy)).
+
+| Setting | Example | What it does |
+|---|---|---|
+| `normalWeeks` | `[[2,9]]` | Makes a grey or exam week a normal teaching week. |
+| `greyWeeks` | `[[1,1,"Induction"]]` | Greys out a week with no lessons and labels it. Use `"\u00a0"` for no label. Clears any exam status. |
+| `notes` | `[[2,11,"Step-Up"]]` | Adds a small label under a week's date. |
+| `noUnit` | `[[2,7],[2,8]]` | Keeps a week's lessons but leaves it out of any unit (e.g. exam revision weeks). |
+| `lessonCount` | `[[1,2,2]]` | Shows only the first *n* lessons in that week. |
+| `devBanner` | `[[2,3,"Developmental task: ..."]]` | Shows a teal banner above a week's topic. |
+| `assessWord` | `"SAC"` | Says SAC instead of CAT in labels, tooltips and Word documents. Used for Year 12. |
+| `updated` | (set by `build.py`) | The date shown as "Last updated" on the plan. |
+
+Developmental tasks are weeks whose topic starts with `Developmental task`. They show as teal badges and don't end a unit. SACs are held after school, so a SAC week keeps normal lessons.
 
 ---
 

@@ -222,7 +222,7 @@ const TERMS=[
   notes:{5:"Cup Day Tue"},grey:{6:"Exams",8:"Step-Up",9:"Step-Up",10:"Activities Week",11:"Clean-Up Week"},hol:[5],noLessons:[6,8,9,10,11],exam:[6]}
 ];
 // Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
-const PLAN={"normalWeeks": [[2, 9], [2, 11]], "greyWeeks": [[4, 4, "VCE exams"], [4, 5, "After exams"], [4, 7, "After exams"]], "lessonCount": [[1, 1, 2], [3, 3, 2], [3, 4, 2], [3, 6, 2], [3, 7, 2], [3, 8, 2], [3, 9, 2]]};
+const PLAN={"normalWeeks": [[2, 9], [2, 11]], "greyWeeks": [[4, 4, "VCE exams"], [4, 5, "After exams"], [4, 7, " "], [4, 8, " "], [4, 9, " "], [4, 10, " "], [4, 11, " "]], "lessonCount": [[1, 1, 2], [3, 3, 2], [3, 4, 2], [3, 6, 2], [3, 7, 2], [3, 8, 2], [3, 9, 2]]};
 (PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
 (PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
 (PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons

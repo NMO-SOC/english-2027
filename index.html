@@ -51,6 +51,7 @@
   .allbtn:hover{background:#2c3f6b}
   .allbtn:focus-visible{outline:3px solid var(--navy);outline-offset:3px}
   .allbtn small{display:block;font-family:var(--sans);font-weight:normal;font-size:14px;opacity:.9;margin-top:4px}
+  a.plan .next{display:block;font-size:14px;font-weight:normal;margin-top:6px;opacity:.95}
   @media (prefers-reduced-motion:reduce){a.plan{transition:none}}
 </style>
 <!-- Analytics: GoatCounter (no cookies, no personal data). Replace YOUR-CODE with your GoatCounter code. -->
@@ -118,6 +119,37 @@
     if(T[i+1]&&today>d(end)&&today<d(T[i+1][0])){el.textContent=`School holidays. Term ${i+2} starts ${T[i+1][1]}`;return;}
   }
   el.textContent="The 2027 school year has finished";
+})();
+</script>
+<script>
+// Next assessment for each plan, read from the plan itself (display only)
+(async()=>{
+  const qd=new URLSearchParams(location.search).get("today");
+  const today=qd?new Date(qd+"T00:00"):new Date(); today.setHours(0,0,0,0);
+  const CAT=/^(S[12]_|EXAM)/;
+  const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const fmt=d=>d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear();
+  for(const a of document.querySelectorAll("a.plan")){
+    const code=(a.getAttribute("href")||"").replace(".html","");
+    try{
+      const txt=await (await fetch(code+".html",{cache:"no-cache"})).text();
+      const terms=new Function("return "+txt.match(/const TERMS=(\[[\s\S]*?\n\]);/)[1])();
+      const store=JSON.parse(txt.match(/^const SAVED=(\{.*\});$/m)[1]);
+      let next=null;
+      for(const t of terms){
+        for(let w=1;w<=t.weeks&&!next;w++){
+          const start=new Date(t.start+"T00:00"); start.setDate(start.getDate()+7*(w-1));
+          const v=(store[`${t.n}--${w}`]||"").trim();
+          if(CAT.test(v)&&start>=today) next={v,start,t:t.n,w};
+        }
+        if(next)break;
+      }
+      if(!next){a.querySelector("span").insertAdjacentHTML("beforeend",`<span class="next">No assessments left this year</span>`);continue;}
+      const i=next.v.indexOf(":"), title=i<0?next.v:next.v.slice(i+1).trim(), code2=i<0?"":next.v.slice(0,i);
+      a.querySelector("span").insertAdjacentHTML("beforeend",
+        `<span class="next">Next: ${title.replace(/</g,"&lt;")}<br>Term ${next.t}, Week ${next.w} (${fmt(next.start)})</span>`);
+    }catch(e){}
+  }
 })();
 </script>
 </body>

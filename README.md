@@ -38,6 +38,7 @@ The site is plain HTML with no server, database, framework or build tools. Each 
 | `index.html` | The homepage. It lists every year level and links to the plans that exist. |
 | `template.html` | The master design for every curriculum plan. It holds no data. **All design changes are made here.** |
 | `09ADVEN1.html` | The Year 9 Advanced English plan: the template design plus Year 9 data. |
+| `EN12.html` | The Year 11 (VCE) English plan, Mainstream and EAL (Units 1 and 2): the template design plus Year 11 weekly topics and SACs. Lessons and codes are not entered yet. |
 | `10ADVEN1.html` | The Year 10 Advanced English plan: the template design plus Year 10 data. |
 | `09EN.html` | The Year 9 Mainstream English plan (draft): the template design plus Year 9 data. |
 | `10EN.html` | The Year 10 Mainstream English plan (draft): the template design plus Year 10 data. The film for the film study is still to be decided. |

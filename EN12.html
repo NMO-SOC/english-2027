@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EN12 Curriculum Plan 2027</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#1f2933;--line:#9aa5b1;--bg:#f7f7f5;--navy:#1d2b4f;--muted:#4a5562;--ph:#5b6570;--now:#a87400;
+    --sans:"Atkinson Hyperlegible",Arial,Helvetica,sans-serif;--serif:"Source Serif 4",Georgia,serif}
+  *{box-sizing:border-box}
+  body{margin:0;padding:16px;font-family:var(--sans);color:var(--ink);background:var(--bg)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .skip{position:absolute;left:-9999px}
+  .skip:focus{left:16px;top:8px;z-index:5;background:#fff;color:var(--navy);padding:8px 12px;border:2px solid var(--navy);font-weight:bold}
+  header{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:12px}
+  header h1{text-align:center}
+  .home{justify-self:start}
+  h1{margin:0;background:var(--navy);color:#fff;padding:8px 18px;font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:0;outline-offset:3px}
+  .tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  .tools button,.btn{font:inherit;font-size:14px;min-height:36px;padding:7px 14px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:4px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+  .tools button:hover,.btn:hover{border-color:var(--navy)}
+  #save{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .menu{position:relative}
+  .menu summary{list-style:none}
+  .menu summary::-webkit-details-marker{display:none}
+  .menu summary::after{content:"\25BE";content:"\25BE" / "";margin-left:6px}
+  .menu-list{position:absolute;right:0;top:calc(100% + 4px);z-index:6;display:flex;flex-direction:column;min-width:230px;padding:4px;background:#fff;border:1px solid var(--line);border-radius:4px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+  .tools .menu-list button{border:none;width:100%}
+  .tools .menu-list button:hover{background:#eef1f6}
+  .tools #clear{margin-left:12px;color:#9b1c1c;border-color:#d9a8a8}
+  .tools #clear:hover{border-color:#9b1c1c;background:#fdf2f2}
+  .home{gap:8px;font-weight:bold;color:var(--navy);border-color:var(--navy)}
+  #status{font-size:14px;color:var(--muted)}
+  #status:empty{display:none}
+  .hint{font-size:14px;color:var(--muted);margin:0 auto 14px;max-width:80ch;text-align:center}
+  @media (max-width:900px){header{grid-template-columns:1fr}header>*{justify-self:start}.tools{justify-content:flex-start}.menu-list{right:auto;left:0}.hint{text-align:left;margin-left:0}}
+  .grid{display:grid;grid-template-columns:1fr;gap:20px}
+  .grid:focus{outline:none}
+  section,.overview{background:#fff;padding:10px;border:1px solid #ddd;border-top:5px solid var(--c);overflow-x:auto}
+  h2{text-align:center;margin:4px 0 2px;font-family:var(--serif);font-size:21px;font-weight:700;color:var(--c)}
+  .dates{text-align:center;font-size:13px;color:var(--muted);margin-bottom:8px}
+  table{border-collapse:collapse;table-layout:fixed;font-size:13px}
+  th,td{border:1px solid var(--line);padding:4px;vertical-align:top}
+  td{scroll-margin-top:60px}
+  thead th{font-size:14px}
+  thead th small{display:block;font-weight:normal;font-size:12px}
+  .hol{display:block;font-size:12px;font-weight:normal}
+  .tag{display:block;font-size:12px;font-weight:bold}
+  .t1{--c:#2a5f9e;--l:#dce8f6}.t2{--c:#2e7d32;--l:#dcefdb}.t3{--c:#a8532a;--l:#f6e1d5}.t4{--c:#7e3f84;--l:#efdff0}
+  .term thead th{background:var(--c);color:#fff}
+  .term thead th.grey{background:#5f666d}
+  td{background:#fff}
+  td.grey{background:#e1e3e5;color:#4a5057}
+  /* week topic leads the column */
+  .wn{min-height:26px;font-family:var(--serif);font-size:15px;line-height:1.25;font-weight:bold;border-bottom:1px solid var(--line);margin-bottom:4px;outline:none;word-wrap:break-word}
+  .wn:empty::before{content:var(--wnl,"Notes / CAT");color:var(--ph);font-weight:normal}
+  .updated{margin:4px 0 0;font-size:13px;color:var(--muted)}
+  .wn.cat,.wn.dev{font-family:var(--sans);line-height:1.3;background:var(--navy);color:#fff;border:none;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px;cursor:pointer}
+  .wn.cat:empty::before,.wn.dev:empty::before{content:none}
+  .ck{display:block;font-size:12px;font-weight:normal;opacity:.9}
+  .ct{display:block;font-size:13.5px}
+  .les{margin-top:3px}
+  .lh{cursor:pointer;background:#fff;padding:5px 7px;font-weight:bold;border:1px solid var(--line);border-left:4px solid var(--line);user-select:none;font-size:13.5px}
+  .lt{font-weight:normal}
+  /* clickable bars respond on hover */
+  .lh:hover{background:#eef1f6}
+  .cch:hover{background:rgba(0,0,0,.12)}
+  .wn.cat:hover,.wn.dev:hover{background:#2c3f6b}
+  .wn.dev{background:#0f6e6a}
+  .wn.dev:hover{background:#15807b}
+  .lh::before,.cch::before{content:"\25B8  ";content:"\25B8  " / ""}
+  .les.open .lh::before,.ccw.open .cch::before{content:"\25BE  ";content:"\25BE  " / ""}
+  /* lessons with content get the term colour on their edge */
+  .les.filled .lh{border-left-color:var(--c)}
+  td.grey .les.filled .lh{border-left-color:#5f666d}
+  /* collapsible panels use hidden="until-found" so Ctrl+F can find and open them */
+  .lb,.codes,.info{display:block}
+  .lb[hidden],.codes[hidden],.info[hidden]{display:none}
+  .uf .lb[hidden],.uf .codes[hidden],.uf .info[hidden]{display:block;min-height:0;padding:0;border:0;margin:0}
+  .lb{min-height:50px;padding:4px;border:1px solid var(--line);border-top:none;background:#fff;word-wrap:break-word}
+  .fl{font-size:12px;font-weight:bold;color:var(--muted);margin:6px 0 1px}
+  .cpall{margin:8px 0 2px;text-align:right}
+  .cp{font:inherit;font-size:13px;min-height:30px;padding:4px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:3px;cursor:pointer}
+  .cp:hover{border-color:var(--navy)}
+  .cp.done{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .fld{min-height:22px;padding:2px 4px;border-bottom:1px dotted #6b7680;outline:none;word-wrap:break-word;font-size:13.5px}
+  .fld ul{margin:0;padding-left:16px}
+  .fld li+li{margin-top:2px}
+  .fld:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  .fld:focus,.codes:focus{background:#fffbe6}
+  .info{background:#fff;border:1px solid var(--line);border-radius:3px;padding:5px 6px;margin:0 0 6px;font-size:13px;outline:none;word-wrap:break-word}
+  .info:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  .ccw{margin:0 0 4px}
+  .cch{cursor:pointer;font-size:12px;font-weight:bold;color:#2d3748;background:rgba(0,0,0,.06);border:1px solid var(--line);padding:3px 7px;user-select:none}
+  .codes{font-size:12px;color:#2d3748;padding:3px 4px;border:1px solid var(--line);border-top:none;background:#fff;word-wrap:break-word;outline:none}
+  .codes:empty::before{content:attr(data-ph);color:var(--ph);font-style:italic}
+  :focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+  .wn.cat:focus-visible,.wn.dev:focus-visible{outline:3px solid #f2b705;outline-offset:1px}
+  .wn:focus,.info:focus{outline:2px solid var(--navy)}
+  /* live site is read-only (body.ro): .ed = editing only, .rd = read-only only */
+  body.ro .ed,body:not(.ro) .rd{display:none!important}
+  body.ro .wn:empty::before,body.ro .fld:empty::before,body.ro .info:empty::before,body.ro .codes:empty::before{content:none}
+  body.ro .ccw:has(.codes:empty){display:none}
+  body.ro .info:empty{display:none!important}
+  .wn.cat,.wn.dev{padding:5px 6px}
+  .dvb{font-family:var(--sans);line-height:1.3;background:#0f6e6a;color:#fff;border-radius:3px;padding:4px 5px;margin-bottom:6px;font-size:12px}
+  /* this week */
+  th.now,td.now{box-shadow:inset 0 0 0 3px var(--now)}
+  td.now{background:#fff8dc}
+  th.now .tag{display:inline-block;background:var(--navy);border-radius:3px;padding:1px 6px;margin-top:3px}
+  /* term jump links */
+  .jump{display:flex;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 0}
+  .jump a{color:#fff;background:var(--c);min-height:36px;display:inline-flex;align-items:center;padding:0 14px;border-radius:4px;text-decoration:none;font-weight:bold;font-size:14px}
+  .jump a.nowlink{--c:var(--navy)}
+  section{scroll-margin-top:60px}
+  /* assessments at a glance (collapsible) */
+  .overview{--c:var(--navy)}
+  .overview summary{list-style:none;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:10px;padding:2px 0;border-radius:4px}
+  .overview summary::-webkit-details-marker{display:none}
+  .overview summary h2{margin:0;color:var(--navy)}
+  .overview summary::before{content:"\25B8";content:"\25B8" / "";color:var(--navy);font-size:16px;transition:transform .15s}
+  .overview[open] summary::before{transform:rotate(90deg)}
+  .overview .count{font-size:13px;font-weight:bold;color:#fff;background:var(--navy);border-radius:999px;padding:2px 9px}
+  .overview .more{font-size:13px;color:var(--muted)}
+  .overview .more::after{content:"Show"}
+  .overview[open] .more::after{content:"Hide"}
+  .overview summary:hover h2{text-decoration:underline}
+  .overview table{width:100%;table-layout:auto;margin-top:8px}
+  .overview th{background:var(--navy);color:#fff;text-align:left;font-size:13px}
+  .overview td{background:#fff;padding:6px}
+  .overview td:first-child{white-space:nowrap}
+  .overview td small{display:block;color:var(--muted)}
+  .overview .ck{color:var(--muted);opacity:1}
+  .overview a{color:var(--navy);font-weight:bold}
+  /* plan search */
+  .search{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+  .search input{font:inherit;font-size:14px;min-height:36px;width:260px;padding:6px 10px;border:1px solid #6b7680;border-radius:4px;background:#fff}
+  .search button{font:inherit;font-size:14px;min-height:36px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:4px;cursor:pointer}
+  #qcount{font-size:13px;color:var(--muted)}
+  td.dim{opacity:.4}
+  .hit{box-shadow:0 0 0 2px #e0a800}
+  .hit.cur{box-shadow:0 0 0 3px var(--navy)}
+  ::highlight(search){background:#ffe066;color:#1f2933}
+  @media (prefers-reduced-motion:reduce){.overview summary::before{transition:none}}
+  /* unit plan (Word) picker */
+  .units{max-width:min(680px,calc(100vw - 32px));border:none;border-radius:8px;padding:20px 24px;color:var(--ink)}
+  .units::backdrop{background:rgba(0,0,0,.45)}
+  .units h2{margin:0 0 4px;color:var(--navy)}
+  .units p{margin:0 0 12px;color:var(--muted);font-size:14px}
+  .units ul{list-style:none;margin:0 0 16px;padding:0}
+  .units li{display:flex;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #e3e6ea}
+  .units li span{flex:1}.units small{display:block;color:var(--muted)}
+  /* bigger targets on touch screens */
+  @media (pointer:coarse){.lh,.cch{min-height:40px;display:flex;align-items:center}.cp{min-height:44px}.jump a,.tools button,.btn{min-height:44px}}
+  /* phones: weeks stack vertically instead of scrolling sideways */
+  @media (max-width:640px){
+    body{padding:12px}
+    .term table{display:flex;flex-direction:column;width:100%!important;min-width:0!important}
+    .term thead,.term tbody,.term tr{display:contents}
+    .term th{order:calc(var(--o) * 2 - 1);display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;text-align:left;margin-top:10px}
+    .term th small,.term th .hol,.term th .tag{display:inline}
+    .term td{order:calc(var(--o) * 2);border-top:none}
+    .overview td:first-child{white-space:normal}
+    .search{margin-left:0;width:100%}.search input{flex:1;width:auto}
+    section,td{scroll-margin-top:120px}
+    header,header>*,.jump,.tools,.search{min-width:0;max-width:100%}
+    .tools{flex-wrap:wrap;justify-content:flex-start}
+    .tools>*{flex:0 1 auto}
+    .jump{flex-wrap:wrap;justify-content:flex-start}
+    .jump>*{flex:0 0 auto}
+  }
+  @media print{
+    @page{size:A3 landscape;margin:8mm}
+    body{background:#fff;padding:0}
+    .tools,.hint,.jump,.home,.skip{display:none}
+    header{grid-template-columns:1fr}
+    th.now,td.now,.hit{box-shadow:none}
+    td.now{background:#fff}
+    td.dim{opacity:1}
+    .overview .more,.overview summary::before{display:none}
+    .grid{gap:8px}
+    section,.overview{border:none;border-top:4px solid var(--c)}
+    section+section{break-before:page}
+    .lb,.lb[hidden]{display:block!important;content-visibility:visible!important;min-height:30px!important;padding:4px!important;border:1px solid var(--line)!important;border-top:none!important}
+    .lh::before,.cch::before,.wn:empty::before,.fld:empty::before{content:""}
+    .cpall{display:none}
+    .codes:not(:empty),.wn.cat + .info:not(:empty){display:block!important;content-visibility:visible!important;padding:3px 4px!important;border:1px solid var(--line)!important;margin:0 0 4px!important}
+    .ccw:has(.codes:empty){display:none}
+    .fld ul{padding:0;list-style:none}.fld li{display:inline}.fld li+li::before{content:" | "}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    /* "Print CATs and topics": weekly topics and CATs only */
+    body.summary .les,body.summary .ccw{display:none!important}
+    body.summary .wn{border-bottom:none}
+  }
+</style>
+<!-- Analytics: GoatCounter (no cookies, no personal data). Replace YOUR-CODE with your GoatCounter code. -->
+<script data-goatcounter="https://soc-english.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</head>
+<body>
+<a class="skip" href="#grid">Skip to the plan</a>
+<header>
+  <a class="home btn" href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>All plans</a>
+  <h1 contenteditable="true">EN12 Curriculum Plan 2027</h1>
+  <p class="updated" id="updated"></p>
+  <div class="tools">
+    <span id="status" aria-live="polite"></span>
+    <button id="expand">Expand all</button>
+    <button id="save" class="ed">Save</button>
+    <details class="menu"><summary class="btn">Print &amp; download</summary><div class="menu-list">
+      <button onclick="printPlan('full')" title="Every lesson with learning intentions, success criteria and Do now. Print or save as PDF.">Print full plan</button>
+      <button onclick="printPlan('summary')" title="Weekly topics and CATs only. Print or save as PDF.">Print CATs and topics</button>
+      <button id="cmbtn" title="Download each semester as a Word curriculum map, in the school's template layout">Curriculum map (Word)</button>
+      <button id="upv2btn" title="Download a unit of work (first lesson to CAT) in the school's unit plan template">Unit plans (Word)</button>
+    </div></details>
+    <button id="clear" class="ed">Clear all</button>
+  </div>
+</header>
+<p class="hint"><span class="ed">Click a lesson to open it, then type. Press Save (or Ctrl+S) to save your changes.</span><span class="rd">Click a lesson, assessment or curriculum codes to see the details.</span> Prints on A3 landscape.</p>
+<main class="grid" id="grid" tabindex="-1"></main>
+<script>
+const TERMS=[
+ {n:1,start:"2027-01-25",weeks:9,label:"Wed 27 Jan – Thu 25 Mar (students start Thu 28 Jan)",
+  notes:{1:"Starts Wed",7:"Labour Day Mon",9:"Ends Thu (Good Fri)"},grey:{},hol:[7,9]},
+ {n:2,start:"2027-04-12",weeks:11,label:"Mon 12 Apr – Fri 25 Jun",
+  notes:{10:"King's Bday Mon"},grey:{9:"Exams",11:"Set-Up"},hol:[10],noLessons:[9],exam:[9]},
+ {n:3,start:"2027-07-12",weeks:10,label:"Mon 12 Jul – Fri 17 Sep",notes:{},grey:{},hol:[]},
+ {n:4,start:"2027-10-04",weeks:11,label:"Mon 4 Oct – Fri 17 Dec",
+  notes:{5:"Cup Day Tue"},grey:{6:"Exams",8:"Step-Up",9:"Step-Up",10:"Activities Week",11:"Clean-Up Week"},hol:[5],noLessons:[6,8,9,10,11],exam:[6]}
+];
+// Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
+const PLAN={"normalWeeks": [[2, 11]], "greyWeeks": [[4, 8, "Retreat and HeadStart"], [4, 9, "HeadStart"]], "assessWord": "SAC", "updated": "2026-11-12"};
+// Assessment word on the page: "CAT" by default, "SAC" for Year 12 (set by PLAN.assessWord)
+const ASSESS=PLAN.assessWord||"CAT";
+{const up=document.getElementById("updated");if(up&&PLAN.updated){const d=new Date(PLAN.updated+"T00:00");up.textContent="Last updated "+d.toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});}}
+document.documentElement.style.setProperty("--wnl",JSON.stringify("Notes / "+ASSESS));
+{const b=document.querySelector('button[onclick="printPlan(\'summary\')"]');if(b){b.textContent="Print "+ASSESS+"s and topics";b.title="Weekly topics and "+ASSESS+"s only. Print or save as PDF.";}const u=document.getElementById("upv2btn");if(u)u.title="Download a unit of work (first lesson to "+ASSESS+") in the school's unit plan template";}
+(PLAN.normalWeeks||[]).forEach(([n,w])=>{const t=TERMS.find(x=>x.n===n);delete t.grey[w];t.noLessons=(t.noLessons||[]).filter(x=>x!==w);t.exam=(t.exam||[]).filter(x=>x!==w);});
+(PLAN.notes||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.notes=t.notes||{};t.notes[w]=l;}); // e.g. [[2,11,"Step-Up"]] labels a week
+(PLAN.greyWeeks||[]).forEach(([n,w,l])=>{const t=TERMS.find(x=>x.n===n);t.grey[w]=l;t.noLessons=(t.noLessons||[]).concat([w]);t.exam=(t.exam||[]).filter(x=>x!==w);}); // e.g. [[1,1,"Induction"]] greys out a week with no lessons
+const DEFAULTS={};
+const SAVED={"1--1": "Reading and exploring texts: The Castle (film). Exploring argument: oral point of view", "1--2": "Reading and exploring texts: The Castle (film). Exploring argument: oral point of view", "1--4": "Reading and exploring texts: The Castle (film). Exploring argument: oral point of view", "1--5": "Reading and exploring texts: The Castle (film). Exploring argument: oral point of view", "1--3": "Reading and exploring texts: The Castle (film)", "1--6": "S1_EN12_SAC1: Oral point of view presentation (U2 AOS 2)", "info-1--6": "U2 AOS 2 SAC: oral point of view presentation. Class presentations start this week and continue in Weeks 7 and 9.", "1--7": "Reading and exploring texts: The Castle (film). Oral presentations continue", "1--8": "Reading and exploring texts: The Castle (film)", "1--9": "S1_EN12_SAC2: U1 AOS 1, Reading and exploring texts (exam conditions)", "info-1--9": "U1 AOS 1 SAC: reading and exploring texts, under exam conditions. Oral presentations continue this week.", "2--1": "Crafting texts: Crisis", "2--2": "Crafting texts: Crisis", "2--3": "Crafting texts: Crisis", "2--5": "Crafting texts: Crisis", "2--4": "S1_EN12_SAC3: U1 AOS 2a, Crafting texts (completed in class)", "info-2--4": "U1 AOS 2a SAC: crafting texts, completed in class, with a reflective commentary on your choice of own creative piece.", "2--6": "S1_EN12_SAC4: U1 AOS 2b, Crafting texts (exam conditions)", "info-2--6": "U1 AOS 2b SAC: crafting texts, under exam conditions.", "2--7": "Unit 1 review: areas of study in preparation for the exams", "2--8": "Unit 1 review: areas of study in preparation for the exams", "2--9": "EXAM: Unit 1 exams", "info-2--9": "Unit 1 exams. Follow-up: analyse exam results for Analytical TR and Crafting Texts.", "2--10": "Start Unit 2: Exploring argument (written, LA booklet introduction). Reading and exploring texts: Rainbow's End (introduction)", "2--11": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End", "3--1": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--2": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--3": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--4": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--5": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--6": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--7": "Exploring argument: written (LA booklet). Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--8": "S2_EN12_SAC5: U2 AOS 2A, Exploring argument (exam conditions)", "info-3--8": "U2 AOS 2A SAC: exploring argument, under exam conditions.", "3--9": "Reading and exploring texts: Rainbow's End (Jane Harrison)", "3--10": "Reading and exploring texts: Rainbow's End (Jane Harrison)", "4--1": "Reading and exploring texts: Rainbow's End. Exploring argument: written (teacher samples)", "4--2": "Reading and exploring texts: Rainbow's End. Exploring argument: written (teacher samples)", "4--3": "S2_EN12_SAC6: U2 AOS 1, Reading and exploring texts", "info-4--3": "U2 AOS 1 SAC: reading and exploring texts. Reading of Rainbow's End continues.", "4--4": "Unit 2 review: areas of study in preparation for the exams. Reading and exploring texts: Rainbow's End", "4--5": "Unit 2 review: review for the exams", "4--6": "EXAM: Unit 2 exams", "info-4--6": "Unit 2 exams. Review for the exams in the week before.", "4--7": "Analyse exam results: Analytical TR and language analysis. Reading and exploring texts: Rainbow's End"};
+let store=Object.assign({},DEFAULTS,SAVED);
+let dirty=false, handle=null;
+const grid=document.getElementById("grid");
+const statusEl=document.getElementById("status");
+const MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt=d=>d.getDate()+" "+MONTHS[d.getMonth()];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CAT=/^(S[12]_|EXAM)/;
+const devBanner=(n,w)=>{const d=(PLAN.devBanner||[]).find(([a,b])=>a===n&&b===w);return d?`<div class="dvb">${esc(d[2])}</div>`:"";};
+const lessonNames=(t,w)=>{const c=(PLAN.lessonCount||[]).find(([n,x])=>n===t.n&&x===w);const all=(t.noLessons||[]).includes(w)?[]:t.hol.includes(w)?["Lesson I","Lesson II","Lesson III","Ad libitum"]:["Lesson I","Lesson II","Lesson III","Lesson IV"];return c?all.slice(0,c[2]):all;}; // PLAN.lessonCount [[term,week,n]] sets how many lessons a week has
+function setStatus(t){statusEl.textContent=t;}
+// ?today=2027-02-17 previews the "This week" highlight
+const qd=new URLSearchParams(location.search).get("today");
+const today=qd?new Date(qd+"T00:00"):new Date();today.setHours(0,0,0,0);
+let nowId=null;
+const weekDate={};
+const jump=document.createElement("nav");jump.className="jump";jump.setAttribute("aria-label","Terms and search");
+grid.appendChild(jump);
+const terms=document.createElement("div");terms.style.cssText="display:contents";jump.appendChild(terms);
+jump.insertAdjacentHTML("beforeend",`<div class="search" role="search"><label class="sr" for="q">Search this plan</label>`+
+  `<input id="q" type="search" placeholder="Search this plan, e.g. Macbeth" autocomplete="off">`+
+  `<button type="button" id="qnext" hidden>Next match</button><span id="qcount" role="status"></span></div>`);
+
+TERMS.forEach(t=>{
+  const s=document.createElement("section");s.className="term t"+t.n;s.id="term"+t.n;
+  terms.insertAdjacentHTML("beforeend",`<a class="t${t.n}" href="#term${t.n}">Term ${t.n}</a>`);
+  const now={};
+  let h=`<h2>Term ${t.n}</h2><div class="dates">${t.label} · ${t.weeks} weeks</div>`+
+        `<table style="width:${(t.weeks/11*100).toFixed(2)}%;min-width:${t.weeks*120}px"><caption class="sr">Term ${t.n} weekly plan</caption><thead><tr>`;
+  for(let w=1;w<=t.weeks;w++){
+    const g=t.grey[w];
+    const d=new Date(t.start+"T00:00");d.setDate(d.getDate()+7*(w-1));
+    weekDate[`${t.n}--${w}`]=fmt(d);
+    const e=new Date(d);e.setDate(e.getDate()+7);
+    if(today>=d&&today<e){now[w]=true;nowId="term"+t.n;}
+    const cls=[g?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
+    h+=`<th scope="col" style="--o:${w}"${cls?` class="${cls}"`:""}>Week ${w}<small>${fmt(d)}</small>`+
+       `${t.notes[w]?`<span class="hol">${t.notes[w]}</span>`:""}`+
+       `${g?`<span class="tag">${g}</span>`:""}${now[w]?`<span class="tag">This week</span>`:""}</th>`;
+  }
+  h+="</tr></thead><tbody><tr>";
+  for(let w=1;w<=t.weeks;w++){
+    const g=t.grey[w];
+    const lessons=lessonNames(t,w);
+    const nn=(t.noLessons||[]).includes(w)&&!(t.exam||[]).includes(w);
+    const tcls=[g&&!(t.exam||[]).includes(w)?"grey":"",now[w]?"now":""].filter(Boolean).join(" ");
+    h+=`<td id="w${t.n}-${w}" style="--o:${w}"${tcls?` class="${tcls}"`:""}>${nn?"":devBanner(t.n,w)+`<div class="wn" contenteditable="true" data-k="${t.n}--${w}"></div><div class="info" id="i${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="info-${t.n}--${w}" data-ph="Assessment details"></div><div class="ccw"><div class="cch" role="button" tabindex="0" aria-label="Curriculum codes" aria-expanded="false" aria-controls="c${t.n}-${w}">Codes</div><div class="codes" id="c${t.n}-${w}" hidden="until-found" contenteditable="true" data-k="codes-${t.n}--${w}" data-ph="Add curriculum codes"></div></div>`}`;
+    lessons.forEach((name,i)=>{
+      const k=`${t.n}-${w}-${i+1}`, title=store[`${k}-title`];
+      h+=`<div class="les"><div class="lh" role="button" tabindex="0" aria-expanded="false" aria-controls="p${k}"${!title&&name==="Ad libitum"?' title="Flexible lesson in a short week"':""}>${esc(name)}${title?`<span class="lt"> - ${esc(title)}</span>`:""}</div><div class="lb" id="p${k}" hidden="until-found">`+
+         `<div class="fl">Learning Intention</div><div class="fld" contenteditable="true" data-k="${k}-li" data-ph="What students will learn (student-friendly)"></div>`+
+         `<div class="fl">Success Criteria</div><div class="fld" contenteditable="true" data-k="${k}-sc" data-ph="Observable, specific steps to show learning"></div>`+
+         `<div class="fl">Do Now</div><div class="fld" contenteditable="true" data-k="${k}-dn" data-ph="Starter task at the start of the lesson"></div>`+
+         `<div class="cpall"><button type="button" class="cp" title="Copy this lesson's learning intention, success criteria and Do Now">Copy lesson</button></div>`+
+         `</div></div>`;
+    });
+    h+="</td>";
+  }
+  h+="</tr></tbody></table>";
+  s.innerHTML=h;grid.appendChild(s);
+});
+if(nowId)terms.insertAdjacentHTML("beforeend",`<a class="nowlink" href="#${nowId}">This week</a>`);
+
+// "S1_09EN_CAT1: Title" shows as a small code above the title. Display only.
+const catHTML=v=>{const i=v.indexOf(":");return i<0?`<span class="ct">${esc(v)}</span>`:`<span class="ck">${esc(v.slice(0,i))}</span><span class="ct">${esc(v.slice(i+1).trim())}</span>`;};
+document.querySelectorAll("[data-k]").forEach(el=>{
+  el.textContent=store[el.dataset.k]||"";
+  const mark=()=>{
+    if(el.classList.contains("wn")){el.classList.toggle("cat",CAT.test(el.innerText.trim()));el.classList.toggle("dev",/^Developmental task/.test(el.innerText.trim()));}
+    const les=el.closest(".les");
+    if(les&&el.classList.contains("fld"))les.classList.toggle("filled",[...les.querySelectorAll(".fld")].some(f=>f.innerText.trim()));
+  };
+  mark();
+  el.addEventListener("input",()=>{store[el.dataset.k]=el.innerText.trim();dirty=true;setStatus("Unsaved changes");mark();});
+  if(!el.classList.contains("wn"))return;
+  // CATs are formatted when not being edited, and go back to plain text while typing so the stored entry stays exact
+  const fmtCat=()=>{if(el.classList.contains("cat")&&document.activeElement!==el)el.innerHTML=catHTML(store[el.dataset.k]||"");};
+  fmtCat();
+  el.addEventListener("focus",()=>{if(el.isContentEditable&&el.classList.contains("cat")){el.textContent=store[el.dataset.k]||"";const sel=getSelection();sel.selectAllChildren(el);sel.collapseToEnd();}});
+  el.addEventListener("blur",fmtCat);
+});
+// Print & download menu closes after a choice, on a click elsewhere, or with Escape
+const menu=document.querySelector(".menu");
+menu.addEventListener("click",e=>{if(e.target.closest(".menu-list button"))menu.open=false;});
+document.addEventListener("click",e=>{if(!menu.contains(e.target))menu.open=false;});
+menu.addEventListener("keydown",e=>{if(e.key==="Escape"&&menu.open){menu.open=false;menu.querySelector("summary").focus();}});
+
+// Open/close panels. Closed panels are hidden="until-found", so the browser's Find can open them.
+if("onbeforematch" in document.body)document.documentElement.classList.add("uf");
+function setOpen(btn,panel,open){
+  (btn.classList.contains("wn")?btn:btn.parentElement).classList.toggle("open",open);
+  if(btn.hasAttribute("aria-expanded"))btn.setAttribute("aria-expanded",open);
+  panel.hidden=open?false:"until-found";
+}
+const keyClick=b=>b.addEventListener("keydown",e=>{if(e.target===b&&(e.key==="Enter"||e.key===" ")){e.preventDefault();b.click();}});
+document.querySelectorAll(".lh,.cch").forEach(b=>{
+  const p=b.nextElementSibling;
+  b.addEventListener("click",()=>setOpen(b,p,!!p.hidden));
+  p.addEventListener("beforematch",()=>setOpen(b,p,true));
+  keyClick(b);
+});
+document.querySelectorAll(".wn").forEach(w=>{
+  const p=w.nextElementSibling;
+  w.addEventListener("click",()=>{if(w.classList.contains("cat"))setOpen(w,p,!!p.hidden);});
+  p.addEventListener("beforematch",()=>setOpen(w,p,true));
+});
+let allOpen=false;
+document.getElementById("expand").onclick=e=>{
+  allOpen=!allOpen;
+  document.querySelectorAll(".lh,.cch,.wn.cat,.wn.dev").forEach(b=>setOpen(b,b.nextElementSibling,allOpen));
+  e.currentTarget.textContent=allOpen?"Collapse all":"Expand all";
+};
+document.querySelector("h1").addEventListener("input",()=>{dirty=true;setStatus("Unsaved changes");});
+
+// Copy lesson: the learning intention, success criteria and Do Now as plain text, in one go. Read-only: works on the live site too.
+const flash=(b,msg)=>{b.textContent=msg;b.classList.add("done");setTimeout(()=>{b.textContent="Copy lesson";b.classList.remove("done");},1500);};
+grid.addEventListener("click",async e=>{
+  const b=e.target.closest(".cp");if(!b)return;
+  const les=b.closest(".les"), field=s=>les.querySelector(`.fld[data-k$="-${s}"]`).innerText.trim();
+  // success criteria become a bulleted list, one per line
+  const sc=field("sc").split(/\s*\|\s*|\n/).map(s=>s.trim()).filter(Boolean).map(s=>"• "+s).join("\n");
+  const sec=(label,body)=>body?label+"\n"+body:"";
+  const text=[sec("Learning Intention:",field("li")),sec("Success Criteria:",sc),sec("Do Now:",field("dn"))].filter(Boolean).join("\n\n");
+  if(!text)return flash(b,"Nothing to copy");
+  try{await navigator.clipboard.writeText(text);}
+  catch(err){ // fallback for browsers or pages where the clipboard API is blocked
+    const t=document.createElement("textarea");t.value=text;t.setAttribute("readonly","");t.style.position="fixed";t.style.opacity="0";
+    document.body.appendChild(t);t.select();const ok=document.execCommand("copy");t.remove();
+    if(!ok)return flash(b,"Copy failed");
+  }
+  flash(b,"Copied");
+});
+
+// Assessment overview, built from the CAT entries (display only)
+(()=>{
+  const rows=[...document.querySelectorAll(".wn.cat")].map(w=>{
+    const k=w.dataset.k, [tn,wk]=k.split("--"), v=store[k]||"", i=v.indexOf(":");
+    return `<tr><td><a href="#w${tn}-${wk}">Term ${tn}, Week ${wk}</a><small>${weekDate[k]}</small></td>`+
+      `<td><span class="ck">${esc(i<0?v:v.slice(0,i))}</span>${esc(i<0?"":v.slice(i+1).trim())}</td>`+
+      `<td>${esc(store["codes-"+k]||"")}</td></tr>`;
+  });
+  if(!rows.length)return;
+  jump.insertAdjacentHTML("afterend",`<details class="overview" id="overview"><summary><h2>Assessments at a glance</h2><span class="count">${rows.length}</span><span class="more"></span></summary>`+
+    `<table><caption class="sr">All assessments in this plan</caption>`+
+    `<thead><tr><th scope="col">When</th><th scope="col">Assessment</th><th scope="col">Curriculum codes</th></tr></thead><tbody>${rows.join("")}</tbody></table></details>`);
+  const ov=document.getElementById("overview");
+  // a "When" link jumps to that week and opens its assessment details
+  ov.addEventListener("click",e=>{const a=e.target.closest("a");if(!a)return;const w=document.querySelector(a.getAttribute("href")+" .wn.cat");if(w)setOpen(w,w.nextElementSibling,true);});
+  // always print the table, then restore
+  let was;addEventListener("beforeprint",()=>{was=ov.open;ov.open=true;});addEventListener("afterprint",()=>{ov.open=was;});
+})();
+
+// Search: highlights matches, opens the lessons they're in, fades other weeks. Display only.
+(()=>{
+  const q=document.getElementById("q"),cnt=document.getElementById("qcount"),next=document.getElementById("qnext");
+  const HL=window.CSS&&CSS.highlights&&window.Highlight;
+  let hits=[],cur=-1,opened=[],timer;
+  function clear(){
+    opened.forEach(([b,p])=>setOpen(b,p,false));opened=[];
+    document.querySelectorAll(".hit,.dim").forEach(e=>e.classList.remove("hit","cur","dim"));
+    if(HL)CSS.highlights.delete("search");
+    hits=[];cur=-1;next.hidden=true;cnt.textContent="";
+  }
+  function open(b,p){if(p.hidden){setOpen(b,p,true);opened.push([b,p]);}}
+  function run(){
+    clear();
+    const term=q.value.trim().toLowerCase();
+    if(term.length<2)return;
+    const ranges=[];let weeks=0;
+    document.querySelectorAll(".term td").forEach(td=>{
+      let found=false;
+      td.querySelectorAll(".wn,.info,.codes,.lh,.fld").forEach(el=>{
+        if(!el.textContent.toLowerCase().includes(term))return;
+        found=true;
+        const les=el.closest(".les");
+        if(les){const b=les.querySelector(".lh");open(b,b.nextElementSibling);}
+        else if(el.classList.contains("codes"))open(el.previousElementSibling,el);
+        else if(el.classList.contains("info")&&el.previousElementSibling.classList.contains("cat"))open(el.previousElementSibling,el);
+        const box=les||el;if(!hits.includes(box)){hits.push(box);box.classList.add("hit");}
+        if(HL){const tw=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;
+          while((n=tw.nextNode())){const s=n.data.toLowerCase();let i=s.indexOf(term);
+            while(i>-1){const r=new Range();r.setStart(n,i);r.setEnd(n,i+term.length);ranges.push(r);i=s.indexOf(term,i+term.length);}}}
+      });
+      if(found)weeks++;else td.classList.add("dim");
+    });
+    if(HL&&ranges.length)CSS.highlights.set("search",new Highlight(...ranges));
+    cnt.textContent=hits.length?`${hits.length} match${hits.length>1?"es":""} in ${weeks} week${weeks>1?"s":""}`:"No matches. Check the spelling or try a shorter word.";
+    next.hidden=!hits.length;
+  }
+  function go(){
+    if(!hits.length)return;
+    if(cur>-1)hits[cur].classList.remove("cur");
+    cur=(cur+1)%hits.length;hits[cur].classList.add("cur");
+    hits[cur].scrollIntoView({block:"center",inline:"center"});
+    if(hits.length>1)cnt.textContent=`Match ${cur+1} of ${hits.length}`;
+  }
+  q.addEventListener("input",()=>{clearTimeout(timer);timer=setTimeout(run,150);});
+  q.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();clearTimeout(timer);if(!hits.length)run();go();}if(e.key==="Escape"){q.value="";clear();}});
+  next.addEventListener("click",go);
+})();
+
+if(location.hash){const el=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start",inline:"center"}));}
+
+// Live site (GitHub Pages) is read-only; edit a local copy and push it to update the site.
+const LIVE=location.hostname.endsWith("github.io");
+if(LIVE){
+  document.body.classList.add("ro");
+  document.querySelectorAll("[data-k],h1").forEach(el=>el.contentEditable=false);
+  // Display-only formatting. The stored entries are untouched and never read back from here.
+  document.querySelectorAll(".wn.cat,.wn.dev").forEach(w=>{
+    w.setAttribute("role","button");w.tabIndex=0;w.setAttribute("aria-expanded","false");w.setAttribute("aria-controls",w.nextElementSibling.id);
+    keyClick(w);
+  });
+  document.querySelectorAll('.fld[data-k$="-sc"]').forEach(f=>{
+    const parts=f.textContent.split(/\s*\|\s*/).filter(Boolean);
+    if(parts.length>1)f.innerHTML="<ul>"+parts.map(p=>"<li>"+esc(p)+"</li>").join("")+"</ul>";
+  });
+}
+
+// Build the file text: original page with the current entries written into SAVED
+function fileText(){
+  const c=document.documentElement.cloneNode(true);
+  c.removeAttribute("class");
+  c.querySelector("#grid").innerHTML="";
+  c.querySelector("#status").textContent="";
+  // \u2028/\u2029 would break the line match below and "<" could end the script early; escaping keeps the data identical
+  const data=JSON.stringify(store).replace(/[<\u2028\u2029]/g,ch=>"\\u"+ch.charCodeAt(0).toString(16).padStart(4,"0"));
+  const html="<!doctype html>\n"+c.outerHTML;
+  let found=false;
+  const out=html.replace(/const SAVED=.*;\n/, ()=>{found=true;return "const SAVED="+data+";\n";});
+  if(!found)throw new Error("SAVED line not found");
+  return out;
+}
+async function save(){
+  if(LIVE)return;
+  let text;
+  try{text=fileText();}catch(e){setStatus("Not saved: this file's data line is missing. Your changes are still on screen.");return;}
+  if(window.showSaveFilePicker){
+    try{
+      if(!handle)handle=await window.showSaveFilePicker({suggestedName:document.title+".html",
+        types:[{description:"HTML file",accept:{"text/html":[".html"]}}]});
+      const w=await handle.createWritable();
+      await w.write(text);
+      await w.close();
+      dirty=false;
+      setStatus("Saved at "+new Date().toLocaleTimeString("en-AU",{hour:"2-digit",minute:"2-digit"}));
+      return;
+    }catch(e){
+      if(e.name==="AbortError")return;
+      handle=null;
+    }
+  }
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([text],{type:"text/html"}));
+  a.download=document.title+".html";
+  a.click();
+  dirty=false;
+  setStatus("Downloaded – replace the file in your folder with it");
+}
+document.getElementById("save").onclick=save;
+function printPlan(mode){document.body.classList.toggle("summary",mode==="summary");window.print();}
+addEventListener("afterprint",()=>document.body.classList.remove("summary"));
+
+// Unit plans: a unit runs from the first week after the previous assessment to its CAT. Exams have no unit plan.
+// Exported as a Word curriculum map in the school's format. Read-only: works on the live site too.
+function units(){
+  const out=[];let cur=[];
+  TERMS.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if(((t.noLessons||[]).includes(w)||t.grey[w])&&!(t.exam||[]).includes(w))continue; // Set-Up, Step-Up and so on (grey weeks are not teaching weeks)
+    if((PLAN.noUnit||[]).some(([n,x])=>n===t.n&&x===w))continue; // in the plan's lessons, but not part of any unit (e.g. post-exam week)
+    const k=`${t.n}--${w}`;
+    cur.push({t:t.n,w,k,lessons:lessonNames(t,w)});
+    const v=(store[k]||"").trim();
+    if(CAT.test(v)){if(!v.startsWith("EXAM"))out.push(cur);cur=[];} // exam revision weeks get no unit plan
+  }});
+  return out; // weeks after the last assessment have no CAT, so they form no unit
+}
+const unitName=u=>{const v=store[u[u.length-1].k].trim(),i=v.indexOf(":");return i<0?v:v.slice(i+1).trim();};
+const unitSpan=u=>{const a=u[0],b=u[u.length-1];return `Term ${a.t} Week ${a.w} to Term ${b.t} Week ${b.w} · ${u.length} weeks`;};
+// Minimal zip (stored, no compression): all a .docx needs
+function zip(files){
+  const enc=new TextEncoder(),local=[],central=[];let off=0;
+  const T=[...Array(256)].map((_,n)=>{for(let k=0;k<8;k++)n=n&1?0xEDB88320^(n>>>1):n>>>1;return n>>>0;});
+  const le=(...f)=>{const b=new Uint8Array(f.reduce((s,x)=>s+x[1],0)),v=new DataView(b.buffer);let i=0;for(const [x,n] of f){n===2?v.setUint16(i,x,true):v.setUint32(i,x,true);i+=n;}return b;};
+  for(const [name,text] of Object.entries(files)){
+    const nm=enc.encode(name),d=enc.encode(text);let c=~0;for(const b of d)c=T[(c^b)&255]^(c>>>8);c=~c>>>0;
+    const common=[[20,2],[0,2],[0,2],[0,2],[33,2],[c,4],[d.length,4],[d.length,4],[nm.length,2],[0,2]];
+    local.push(le([0x04034b50,4],...common),nm,d);
+    central.push(le([0x02014b50,4],[20,2],...common,[0,2],[0,2],[0,2],[0,4],[off,4]),nm);
+    off+=30+nm.length+d.length;
+  }
+  const size=central.reduce((s,b)=>s+b.length,0), n=Object.keys(files).length;
+  return new Blob([...local,...central,le([0x06054b50,4],[0,2],[0,2],[n,2],[n,2],[size,4],[off,4],[0,2])],{type:CT_DOCX});
+}
+const CT_DOCX="application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+
+// Curriculum map (Word): one document per semester in the school's template layout.
+// Lesson plan and CAT links are relative: save the download into that semester's Curriculum Map folder.
+// Folder name for each unit (Year Level Folder structure). Plans without an entry get no links.
+const CM_FOLDERS={
+ "09ADVEN1":{"NAPLAN Practice":"1. NAPLAN Practice","Scene Analysis (12 Angry Men)":"2. Scene Analysis (12 Angry Men)","Crafting Texts":"3. Crafting Texts","Oral Presentation":"1. Oral Presentation","Analysing Argument":"2. Analysing Argument","Analytical Text Response Essay (Julius Caesar)":"3. Julius Caesar"},
+ "10ADVEN1":{"Personal Text Response Essay (Rear Window)":"1. Rear Window","English Conventions":"2. English Conventions","Love Framework of Ideas":"3. Love Framework of Ideas","Oral Presentation":"1. Oral Presentation","Early Modern English":"2. Early Modern English","Analytical Text Response Essay (Macbeth)":"3. Macbeth"},
+ "09EN":{"Presenting Argument":"1. Presenting Argument","Whale Rider Analytical Essay":"2. Whale Rider","Creative Writing (Memoir)":"1. Creative Writing (Memoir)","Animal Farm Analytical Essay":"2. Animal Farm"},
+ "10EN":{"Creative Writing":"1. Creative Writing","Film Text Response":"2. Film Text Response","Debate or Oral Presentation":"1. Debate or Oral Presentation","Romeo and Juliet":"2. Romeo and Juliet"},
+ "07ADVEN1":{"Creative Writing - Newspaper Report":"1. Creative Writing - Newspaper Report","\"Trash\" Chapter Expert Task":"2. Trash Chapter Expert Task","\"Trash\" Passage Analysis":"3. Trash Passage Analysis","Visual Persuasion":"1. Visual Persuasion","Back to the Future - Film Study":"2. Back to the Future - Film Study"},
+ "08ADVEN1":{"Creative Writing - Developing a Character":"1. Creative Writing - Developing a Character","Understanding Neurodivergence":"2. Understanding Neurodivergence","Passage Analysis: The Curious Incident of the Dog":"3. Passage Analysis - The Curious Incident of the Dog","Dystopian Reading Journal":"1. Dystopian Reading Journal","Dystopian Research Project":"2. Dystopian Research Project","Oral Issues Presentation":"3. Oral Issues Presentation"},
+ "08EN":{"Oral Language Presentation":"1. Oral Language Presentation","Hunt for the Wilderpeople Film Study (TEEL)":"2. Hunt for the Wilderpeople Film Study (TEEL)","The Giver Essay":"1. The Giver Essay","Article Analysis":"2. Article Analysis"},
+ "07EN":{"Coraline: Comprehension Questions":"1. Coraline Comprehension Questions","Persuasive Poster":"2. Persuasive Poster","His Name was Walter TEEL Paragraph":"1. His Name was Walter TEEL Paragraph","Article Analysis Podcast":"2. Article Analysis Podcast"}
+};
+// File names as saved on Windows: ":" becomes " -" (matching the folder names), other characters Windows forbids are dropped
+const fileSafe=s=>s.replace(/:/g," -").replace(/[\\/*?"<>|]/g,"").replace(/\s+/g," ").trim();
+// Relative link target: each folder or file name is URL-encoded, so spaces and "&" in names resolve in Word
+const relLink=(...parts)=>parts.map(p=>encodeURIComponent(p)).join("/");
+// Key knowledge reads as the content itself: "We will explore how memory shapes a story." -> "How memory shapes a story"
+const kkFromLI=li=>{
+  let t=(li||"").trim().replace(/^we will\s+/i,"");
+  if(/^be\s+/i.test(t)) t=t.replace(/^be\s+/i,"");
+  else t=t.replace(/^[a-z]+\s+/i,"");
+  t=t.replace(/\.$/,"").trim();
+  return t?t.charAt(0).toUpperCase()+t.slice(1):"";
+};
+function cmDocx(sem){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const subject=code==="EN34"?"Year 12 English":(m?`Year ${+m[1]} ${m[2]?"Advanced ":""}English`:code);
+  const folders=CM_FOLDERS[code]||{};
+  const terms=TERMS.filter(t=>sem===1?t.n<=2:t.n>=3);
+  const unitOf={};
+  units().forEach(u=>u.forEach(x=>{unitOf[x.k]={u,cat:x===u[u.length-1]};}));
+  const rels=[];
+  const link=(text,target)=>{
+    const id="rIdL"+(rels.length+1);
+    rels.push(`<Relationship Id="${id}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(target)}" TargetMode="External"/>`);
+    return `<w:hyperlink r:id="${id}"><w:r><w:rPr><w:color w:val="0563C1"/><w:sz w:val="18"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:hyperlink>`;};
+  const run=(text,b)=>`<w:r><w:rPr>${b?"<w:b/>":""}<w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(runs)=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${runs}</w:p>`;
+  const P=(text,b)=>para(run(text,b));
+  const W=[1035,1941,2070,1797,1830,2414,1873], SH=[null,null,"DAE8F8",null,null,"DAE8F8",null];
+  const cell=(i,paras)=>`<w:tc><w:tcPr><w:tcW w:w="${W[i]}" w:type="dxa"/>${SH[i]?`<w:shd w:val="clear" w:color="auto" w:fill="${SH[i]}"/>`:""}</w:tcPr>${paras||para("")}</w:tc>`;
+  const row=(cells)=>`<w:tr><w:trPr><w:cantSplit/></w:trPr>${cells.map((c,i)=>cell(i,c)).join("")}</w:tr>`;
+  const three=a=>{const u=[...new Set(a)];return u.length<=3?u:[0,1,2].map(i=>u[Math.round(i*(u.length-1)/2)]);};
+  const header=row(["",P("Semester "+sem,true),"","","","",""])+
+    row([P(""),P("Topic / Links to VIC Curriculum",true),P("Learning Intentions: / Success Criteria: / (include in lesson plan)",true),P("Key Knowledge",true),P("Link to Lesson plans",true),P("Do Now",true),P("Assessment",true)]);
+  const rowsXml=[]; let n=0;
+  terms.forEach(t=>{for(let w=1;w<=t.weeks;w++){
+    if(t.grey[w]=="Step-Up")continue; // Step-Up is the start of the next semester, so it is left out here
+    n++;
+    const k=`${t.n}--${w}`, d=new Date(t.start+"T00:00"); d.setDate(d.getDate()+7*(w-1));
+    const topic=(store[k]||"").trim(), g=t.grey[w];
+    const c0=P("Week "+n,true)+P(`Term ${t.n}, Week ${w}`)+P("Monday "+fmt(d));
+    if(g&&!topic){rowsXml.push(row([c0,P(g,true),"","","","",""]));continue;}
+    const codes=(store["codes-"+k]||"").trim();
+    const c1=P(topic||"Not yet entered",true)+P("Curriculum codes: "+(codes||"to be added"));
+    const lis=[],scs=[],titles=[],dos=[];
+    lessonNames(t,w).forEach((ln,j)=>{
+      const kk=`${t.n}-${w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+      if(f("li"))lis.push(f("li"));
+      f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+      const kl=f("title")||kkFromLI(f("li")); if(kl)titles.push(kl); // key knowledge: the lesson title, or its learning intention when untitled
+      if(f("dn"))dos.push([f("title")||ln,f("dn")]);
+    });
+    let c2="";
+    if(three(lis).length)c2+=P("Learning Intentions:",true)+three(lis).map(s=>P("• "+s)).join("");
+    if(three(scs).length)c2+=P("Success Criteria:",true)+three(scs).map(s=>P("• "+s)).join("");
+    c2=c2||P("Not yet entered");
+    const c3=titles.length?titles.map(s=>P(s)).join(""):P("Not yet entered");
+    const ui=unitOf[k], name=ui?unitName(ui.u):"", folder=ui?folders[name]:null;
+    // A unit sits in the semester of its CAT (S1_ or S2_), even when its first weeks fall in the other semester
+    const usem=ui?(/^S2_/.test((store[ui.u[ui.u.length-1].k]||"").trim())?2:1):0;
+    let c4="";
+    if(ui){
+      if(folder){const file=`${code} - ${fileSafe(name)} - Lesson Plans.docx`;
+        c4=para(link("Lesson plans: "+name,relLink("..","..",`Semester ${usem}`,folder,"Lesson Plans",file)));}
+      else c4=P("Lesson plans: "+name);
+    }
+    const c5=dos.length?dos.map(([l,dn])=>P(l+": "+dn)).join(""):P("Do Nows to be added");
+    let c6="";
+    if(ui&&ui.cat){c6=P(topic,true)+(folder?para(link(ASSESS+" assessment brief",relLink("..","..",`Semester ${usem}`,folder,"Assessments & Rubrics",`${code} - ${fileSafe(name)} - ${ASSESS} Assessment.docx`))):"");}
+    rowsXml.push(row([c0,c1,c2,c3,c4,c5,c6]));
+  }});
+  const tbl=`<w:tbl><w:tblPr><w:tblW w:w="${W.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="9AA5B1"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${W.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${header}${rowsXml.join("")}</w:tbl>`;
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/>${rels.join("")}</Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${P("Semester "+sem,true)}${P("KLA: English")}${P("Subject: "+subject)}${tbl}<w:p/><w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("cmbtn").onclick=()=>{
+  const dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","cmh");
+  dl.innerHTML=`<h2 id="cmh">Curriculum map</h2><p>One curriculum map per semester, in the school's Word format. Save each download into that semester's Curriculum Map folder so the lesson plan and assessment links work.</p>`+
+    `<ul>${[1,2].map(s=>`<li><span><b>Semester ${s}</b><small>${s===1?"Terms 1 and 2":"Terms 3 and 4"}</small></span><button type="button" class="btn" data-s="${s}">Download .docx</button></li>`).join("")}</ul>`+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-s]");if(!b)return;
+    const s=+b.dataset.s, a=document.createElement("a"), url=URL.createObjectURL(cmDocx(s));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Semester ${s} Curriculum Map.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="s"){e.preventDefault();save();}});
+window.addEventListener("beforeunload",e=>{if(dirty){e.preventDefault();e.returnValue="";}});
+document.getElementById("clear").onclick=()=>{
+  if(!window.confirm("Clear every entry?"))return;
+  store={};
+  document.querySelectorAll("[data-k]").forEach(el=>{el.textContent="";});
+  document.querySelectorAll(".les.filled").forEach(el=>el.classList.remove("filled"));
+  dirty=true;setStatus("Unsaved changes – click Save");
+};
+
+// Unit plans (Word): one document per unit of work, in the school's unit plan template.
+// Tick boxes for cross-curriculum priorities, capabilities and 21CLD are chosen from the unit's own wording; the teacher should check them.
+const UP2_CROSS=[
+ ["Learning about Aboriginal and Torres Strait Islander histories and cultures",/aboriginal|torres|indigenous|first nations/],
+ ["Learning about Sustainability",/sustainab|climate/],
+ ["Learning about Asia and Australia's engagement with Asia",/asia|china|japan|korea|indonesia|vietnam/]];
+const UP2_CAPS=[
+ ["Ethical Capability",/ethic|justice|fair|moral|power|bias|responsib|rights/],
+ ["Critical and Creative Thinking",/analys|argu|persua|creative|essay|evaluat|interpret|critic|imagin/],
+ ["Intercultural Capability",/cultur|identity|m[aā]ori|asia|diverse|perspective|country/],
+ ["Personal and Social Capability",/oral|present|debate|collab|group|team|peer|reflect|feedback|discuss|rehears/]];
+const UP2_CLD=[
+ ["Knowledge Construction",/analys|interpret|evidence|context|understand|theme|explore|explain/],
+ ["Real world",/audience|persua|argu|pitch|letter|advert|media|news|public|community/],
+ ["Collaboration",/collab|group|peer|team|discuss|debate|pair/],
+ ["Self-regulation",/reflect|goal|plan|revis|draft|feedback|self|rehears|checklist/],
+ ["Skillful Communication",/oral|present|write|writ|essay|speech|debate|communicat|letter|pitch/],
+ ["ICT for learning",/film|digital|online|ict|slide|video|podcast|screen|media/]];
+function unitDocxV2(u){
+  const code=document.title.split(" ")[0], m=code.match(/^(\d+)(ADV)?EN/);
+  const yearLevel=m?`Year ${+m[1]}${m[2]?" Advanced":""}`:code;
+  const name=unitName(u);
+  // Lesson plans sit beside the Unit Plan folder (../Lesson Plans/<file>), so the link resolves from there
+  const lpRels=[], lpFolder=(CM_FOLDERS[code]||{})[name];
+  const lpLine=lpFolder?`<w:p><w:pPr><w:spacing w:after="120"/></w:pPr><w:r><w:rPr><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">Lesson plans: </w:t></w:r><w:hyperlink r:id="rIdLP1"><w:r><w:rPr><w:color w:val="0563C1"/><w:sz w:val="18"/><w:u w:val="single"/></w:rPr><w:t xml:space="preserve">${esc(name)}</w:t></w:r></w:hyperlink></w:p>`:"";
+  if(lpFolder)lpRels.push(`<Relationship Id="rIdLP1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" Target="${esc(relLink("..","Lesson Plans",`${code} - ${fileSafe(name)} - Lesson Plans.docx`))}" TargetMode="External"/>`);
+  const run=(text,o={})=>`<w:r><w:rPr>${o.b?"<w:b/>":""}${o.i?"<w:i/>":""}<w:sz w:val="${o.sz||18}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r>`;
+  const para=(text,o={})=>`<w:p><w:pPr><w:spacing w:after="40"/></w:pPr>${run(text,o)}</w:p>`;
+  const bullets=items=>items.map(s=>para("• "+s)).join("");
+  const cell=(w,o={})=>`<w:tc><w:tcPr><w:tcW w:w="${w}" w:type="dxa"/>${o.span>1?`<w:gridSpan w:val="${o.span}"/>`:""}${o.vm?`<w:vMerge${o.vm==="restart"?' w:val="restart"':""}/>`:""}${o.fill?`<w:shd w:val="clear" w:color="auto" w:fill="${o.fill}"/>`:""}</w:tcPr>${o.body||para("")}</w:tc>`;
+  const tr=cells=>`<w:tr>${cells.join("")}</w:tr>`;
+  const table=(widths,rows)=>`<w:tbl><w:tblPr><w:tblW w:w="${widths.reduce((a,b)=>a+b)}" w:type="dxa"/><w:tblBorders>${["top","left","bottom","right","insideH","insideV"].map(s=>`<w:${s} w:val="single" w:sz="4" w:space="0" w:color="000000"/>`).join("")}</w:tblBorders><w:tblLayout w:type="fixed"/></w:tblPr><w:tblGrid>${widths.map(w=>`<w:gridCol w:w="${w}"/>`).join("")}</w:tblGrid>${rows.join("")}</w:tbl>`;
+
+  // Data for this unit
+  const weeks=u.map(x=>({t:TERMS.find(T=>T.n===x.t),w:x.w,k:x.k,topic:(store[x.k]||"").trim(),isCat:x===u[u.length-1]}));
+  const topics=weeks.map(x=>x.topic.replace(/^S[12]_\w+?:\s*/,"").replace(/^EXAM:\s*/,"")).filter(Boolean);
+  const codes=[...new Set(weeks.flatMap(x=>(store["codes-"+x.k]||"").split(/[\s,;]+/).filter(Boolean)))];
+  const lis=[],scs=[],dns=[],titles=[];
+  let firstDn="";
+  weeks.forEach(x=>lessonNames(x.t,x.w).forEach((ln,j)=>{
+    const kk=`${x.t.n}-${x.w}-${j+1}`, f=s=>(store[`${kk}-${s}`]||"").trim();
+    if(f("li"))lis.push(f("li"));
+    f("sc").split(/\s*\|\s*/).filter(Boolean).forEach(s=>scs.push(s));
+    if(f("dn"))dns.push(f("dn"));
+    if(f("title"))titles.push(f("title"));
+    if(!firstDn&&f("dn"))firstDn=f("dn");
+  }));
+  const uniq=a=>[...new Set(a)];
+  const liU=uniq(lis), scU=uniq(scs);
+  const cat=weeks[weeks.length-1];
+  const UNIT_TEXT=[name,...topics,...titles,...liU,...scU].join(" ");
+  const SUBS=[
+    [/film|viewing|camels/i,"Analysing film","film language and camera techniques"],
+    [/oral|present|debate|speech|rehears/i,"Speaking and presenting","spoken language and presentation"],
+    [/memoir|creative|narrative|crafting|personal text/i,"Creating texts","creative and personal language"],
+    [/grammar|conventions|punctuation|sentence/i,"Language conventions","language conventions and sentence structure"],
+    [/macbeth|romeo|shakespeare|early modern/i,"Shakespearean drama","Shakespearean language and dramatic structure"],
+    [/persua|argu|contention|analys|essay/i,"Analysing argument and texts","persuasive and analytical language"],
+    [/animal farm|allegory|novel|fable/i,"Analysing novels","narrative voice and symbolism"]];
+  const subHits=SUBS.filter(([re])=>re.test(UNIT_TEXT));
+  const sub=subHits.length?[...new Set(subHits.map(x=>x[1]))].slice(0,2).join(", "):"Reading and responding to texts";
+  const focusPhrase=subHits.length?subHits[0][2]:"text structure and language features";
+  const opt=(re,yes)=>re.test(UNIT_TEXT)?yes:"";
+  const adj={
+    eal:`Pre-teach the key terms for ${(subHits.length?subHits[0][1]:"this unit").toLowerCase()} with a word bank and visual glossary. Give sentence starters for each learning intention. Students plan the ${ASSESS} in dot points before drafting.`+opt(/oral|present|debate|speech/i," Record a practice run so students hear the model before they speak."),
+    int:`Break each lesson into numbered steps with a visual organiser. Give annotated copies of the texts with key quotes highlighted. For the ${ASSESS}, allow extra time, a dictated or recorded response and a shorter word target.`+opt(/film|viewing|camels/i," Re-watch film clips in short sections, with a CAMELS+D checklist."),
+    ext:`Students write their own analytical question about the unit and test it against the success criteria. Add a comparison with a second text, or a counter-argument, to the ${ASSESS}.`+opt(/oral|present|debate/i," Students answer audience questions after their presentation.")+opt(/film|viewing/i," Students compare two film clips using CAMELS+D.")
+  };
+  const std9=`By the end of Level 9, students analyse how ${focusPhrase} shape meaning for an audience. They use evidence from the text to support their interpretation and organise their ideas in clear, structured responses.`;
+  const std10=`By the end of Level 10, students evaluate how ${focusPhrase} position the audience and shape meaning. They sustain a clear interpretation or argument using precise, selected evidence, and adapt language and structure to purpose and audience.`;
+  const formText=`Checked in every lesson against the success criteria, with the Do Now as an entry check (Weeks 1–${weeks.length}).`;
+  const catInfo=(store["info-"+cat.k]||"").trim();
+  const strandCounts={};
+  codes.forEach(c=>{const mm=c.match(/^VC2E\d+(LA|LE|LY)/); if(mm) strandCounts[mm[1]]=(strandCounts[mm[1]]||0)+1;});
+  const STRAND={LA:"Language",LE:"Literature",LY:"Literacy"};
+  const top=Object.entries(strandCounts).sort((a,b)=>b[1]-a[1])[0];
+  const strand=top?STRAND[top[0]]:"to be added";
+  const corpus=[name,...topics,...liU,...scU,...dns,...titles,catInfo].join(" ").toLowerCase();
+  const tick=(on,label)=>para((on?"☒ ":"☐ ")+label);
+  const cross=UP2_CROSS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const caps=UP2_CAPS.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const cld=UP2_CLD.map(([l,re])=>tick(re.test(corpus),l)).join("");
+  const firstWeek=weeks[0];
+  const preText=firstDn?`Week 1 Do Now (diagnostic): ${firstDn}`:`Diagnostic at the start of the unit: students write what they already know about "${topics[0]||name}" and one question they have.`;
+  const catText=para(cat.topic||"To be added",{b:1})+(catInfo?bullets(catInfo.split("\n").filter(s=>s.trim()).map(s=>s.trim())):"");
+  const W=[1421,1421,1421,2549,6045];
+
+  const sec1=table([2850,5110,5110],[
+    tr([cell(13070,{span:3,fill:"FFC0E3",body:para("Adjustments/ Scaffolds",{b:1})})]),
+    tr([cell(2850,{body:para("EAL",{b:1})}),cell(5110,{body:para("Integration",{b:1})}),cell(5110,{body:para("Extension",{b:1})})]),
+    tr([cell(2850,{body:para(adj.eal)}),cell(5110,{body:para(adj.int)}),cell(5110,{body:para(adj.ext)})])]);
+  const sec2=table([6229,6821],[
+    tr([cell(13050,{span:2,fill:"D9D9D9",body:para("Mapping to F–10 Victorian Curriculum 2.0",{b:1})})]),
+    tr([cell(13050,{span:2,body:para("Content description: "+(codes.join(", ")||"to be added"))})]),
+    tr([cell(13050,{span:2,fill:"D1E8B2",body:para("Achievement standard",{b:1})})]),
+    tr([cell(6229,{body:para("Level 9",{b:1})}),cell(6821,{body:para("Level 9 and 10",{b:1})})]),
+    tr([cell(6229,{body:para(std9)}),cell(6821,{body:para(std10)})])]);
+  const sec3=table([3120,3120,6600],[
+    tr([cell(12840,{span:3,fill:"C6ECFF",body:para(`${yearLevel} English: ${name}`,{b:1})})]),
+    tr([cell(3120,{body:para("Strand: "+strand)}),cell(3120,{body:para("Sub-strand: "+sub)}),cell(6600,{body:para(`Recommended teaching time: ${u.length} weeks`)})])]);
+  const catName=((cat.topic||"").split(":").slice(1).join(":")||cat.topic||name).trim();
+  const euLI=`We will explore how ${focusPhrase} shape meaning, and apply this in ${catName}.`;
+  const euSC=`I can use evidence from the text to explain how ${focusPhrase} shape meaning, and structure this in ${catName}.`;
+  const eu=para("Learning Intention:",{b:1})+para(euLI)+para("Success Criteria:",{b:1})+para(euSC);
+  const bigRows=[
+    tr([cell(4263,{fill:"D1E8B2",body:para("The Big Question / Idea",{b:1})}),cell(8594,{fill:"D1E8B2",body:para("Essential Understandings",{b:1})})]),
+    tr([cell(4263,{body:para(name,{b:1})+para("What students do in this unit:",{b:1})+bullets(topics)}),cell(8594,{vm:"restart",body:eu})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Cross Curricular Priorities",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:cross}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{fill:"D1E8B2",body:para("Capabilities curriculum",{b:1})}),cell(8594,{vm:"continue"})]),
+    tr([cell(4263,{body:caps}),cell(8594,{vm:"continue"})])];
+  const sec4=table([4263,8594],bigRows);
+  const sec5=table(W,[
+    tr([cell(4263,{span:3,fill:"D1E8B2",body:para("Common Assessments",{b:1})}),cell(8594,{span:2,fill:"D1E8B2",body:para("21CLD",{b:1})})]),
+    tr([cell(W[0],{body:para("Pre-assessment",{b:1})+para(preText)}),
+        cell(W[1],{body:para("Formative (ongoing)",{b:1})+para(formText)}),
+        cell(W[2],{body:para("Summative (final)",{b:1})+catText}),
+        cell(W[3],{body:cld}),
+        cell(W[4],{})])]);
+
+  const NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"';
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>', R="http://schemas.openxmlformats.org/officeDocument/2006/relationships", CT="application/vnd.openxmlformats-officedocument.wordprocessingml.";
+  const body=para(`English · ${yearLevel} · ${name}`,{b:1,sz:24})+lpLine+sec1+para("")+sec2+para("")+sec3+para("")+sec4+para("")+sec5+para("");
+  return zip({
+    "[Content_Types].xml":X+`<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="${CT}document.main+xml"/><Override PartName="/word/styles.xml" ContentType="${CT}styles+xml"/></Types>`,
+    "_rels/.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/officeDocument" Target="word/document.xml"/></Relationships>`,
+    "word/_rels/document.xml.rels":X+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${R}/styles" Target="styles.xml"/>${lpRels.join("")}</Relationships>`,
+    "word/styles.xml":X+`<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Aptos" w:hAnsi="Aptos" w:eastAsia="Aptos" w:cs="Aptos"/><w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-AU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="0" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults></w:styles>`,
+    "word/document.xml":X+`<w:document ${NS}><w:body>${body}<w:sectPr><w:pgSz w:w="15840" w:h="12240" w:orient="landscape"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`
+  });
+}
+document.getElementById("upv2btn").onclick=()=>{
+  const us=units(), dl=document.createElement("dialog");dl.className="units";dl.setAttribute("aria-labelledby","up2h");
+  dl.innerHTML=`<h2 id="up2h">Unit plans</h2><p>Each unit runs from its first lesson to its ${ASSESS}.</p>`+
+    (us.length?`<ul>${us.map((u,i)=>`<li><span><b>${esc(unitName(u))}</b><small>${unitSpan(u)}</small></span><button type="button" class="btn" data-i="${i}">Download .docx</button></li>`).join("")}</ul>`:"<p>No "+ASSESS+"s in this plan yet.</p>")+
+    `<form method="dialog"><button class="btn">Close</button></form>`;
+  dl.addEventListener("click",e=>{
+    if(e.target===dl)return dl.close();
+    const b=e.target.closest("[data-i]");if(!b)return;
+    const u=us[b.dataset.i], a=document.createElement("a"), url=URL.createObjectURL(unitDocxV2(u));
+    a.href=url;a.download=`${document.title.split(" ")[0]} Unit Plan - ${fileSafe(unitName(u))}.docx`;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  dl.addEventListener("close",()=>dl.remove());
+  document.body.appendChild(dl);dl.showModal();
+};
+
+</script>
+</body>
+</html>

@@ -13,6 +13,25 @@ Everything is plain HTML. There is no server, no database and nothing to install
 | `09SUB.html` | An empty example plan (Year 9 Mainstream). Rename it and fill it in. |
 | `overview.html` | The whole-subject overview with search, print and the **Learning area plan (Word)** download. |
 | `build.py` | Copies the template's design into your plans and keeps each plan's own data. |
+| `CLAUDE.md` | Instructions Claude Code reads automatically: the rules and where things are. |
+| `.claude/skills/curriculum-plans/` | The Claude skill holding the whole workflow and the scripts for every Word document. It loads automatically when you run Claude Code in this folder. |
+| `curriculum-plans-skill.zip` | The same skill as a zip, for uploading to claude.ai (Settings → Capabilities → Skills). |
+
+## Building with Claude (the easy way)
+
+This is how the English plans were built: Claude Code does the work, and you check it.
+
+1. Copy this folder into your own GitHub repository, including the hidden `.claude` folder, and open it in Claude Code.
+2. Start with: **"Set this up for [Subject]. Our plan codes are [e.g. SCI]. Here are the VC 2.0 content descriptions: [attach]."** Claude fills the subject settings, renames the pages and fills in `CLAUDE.md`.
+3. Then build each plan, for example:
+   - "Make the Year 9 Mainstream plan. CATs: CAT 1 Practical Report (Term 1 Week 8), CAT 2 … Exams as usual." (A screenshot of this year's assessment calendar works too.)
+   - "Add weekly topics that build to each CAT, then learning intentions, success criteria, Do Nows and VC 2.0 codes for every lesson. Use these sources: [attach]."
+   - "Move CAT 2 to Term 2 Week 7 and shorten the unit to fit."
+   - "Make all the Word documents for 09SCI and put them in the drive folder [path]."
+   - "Do the same for Year 10."
+4. Check what Claude drafts. It flags drafted lessons, achievement standards and adjustments for you to confirm.
+
+Claude commits and pushes each change, so the live site updates by itself.
 
 ## Setting it up for your subject
 

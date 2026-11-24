@@ -11,7 +11,7 @@ Everything is plain HTML. There is no server, no database and nothing to install
 | `index.html` | The homepage. It has a card for every class, and "Coming soon" cards for plans not made yet. |
 | `template.html` | The master design for every plan. **The subject settings are at the top of its script** (see step 2). |
 | `09SUB.html` | An empty example plan (Year 9 Mainstream). Rename it and fill it in. |
-| `overview.html` | The whole-subject overview with search, print and the **Learning Area Plan (Word)** download. |
+| `overview.html` | The whole-subject overview with search, print and the **Learning area plan (Word)** download. |
 | `build.py` | Copies the template's design into your plans and keeps each plan's own data. |
 
 ## Setting it up for your subject
@@ -69,7 +69,7 @@ Week topics starting `Developmental task` show as teal badges. Per-plan calendar
 |---|---|---|
 | Each plan | **Curriculum map (Word)** | One document per semester in the school's curriculum map layout, with Do Nows as retrieval practice and links to lesson plans. |
 | Each plan | **Unit plans (Word)** | The school's unit plan template for each unit (first lesson to CAT): adjustments, VC 2.0 mapping, big idea, essential understandings, capabilities and assessment. |
-| `overview.html` | **Learning Area Plan (Word)** | Every class by semester and week, with the topic and VC 2.0 codes, coloured by unit of work. |
+| `overview.html` | **Learning area plan (Word)** | Every class by semester and week, with the topic and VC 2.0 codes, coloured by unit of work. |
 
 Everything comes from the plan data, so change the plan and download again.
 

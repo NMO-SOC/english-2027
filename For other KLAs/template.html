@@ -254,6 +254,16 @@ const TERMS=[
 ];
 // Per-plan calendar changes, e.g. {"normalWeeks":[[2,9]]} makes Term 2 Week 9 a normal teaching week for that plan.
 const PLAN={};
+// Year-level camps and interruptions (school-wide, every subject). Added to each plan by its year level,
+// which is read from the code in the title: 07.. = Year 7, ..12 = Year 11, ..34 = Year 12. Same keys as PLAN.
+const YEAR_EVENTS={
+  7:{normalWeeks:[[2,9],[2,11]],greyWeeks:[[1,1,"Induction"]],notes:[[1,2,"Starts Thu (induction)"],[1,5,"Camp 24-26 Feb"]],lessonCount:[[1,2,2],[1,5,2]]}, // no Semester 1 exam
+  8:{notes:[[3,2,"Camp 21-23 Jul"]],lessonCount:[[3,2,2]]},
+  11:{normalWeeks:[[2,11]],greyWeeks:[[4,8,"Retreat and HeadStart"],[4,9,"HeadStart"]]},
+  12:{normalWeeks:[[2,9],[2,11]],greyWeeks:[[4,4," "],[4,5," "],[4,6," "],[4,7," "],[4,8," "],[4,9," "],[4,10," "],[4,11," "]]} // Year 12 classes end
+};
+{const c=document.title.split(" ")[0],y=/34$/.test(c)?12:/12$/.test(c)?11:+(c.match(/^\d+/)||[0])[0];
+ Object.entries(YEAR_EVENTS[y]||{}).forEach(([k,v])=>{PLAN[k]=k==="lessonCount"?(PLAN[k]||[]).concat(v):v.concat(PLAN[k]||[]);});} // the plan's own settings win
 // Assessment word on the page: "CAT" by default, "SAC" for Year 12 (set by PLAN.assessWord)
 const ASSESS=PLAN.assessWord||"CAT";
 {const up=document.getElementById("updated");if(up&&PLAN.updated){const d=new Date(PLAN.updated+"T00:00");up.textContent="Last updated "+d.toLocaleDateString("en-AU",{day:"numeric",month:"long",year:"numeric"});}}

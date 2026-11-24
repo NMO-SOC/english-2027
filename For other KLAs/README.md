@@ -43,6 +43,13 @@ Also in `template.html`, filled in when ready:
 - `CM_FOLDERS`: the drive folder name for each unit, so the Word documents link to the lesson plans. Plans without an entry just have no links.
 - `VCE_MAP` and `VCE_SD`: for Years 11 and 12 only. These map units to your study design's outcomes, key knowledge and key skills.
 - `TERMS`: the term dates, public holidays, exam weeks and Step-Up weeks. These are already set for 2027.
+- `YEAR_EVENTS`: camps and other year-level interruptions. Every plan picks these up from the year in its code, and they also show on the overview. Already set for 2027:
+  - **Year 7:** induction in Term 1 Week 1 (greyed out); classes start Thursday of Week 2 (two lessons); camp 24–26 Feb in Term 1 Week 5 (two lessons); no Semester 1 exam, so Term 2 Weeks 9 and 11 are normal teaching weeks.
+  - **Year 8:** camp 21–23 Jul in Term 3 Week 2 (two lessons).
+  - **Year 11:** Term 2 Week 11 is a normal teaching week; Term 4 Weeks 8–9 are Retreat and HeadStart.
+  - **Year 12:** Term 2 Weeks 9 and 11 are normal teaching weeks; classes finish after Term 4 Week 3.
+
+  A plan's own `PLAN` settings override these, e.g. a class that needs a different lesson count in camp week.
 - The unit plan's adjustments wording (EAL, Integration, Extension) is generated in `unitDocxV2`. Change it if it doesn't suit your subject.
 
 ### 3. Rename the words "Subject" and "SUB"
